@@ -3,14 +3,21 @@
 {% block title%}404{% end %}
 
 {% block content %}
-    <div class="container">
-        <h1>404 - {{ _("Glitch in the Matrix") }}</h1>
-        <!-- Okay yes I know, it really returns a 200 -->
+    <div class="container text-center" style="margin-top: 100px;">
+        <h1 class="cyber-glow" style="font-size: 5em;">404</h1>
+        <h2 class="matrix-text">{{ _("Glitch in the Matrix") }}</h2>
         <br />
-        <p>
-            {{ _("It looks like you typed a URL incorrectly, or were attempting to find something you ought not have access to.") }}
-            <br />
-            {{ _("The only other possibility is that I messed up some of the code, and that doesn't seem very likely.") }}
-        </p>
+        <div class="well card-main" style="max-width: 600px; margin: 0 auto; padding: 30px;">
+            <p style="font-size: 1.2em;">
+                {{ _("It looks like you typed a URL incorrectly, or were attempting to find something you ought not have access to.") }}
+            </p>
+            <p class="text-error">
+                {{ _("The only other possibility is that I messed up some of the code, and that doesn't seem very likely.") }}
+            </p>
+            <hr style="border-top: 1px solid var(--border-color);">
+            <a href="/" class="btn btn-primary btn-large">
+                <i class="fa fa-home"></i> {{ _("Return to Uplink") }}
+            </a>
+        </div>
     </div>
 {% end %}

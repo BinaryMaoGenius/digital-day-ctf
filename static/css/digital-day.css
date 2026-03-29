@@ -1,0 +1,253 @@
+/* 
+    Digital Day - Club IT 
+    Modern UI Overrides for RootTheBox (Bootstrap 2)
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+    --bg-main: #0d1117;
+    --bg-card: #161b22;
+    --primary-neon: #58a6ff;
+    --secondary-green: #39ff14;
+    --accent-violet: #bc13fe;
+    --danger-red: #ff3e3e;
+    --text-high: #f0f6fc;
+    --text-dim: #8b949e;
+    --border-color: rgba(255, 255, 255, 0.1);
+    --glass-bg: rgba(22, 27, 34, 0.8);
+}
+
+body {
+    background-color: var(--bg-main) !important;
+    color: var(--text-high) !important;
+    font-family: 'Inter', sans-serif !important;
+    line-height: 1.6;
+}
+
+/* Padding fix for fixed navbar */
+body {
+    padding-top: 80px !important;
+}
+
+/* Navbar Modernization */
+.navbar-inner {
+    background: var(--glass-bg) !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5) !important;
+    padding: 10px 0 !important;
+}
+
+.navbar .nav > li > a {
+    color: var(--text-dim) !important;
+    text-shadow: none !important;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.navbar .nav > li > a:hover, .navbar .nav > .active > a {
+    color: var(--primary-neon) !important;
+    background: transparent !important;
+    text-shadow: 0 0 8px var(--primary-neon) !important;
+}
+
+.navbar .brand {
+    color: var(--text-high) !important;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Card / Well Modernization */
+.well, .hero-unit {
+    background: var(--bg-card) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37) !important;
+    color: var(--text-high) !important;
+}
+
+/* Button Modernization */
+.btn {
+    border-radius: 8px !important;
+    padding: 8px 20px !important;
+    font-weight: 600 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    border: 1px solid transparent !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+}
+
+.btn-primary {
+    background: transparent !important;
+    border-color: var(--primary-neon) !important;
+    color: var(--primary-neon) !important;
+}
+
+.btn-primary:hover {
+    background: var(--primary-neon) !important;
+    color: var(--bg-main) !important;
+    box-shadow: 0 0 15px var(--primary-neon) !important;
+}
+
+.btn-success {
+    background: transparent !important;
+    border-color: var(--secondary-green) !important;
+    color: var(--secondary-green) !important;
+}
+
+.btn-success:hover {
+    background: var(--secondary-green) !important;
+    color: var(--bg-main) !important;
+    box-shadow: 0 0 15px var(--secondary-green) !important;
+}
+
+/* Table Modernization */
+.table {
+    border-collapse: separate !important;
+    border-spacing: 0 8px !important;
+    background: transparent !important;
+}
+
+.table th {
+    border: none !important;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+}
+
+.table td {
+    background: var(--bg-card) !important;
+    border-top: 1px solid var(--border-color) !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    padding: 15px !important;
+}
+
+.table td:first-child {
+    border-left: 1px solid var(--border-color) !important;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+.table td:last-child {
+    border-right: 1px solid var(--border-color) !important;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+/* Progress Bars */
+.progress {
+    background: var(--bg-main) !important;
+    border-radius: 10px !important;
+    height: 12px !important;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+}
+
+.progress .bar {
+    background-color: var(--primary-neon) !important;
+    box-shadow: 0 0 10px var(--primary-neon) !important;
+}
+
+/* Inputs */
+input[type="text"], input[type="password"], textarea {
+    background: var(--bg-main) !important;
+    border: 1px solid var(--border-color) !important;
+    color: var(--text-high) !important;
+    border-radius: 6px !important;
+    padding: 10px !important;
+}
+
+input:focus {
+    border-color: var(--primary-neon) !important;
+    box-shadow: 0 0 8px rgba(88, 166, 255, 0.3) !important;
+}
+
+/* Custom Hacking Accent */
+.cyber-glow {
+    text-shadow: 0 0 10px var(--primary-neon);
+}
+
+.matrix-text {
+    color: var(--secondary-green);
+    font-family: 'JetBrains Mono', monospace;
+}
+
+/* Footer Rendering Fix */
+footer {
+    position: relative !important;
+    margin-top: 50px;
+    background: transparent !important;
+    color: var(--text-dim) !important;
+    border-top: 1px solid var(--border-color) !important;
+}
+
+.navbar-inner.footernav {
+    background: transparent !important;
+    backdrop-filter: none !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+/* Animations */
+@keyframes neon-pulse {
+    0% { box-shadow: 0 0 5px var(--primary-neon); }
+    50% { box-shadow: 0 0 15px var(--primary-neon); }
+    100% { box-shadow: 0 0 5px var(--primary-neon); }
+}
+
+.pulse-primary {
+    animation: neon-pulse 2s infinite;
+}
+
+/* Nexus Killfeed */
+#nexus-killfeed {
+    position: fixed;
+    top: 90px;
+    right: 20px;
+    width: 350px;
+    z-index: 9998;
+    pointer-events: none; /* Let clicks pass through */
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.killfeed-entry {
+    background: rgba(13, 17, 23, 0.85);
+    border-left: 3px solid var(--secondary-green);
+    padding: 8px 12px;
+    box-shadow: 0 0 10px rgba(57, 255, 20, 0.2);
+    color: var(--text-high);
+    text-shadow: 0 0 5px var(--secondary-green);
+    overflow: hidden;
+    position: relative;
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+.killfeed-entry::before {
+    content: ">_";
+    color: var(--primary-neon);
+    margin-right: 5px;
+    font-weight: bold;
+}
+
+.killfeed-entry.fading-out {
+    opacity: 0;
+    transform: translateX(100%);
+}
+
+.kf-title {
+    color: var(--primary-neon);
+    font-weight: 700;
+}
+
+.kf-message {
+    color: var(--text-high);
+}

@@ -424,9 +424,13 @@ class RegistrationHandler(BaseHandler):
                 if self.config.restrict_registration:
                     self.check_regtoken()
                 user = self.create_user()
-                validate = options.require_email and options.validate_email
                 send_user_registered_webhook(user)
-                self.render("public/successful_reg.html", user=user, validate=validate)
+                # Auto-login après inscription (Fast onboarding)
+                self.start_session()
+                self.session.user_id = user.id
+                self.session.save()
+                Theme.apply_theme(user.theme)
+                self.redirect("/user/missions/firstlogin" if self.config.story_mode else "/user")
         except ValidationError as error:
             self.render(
                 "public/registration.html",
@@ -451,20 +455,6 @@ class RegistrationHandler(BaseHandler):
             is False
         ):
             raise ValidationError("Invalid handle format")
-        email = self.get_argument("email", None)
-        if options.require_email and (not email or not len(email) > 0):
-            raise ValidationError("Email address is required")
-        if (
-            email
-            and bool(
-                re.match(
-                    r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
-                    self.get_argument("email", ""),
-                )
-            )
-            is False
-        ):
-            raise ValidationError("Invalid email format")
         if (
             self.get_argument("playername", None)
             and bool(
@@ -504,11 +494,6 @@ class RegistrationHandler(BaseHandler):
             is not None
         ):
             raise ValidationError("This handle is already registered")
-        if (
-            options.require_email
-            and User.by_email(self.get_argument("email", None)) is not None
-        ):
-            raise ValidationError("This email address is already registered")
         if self.get_argument("pass1", "") != self.get_argument("pass2", ""):
             raise ValidationError("Passwords do not match")
         if self.config.use_recaptcha and self.verify_recaptcha() is False:
@@ -568,18 +553,8 @@ class RegistrationHandler(BaseHandler):
         self.dbsession.add(user)
         self.dbsession.add(team)
         self.dbsession.commit()
-        if (
-            options.require_email
-            and options.validate_email
-            and len(options.mail_host) > 0
-        ):
-            self.send_validate_message(user)
-            user.locked = True
-            self.dbsession.add(user)
-            self.dbsession.commit()
-        else:
-            self.event_manager.user_joined_team(user)
-
+        
+        self.event_manager.user_joined_team(user)
         self.event_manager.push_score_update()
         # Chat
         if self.chatsession:
@@ -633,12 +608,16 @@ class RegistrationHandler(BaseHandler):
                     team.game_levels.append(level)
             return team
         elif self.config.public_teams:
-            if Team.by_name(self.get_argument("team_name", "")) is not None:
+            team_name = self.get_argument("team_name", "")
+            if not team_name:
+                team_name = self.get_argument("handle", "") + "_Cell"
+            
+            if Team.by_name(team_name) is not None:
                 raise ValidationError(
-                    "This team name is already registered.  Use team code to join that team."
+                    "This team name is already registered. Use an access code to join instead."
                 )
             team = Team()
-            team.name = self.get_argument("team_name", "")
+            team.name = team_name
             team.motto = self.get_argument("motto", "")
             if len(filter_avatars("team")) == 0:
                 team._avatar = identicon(team.name, 6)

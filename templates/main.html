@@ -12,6 +12,7 @@
         <link href="/static/css/animate.css" rel="stylesheet" />
         <link href="/static/css/notifier.css" rel="stylesheet" />
         <link href="/static/css/main.css" rel="stylesheet" />
+        <link href="/static/css/digital-day.css" rel="stylesheet" />
         <!--[if lt IE 9]>
             <script src="/static/js/libs/html5.js"></script>
         <![endif]-->
@@ -22,6 +23,7 @@
         <script src="/static/js/bootstrap.min.js" type="text/javascript"></script>
         <script src="/static/js/pages/main.js" type="text/javascript"></script>
         <script src="/static/js/libs/notifier.js" type="text/javascript"></script>
+        <script src="/static/js/nexus-killfeed.js" type="text/javascript"></script>
         {% block header %}{% end %}
         {% module Theme() %}
     </head>
@@ -36,6 +38,7 @@
             {% from tornado.options import options %}
             <hr style="margin-bottom: -1px;">
             <div class="navbar-inner footernav">
+                <span class="matrix-text" style="font-weight: bold;">Digital Day - Club IT</span> • 
                 Powered by <a href="https://github.com/moloch--/RootTheBox" target="_blank">Root the Box</a> &copy; {{ datetime.date.today().year }}{% if options.privacy_policy_link %} • <a href="{{ options.privacy_policy_link }}">{{ _("Privacy Policy") }}</a>{% end %}
                 <span style="float:right; padding-right: 5px;">{% raw options.org_footer %}</span>
             </div>

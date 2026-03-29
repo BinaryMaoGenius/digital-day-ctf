@@ -30,7 +30,7 @@ import sys
 from builtins import input, str
 from datetime import datetime
 
-import nose
+# import nose  -- Moved to tests() for Python 3.12 compatibility
 from tornado.options import define, options
 
 from libs.ConfigHelpers import save_config, save_config_image
@@ -199,6 +199,12 @@ def generate_admins(admin_names):
 
 def tests():
     """Creates a temporary sqlite database and runs the unit tests"""
+    try:
+        import nose
+    except ImportError:
+        print(WARN + "Error: 'nose' is not installed or not compatible with your Python version.")
+        print(INFO + "Note: 'nose' requires the 'imp' module which was removed in Python 3.12.")
+        return
     print(INFO + "%s : Running unit tests ..." % current_time())
     from tests import setup_database, teardown_database
 

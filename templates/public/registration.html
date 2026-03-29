@@ -68,7 +68,7 @@
 
 {% block content %}
     <div class="container">
-        <h1>
+        <h1 class="cyber-glow">
             <i class="fa fa-pencil"></i>
             {{ _("Registration") }}
         </h1>
@@ -76,27 +76,28 @@
         {% if errors is not None and len(errors) != 0 %}
             {% for error in errors %}
                 <div class="alert alert-error">
-                    <a class="close" data-dismiss="alert" href="#">&times;</a>
                     <h4 class="alert-heading">{{ _("ERROR") }}</h4>
                     {{ error }}
                 </div>
             {% end %}
         {% end %}
-        <div class="{% if len(avatars) == 0 %}span8 offset1 {% end %}well" style="position: relative;">
+        <div class="well card-main pulse-primary" style="padding: 40px;">
         {% if not suspend %}
-            <legend>
-                {{ _("Welcome to the Scene") }}
-            </legend><!-- http://www.youtube.com/watch?v=xIs_5nfJKu4&list=PLC2FCB2871C396459 -->
+            <legend class="matrix-text" style="border: none; font-size: 1.5em;">
+                {{ _("Initialize New Agent") }}
+            </legend>
             <form class="form-horizontal" action="/registration" method="post" enctype="multipart/form-data">
                 {% raw xsrf_form_html() %}
                 {% if len(avatars) > 0 %}
                     {% set avatarimg = get_new_avatar("user", not options.teams) %}
-                    <div class="control-group" style="float: right; position: absolute; right: 30px; top: 40px;">
-                        <img id="avatarimage" src="/avatars/{{avatarimg}}" class="img-polaroid" style="width: 350px; height: 175px; object-fit: cover"/>
-                        <div class="controls" style="margin-top: 15px; margin-left: 0px;">
+                    <div class="avatar-container" style="float: right; text-align: center; width: 350px;">
+                        <img id="avatarimage" src="/avatars/{{avatarimg}}" class="img-circle" style="width: 250px; height: 250px; object-fit: cover; border: 3px solid var(--primary-neon); box-shadow: 0 0 20px var(--primary-neon);"/>
+                        <div style="margin-top: 20px;">
                             <input id="user_avatar_select" name="user_avatar_select" type="hidden" value="{{avatarimg}}" />
-                            {% if len(avatars) > 0 %}<a data-toggle="modal" class="btn btn-primary" href="#change-user-avatar-modal"> {{ _("Select New Avatar") }} </a>&nbsp;&nbsp;{% end %}
-                            <a id="uploadbutton" class="btn btn-primary" href="#">{{ _("Upload Avatar") }}</a>&nbsp;&nbsp;(w500 x h250)
+                            <div class="btn-group">
+                                {% if len(avatars) > 0 %}<a data-toggle="modal" class="btn btn-primary" href="#change-user-avatar-modal"> {{ _("Terminal Avatars") }} </a>{% end %}
+                                <a id="uploadbutton" class="btn btn-info" href="#">{{ _("Custom Uplink") }}</a>
+                            </div>
                             <input id="user-avatar" name="avatar" type="file" accept="image/bmp,image/jpeg,image/gif,image/png" style="display: none;"/>
                         </div>
                         {% if options.use_recaptcha %}
@@ -104,156 +105,99 @@
                         {% module Recaptcha() %}
                         {% end %}
                     </div>
+                {% end %}
+                
+                <div style="max-width: 500px;">
+                    <div class="control-group">
+                        <label class="control-label matrix-text" for="handle">{{ _("Handle") }}</label>
+                        <div class="controls">
+                            <input required id="handle" name="handle" maxlength="16" minlength="3" placeholder="{{ _('Agent Alias') }}" type="text" pattern="^[a-zA-Z0-9_\-\.]{3,16}$" />
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label matrix-text" for="playername">{{ _("Real Name") }}</label>
+                        <div class="controls">
+                            <input required id="playername" name="playername" maxlength="64" minlength="3" placeholder="{{_('Identity')}}" type="text" pattern="^[a-zA-Z0-9 ]{3,64}$" />
+                        </div>
+                    </div>
+                    {% if options.require_email %}
+                    <div class="control-group">
+                        <label class="control-label matrix-text" for="email">{{ _("Email") }}</label>
+                        <div class="controls">
+                            <input required id="email" name="email" maxlength="64" minlength="3" placeholder="{{ _('Communication Link') }}" type="text" pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$" />
+                        </div>
+                    </div>
+                    {% end %}
                     
-                {% end %}
-                <div class="control-group">
-                    <label class="control-label" for="handle">
-                        <i class="fa fa-user"></i>
-                        {{ _("Handle") }}
-                    </label>
-                    <div class="controls">
-                        <input required id="handle" name="handle" maxlength="16" minlength="3" placeholder="{{ _('Player Alias') }}" type="text"
-                            rel="popover" pattern="^[a-zA-Z0-9_\-\.]{3,16}$"
-                            data-original-title="{{ _('Player Alias') }}"
-                            data-content="{{_('Your handle must be 3-16 alphanumeric characters.  Underscore, dash, and dots allowed.')}}" />
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label" for="playername">
-                        {{ _("Player Name") }}
-                    </label>
-                    <div class="controls">
-                        <input required id="playername" name="playername" maxlength="64" minlength="3" placeholder="{{_('Name')}}" type="text"
-                            rel="popover" pattern="^[a-zA-Z0-9 ]{3,64}$"
-                            data-original-title="{{ _('Player Name') }}"
-                            data-content="{{_('Your name, visible to game administrators.  Your name can be 3-64 alphanumeric characters')}}" />
-                    </div>
-                </div>
-                {% if options.require_email %}
-                <div class="control-group">
-                    <label class="control-label" for="email">
-                        {{ _("Email") }}
-                    </label>
-                    <div class="controls">
-                        <input required id="email" name="email" maxlength="64" minlength="3" placeholder="{{ _('Email') }}" type="text"
-                            rel="popover" pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$"
-                            data-original-title="{{_('Player Email')}}"
-                            data-content="{{_('Your email, visible to game administrators.')}}" />
-                    </div>
-                </div>
-                {% end %}
-                <hr style="margin-right: 400px;">
-                {% if options.teams %}
-                    {% if options.public_teams %}
-                        <input type="radio" class="teammode" name="teammode" value="join" checked><h5 style="display: inline;">{{ _("Join Existing Team") }}</h5>
-                        <input type="radio" class="teammode" name="teammode" value="create"><h5 style="display: inline;">{{ _("Start a New Team") }}</h5>
-                        <br/><br/>
+                    <hr style="border-top: 1px solid var(--border-color);">
+                    
+                    {% if options.teams %}
+                        <div class="control-group">
+                            <div class="controls">
+                                <label class="radio inline matrix-text">
+                                    <input type="radio" class="teammode" name="teammode" value="join" checked> {{ _("Join Cell") }}
+                                </label>
+                                {% if options.public_teams %}
+                                <label class="radio inline matrix-text">
+                                    <input type="radio" class="teammode" name="teammode" value="create"> {{ _("Found Cell") }}
+                                </label>
+                                {% end %}
+                            </div>
+                        </div>
+                        
                         <div id="teammode-create" style="display: none;">
                             <div class="control-group">
-                                <label class="control-label" for="team_name">{{ _("Team Name") }}</label>
+                                <label class="control-label matrix-text" for="team-name">{{ _("Cell Name") }}</label>
                                 <div class="controls">
-                                    <input id="team-name" name="team_name" maxlength="24" minlength="3" type="text" placeholder="{{ _('Team Name') }}"
-                                        rel="popover" pattern="^[a-zA-Z0-9 _\-\.]{3,24}$"
-                                        data-original-title="{{_('New Team Name')}}"
-                                        data-content="{{_('Choose a name for your new team!')}} [3-24 {{_('Characters')}}]" >
-                                </div>
-                            </div>
-                            <div class="control-group">
-                                <label class="control-label" for="motto">{{ _("Motto") }}</label>
-                                <div class="controls">
-                                    <input id="motto" name="motto" maxlength="32" type="text" placeholder="{{ _('Team Motto') }}"
-                                        rel="popover" pattern="^[a-zA-Z0-9 _\-\.]{,32}$"
-                                        data-original-title="{{_('Team Motto')}}"
-                                        data-content="{{_('Optional')}}: {{_('What is your teams motto?')}} [{{ _('Max') }}: 32 {{_('Characters')}}]">
+                                    <input id="team-name" name="team_name" maxlength="24" minlength="3" type="text" placeholder="{{ _('Cell Name') }}" pattern="^[a-zA-Z0-9 _\-\.]{3,24}$">
                                 </div>
                             </div>
                         </div>
-                    {% else %}
-                        <h5 style="margin-left: 20px; margin-bottom: 15px;">{{ _("Join Existing Team") }}</h5>
+                        
+                        <div id="teammode-join" class="control-group">
+                            <label class="control-label matrix-text" for="team-code">{{ _("Cell Code") }}</label>
+                            <div class="controls">
+                                <input id="team-code" name="team-code" type="text" placeholder="{{ _('Access Code') }}">
+                            </div>
+                        </div>
                     {% end %}
-                    <div id="teammode-join" class="control-group">
-                        <label class="control-label" for="team-code">{{ _("Team Code") }}</label>
-                        <div class="controls">
-                            <input id="team-code" name="team-code" type="text" placeholder="{{ _('Team Code') }}"
-                                rel="popover"
-                                data-original-title="{{_('Team Code')}}"
-                                data-content="{{_('Provide the code used to join an existing team.  Visible to other team members on their home page.')}}" >
-                        </div>
-                    </div>
-                {% else %}
+
+                    <hr style="border-top: 1px solid var(--border-color);">
+                    
                     <div class="control-group">
-                        <label class="control-label" for="motto">{{ _("Motto") }}</label>
+                        <label class="control-label matrix-text" for="pass1">{{ _("Access Key") }}</label>
                         <div class="controls">
-                            <input id="motto" name="motto" maxlength="32" type="text" placeholder="{{ _('Motto') }}"
-                                rel="popover" pattern="^[a-zA-Z0-9_\-\.]{,32}$"
-                                data-original-title="{{_('Motto')}}"
-                                data-content="{{_('Optional')}}: {{_('What is your motto?')}} [{{ _('Max') }}: 32 {{_('Characters')}}]">
+                            <input required id="pass1" name="pass1" minlength="{{ options.min_user_password_length }}" placeholder="{{ _('Password') }}" type="password" autocomplete="off" />
                         </div>
                     </div>
-                {% end %}
-                <hr style="margin-right: 400px;">
-                <div class="control-group">
-                    <label class="control-label" for="pass1">{{ _("Account Password") }}</label>
-                    <div class="controls">
-                        <input required id="pass1" name="pass1" minlength="{{ options.min_user_password_length }}"  placeholder="{{ _('Password') }}" type="password"
-                            autocomplete="off"
-                            rel="popover"
-                            data-original-title="{{_('Password')}}"
-                            data-content="{{_('Enter a complex password of')}} {{ options.min_user_password_length }}+ {{_('Characters')}}" />
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label" for="pass2">{{ _("Confirm Account Password") }}</label>
-                    <div class="controls">
-                        <input required id="pass2" name="pass2" minlength="{{ options.min_user_password_length }}"  placeholder="{{ _('Confirm Password') }}" type="password"
-                            autocomplete="off"
-                            rel="popover"
-                            data-original-title="{{_('Confirm Password')}}"
-                            data-content="{{_('Enter the same password as before')}}" />
-                    </div>
-                </div>
-                {% if options.banking and not set(["Password Security", "Federal Reserve"]).isdisjoint(options.allowed_market_items) %}
-					<div class="control-group">
-						<label class="control-label" for="bpass1">{{ _("Bank Account Password") }}</label>
-						<div class="controls">
-							<input required id="bpass" name="bpass" maxlength="{{ options.max_password_length }}" placeholder="{{ _('Bank Account Password') }}" type="password"
-								autocomplete="off"
-								rel="popover"
-								data-original-title="{{_('Password')}}"
-								data-content="{{_('Used to secure your (in-game) bank account.')}} [{{ _('Max') }}: {{ options.max_password_length }} {{_('Characters')}}].  {{_('Please do NOT enter your real bank account password.')}}" />
-						</div>
-					</div>
-                {% end %}
-                {% if options.restrict_registration %}
                     <div class="control-group">
-                        <label class="control-label" for="token">{{ _("Registration Token") }}</label>
+                        <label class="control-label matrix-text" for="pass2">{{ _("Sync Key") }}</label>
                         <div class="controls">
-                            <input required id="regtoken" name="token" placeholder="{{ _('Token') }}" type="text"
-                                rel="popover" pattern="^[a-fA-F0-9]{1,6}$"
-                                data-original-title="{{_('Registration Token')}}"
-                                data-content="{{_('Get your registration token from reception')}}" />
+                            <input required id="pass2" name="pass2" minlength="{{ options.min_user_password_length }}" placeholder="{{ _('Confirm Password') }}" type="password" autocomplete="off" />
                         </div>
                     </div>
-                {% end %}
-                {% if options.privacy_policy_link %}
+                    
+                    {% if options.restrict_registration %}
                     <div class="control-group">
-                        <label class="control-label" for="privacy_policy_accept">{{ _("I accept the") }} <a href="{{ options.privacy_policy_link }}">{{ _("Privacy Policy") }}</a></label>
+                        <label class="control-label matrix-text" for="token">{{ _("Entry Token") }}</label>
                         <div class="controls">
-                            <input required id="privacy_policy_accept" name="privacy_policy_accept" type="checkbox" />
+                            <input required id="regtoken" name="token" placeholder="{{ _('Token') }}" type="text" pattern="^[a-fA-F0-9]{1,6}$" />
                         </div>
                     </div>
-                {% end %}
-                <br />
-                <div class="control-group">
-                    <div class="controls">
-                        <button class="btn btn-primary" type="submit">
-                            {{ _("Register Account") }}
-                        </button>
+                    {% end %}
+                    
+                    <div class="control-group" style="margin-top: 30px;">
+                        <div class="controls">
+                            <button class="btn btn-primary btn-large" type="submit">
+                                <i class="fa fa-user-plus"></i>
+                                {{ _("INITIALIZE AGENT") }}
+                            </button>
+                        </div>
                     </div>
                 </div>
             </form>
         {% else %}
-            <h4 style="text-align: center;"><i class="fa fa-group"></i>&nbsp;&nbsp;{{ _("The game is not accepting new players at this time.") }}</h4>
+            <h4 class="text-center matrix-text"><i class="fa fa-warning"></i> {{ _("Recruitment is currently suspended.") }}</h4>
         {% end %}
         </div>
     </div>

@@ -6,10 +6,20 @@
 {% end %}
 
 {% block content %}
-    <div id="home_container" style="margin-right: auto; margin-left: auto; min-width: 940px; display: table; padding: 30px;">
-        <div class="well" style="position: relative; display: table-row; min-width: 850px; min-height: 600px;">
-            <img src="{{options.ctf_logo}}" style="margin-left: auto; margin-right: auto; display: block;">
-            <h2 style="position: absolute; top: 0; margin-top: 15px; margin-left: 25px;  text-shadow: 2px 2px .3px black;">{{options.ctf_tagline}}</h2>
+    <div id="home_container" class="container text-center" style="margin-top: 50px;">
+        <div class="well card-main pulse-primary" style="padding: 50px; min-height: 400px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <img src="{{options.ctf_logo}}" style="max-width: 400px; filter: drop-shadow(0 0 15px var(--primary-neon)); margin-bottom: 30px;">
+            <h1 class="cyber-glow" style="font-size: 3.5em; margin-bottom: 10px;">{{options.game_name}}</h1>
+            <h3 class="matrix-text" style="letter-spacing: 5px; text-transform: uppercase;">{{options.ctf_tagline}}</h3>
+            
+            <div style="margin-top: 50px;">
+                <a href="/login" class="btn btn-primary btn-large" style="margin-right: 20px; width: 200px;">
+                    <i class="fa fa-sign-in"></i> {{ _("LOGIN") }}
+                </a>
+                <a href="/registration" class="btn btn-info btn-large" style="width: 200px;">
+                    <i class="fa fa-user-plus"></i> {{ _("REGISTER") }}
+                </a>
+            </div>
         </div>
     </div>
 {% end %}

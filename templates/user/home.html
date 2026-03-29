@@ -12,6 +12,14 @@
 <script src="/static/js/pages/missions/view.js"></script>
 <script src="/static/js/pages/user/home.js"></script>
 <link href="/static/css/pages/user/home.css" rel="stylesheet" />
+<style>
+    .stat-card { background: rgba(88, 166, 255, 0.1) !important; border: 1px solid var(--primary-neon) !important; text-align: center; }
+    .stat-item { padding: 10px; border-right: 1px solid var(--border-color); }
+    .stat-item:last-child { border-right: none; }
+    .card-main { position: relative; overflow: hidden; }
+    .card-main::before { content: ""; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--primary-neon); }
+    .uppercase { text-transform: uppercase; }
+</style>
 {% end %}
 
 {% block content %}
@@ -23,27 +31,52 @@
 <div class="row-fluid">
     <div class="span6">
         <div class="row">
-            <div class="span11 offset1 well">
-                <h2 style="padding-bottom: 8px;">
-                    <i class="fa fa-user"></i> {{ user.handle }} 
-                </h2>
-                <span style="float: right; margin-top: -63px; text-align: center;">
-                    <table>
-                        <tr>
-                            {% if options.teams %}<td>{{ _("Player Score") }}</td>{% end %}{% if scoreboard_visible %}<td style="padding-left: 20px;">Rank</td>{% end %}
-                        </tr>
-                        <tr>
-                            {% if options.teams %}<td><h4 style="margin-top: 0;">{% if options.banking %}${% end %}{{ user.money }} &bull; {{ len(user.flags) }} <i class="fa fa-flag-o"></i><h4></td>{% end %}{% if scoreboard_visible %}<td style="padding-left: 20px;"><h4 style="margin-top: 0;">{{ rank }}<h4></td>{% end %}
-                        </tr>
-                    </table>
-                </span>
-                <center>
-                    {% if options.teams or not team %}
-                        <img src="/avatars/{{ user.avatar }}" class="img-polaroid" />
-                    {% else %}
-                        <img src="/avatars/{{ team.avatar }}" class="img-polaroid" />
-                    {% end %}
-                </center>
+            <div class="span11 offset1 well card-main">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <h1 class="cyber-glow" style="margin-top: 0;">
+                            <i class="fa fa-user"></i> {{ user.handle }}
+                            <button onclick="window.NexusFeed.addLog('SYS.OVERRIDE', 'Agent infiltré avec succès. Transfert de données en cours...')" class="btn btn-primary pull-right" style="font-size: 0.8rem; margin-top: 5px;">
+                                <i class="fa fa-terminal"></i> Tester Live Feed
+                            </button>
+                        </h1>
+                        <p class="matrix-text" style="font-size: 1.2em; font-weight: bold;">
+                            {% if options.teams %}{{ _("Team") }}: {{ team.name }}{% end %}
+                        </p>
+                    </div>
+                    <div class="span4 text-right">
+                        <div class="well stat-card pulse-primary" style="padding: 10px; margin-bottom: 0;">
+                            <span class="text-dim uppercase" style="font-size: 0.8em; letter-spacing: 1px;">{{ _("Global Rank") }}</span>
+                            <h2 class="cyber-glow" style="margin: 0;">#{{ rank }}</h2>
+                        </div>
+                    </div>
+                </div>
+                
+                <hr style="border-top: 1px solid var(--border-color);">
+                
+                <div class="row-fluid text-center">
+                    <div class="span4">
+                        <div class="stat-item">
+                            <span class="text-dim">{{ _("Score") }}</span>
+                            <h3 class="matrix-text">{% if options.banking %}${% end %}{{ user.money }}</h3>
+                        </div>
+                    </div>
+                    <div class="span4">
+                        <div class="stat-item">
+                            <span class="text-dim">{{ _("Flags") }}</span>
+                            <h3 style="color: var(--primary-neon);">{{ len(user.flags) }} <i class="fa fa-flag-o"></i></h3>
+                        </div>
+                    </div>
+                    <div class="span4">
+                        <center>
+                            {% if options.teams or not team %}
+                                <img src="/avatars/{{ user.avatar }}" class="img-circle" style="width: 80px; border: 2px solid var(--primary-neon); box-shadow: 0 0 10px var(--primary-neon);" />
+                            {% else %}
+                                <img src="/avatars/{{ team.avatar }}" class="img-circle" style="width: 80px; border: 2px solid var(--primary-neon); box-shadow: 0 0 10px var(--primary-neon);" />
+                            {% end %}
+                        </center>
+                    </div>
+                </div>
                 <hr>
                 {% if team is not None %}
                     {% set hintcount = len(Hint.all()) %}

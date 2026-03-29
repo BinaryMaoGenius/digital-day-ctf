@@ -67,28 +67,27 @@
 
             {% set has_level = (not team or level.type == 'none' or level in team.game_levels) and level.type != 'locked'  %}
             {% if not (level.type == 'hidden' and not has_level) %}
-            <div class="well">
+            <div class="well card-main pulse-primary">
                 {% if len(GameLevel.all()) > 1 %}
-                    <h3 class="levelheader">
+                    <h3 class="levelheader cyber-glow">
                         {% if has_level %}
                             <i class="fa fa-unlock-alt"></i>
                         {% else %}
                             <i class="fa fa-lock"></i>
                         {% end %}
-                        {{ level.name }}&nbsp;
+                        {{ level.name }}
                     </h3>
-                    {% if level.description %}<h4 class="levelheader">({{ level.description }})</h4>{% end %}
+                    {% if level.description %}<h4 class="levelheader matrix-text"> - {{ level.description }}</h4>{% end %}
                     {% if team and has_level %}
-                        <div class="progress" style="height: 10px; background-color: #424242;">
+                        <div class="progress" style="margin-top: 10px;">
                         {% if len(level.flags) == 0 %}
-                            <div class="bar minibar" style="width: {{0}}%;" title="{{ len(team.level_flags(level.number)) }} / {{ len(level.flags) }}"></div>
-                        {% end %}
-                        {% if len(level.flags) != 0 %}
-                            <div class="bar minibar" style="width: {{ ( len(team.level_flags(level.number)) /  float(len(level.flags)) ) * 100.0 }}%;" title="{{ len(team.level_flags(level.number)) }} / {{ len(level.flags) }}"></div>
+                            <div class="bar" style="width: 0%;"></div>
+                        {% else %}
+                            <div class="bar" style="width: {{ ( len(team.level_flags(level.number)) /  float(len(level.flags)) ) * 100.0 }}%;"></div>
                         {% end %}
                         </div>
                     {% end %}
-                    <hr>
+                    <hr style="border-top: 1px solid var(--border-color);">
                 {% end %}
                 {% if has_level %}
                     <div class="container">

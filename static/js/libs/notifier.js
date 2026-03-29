@@ -101,6 +101,10 @@ $(document).ready(function() {
         }
         if ('message' in notification) {
             Notifier.notify(notification['message'], notification['title'], notification['icon_url']);
+            // Digital Day : Ajouter au killfeed en temps réel
+            if (window.NexusFeed) {
+                window.NexusFeed.addLog(notification['title'], notification['message']);
+            }
         }
     };
 

@@ -9,9 +9,9 @@
     {% set team = teaminfo.get(team_name) %}
     {% if team.get('members_count') > 0 %}
     <tr id="{{ team.get('uuid') }}" style="padding-top: 5px;">
-        <td class="summarycolumn shortcolumn centercolumn" style="font-size: x-large; padding: 0px 20px 0px 10px;">
-            {{ page * display - display + t_index + 1 }}
-        </td>
+<td class="summarycolumn shortcolumn centercolumn matrix-text" style="font-size: 2em; font-weight: 800; padding: 10px 20px;">
+    {{ page * display - display + t_index + 1 }}
+</td>
         <td style="display:none;">{{ team.get('uuid') }}</td>
         <td class="summarycolumn anim:hold">
             <div style="width: 100%; display: table;">
@@ -48,11 +48,11 @@
                                     {% else %}
                                         <i class="fa fa-lock" style="color: #424242; font-size: small; float:left; padding-right: 4px; margin-top: -3px;"></i>
                                     {% end %}
-                                    <div class="progress" style="height: 8px; margin-bottom: 8px; background-color: #424242;" title="{% if level_count_all > 1 %}{{ level_name }} &ndash; {% end %}{% if level.get('number') >= 0 and team_count_lvl != 0 %}{{ int(( team_count_lvl /  float(level.get('flag_count')) ) * 100) }}%{% else %}0%{% end %}">
+                                    <div class="progress" title="{% if level_count_all > 1 %}{{ level_name }} &ndash; {% end %}{% if level.get('number') >= 0 and team_count_lvl != 0 %}{{ int(( team_count_lvl /  float(level.get('flag_count')) ) * 100) }}%{% else %}0%{% end %}">
                                         {% if level.get("number") >= 0 and team_count_lvl != 0 %}
-                                            <div class="bar minibar" style="width: {{ ( team_count_lvl /  float(level.get('flag_count')) ) * 100.0 }}%;"></div>
+                                            <div class="bar" style="width: {{ ( team_count_lvl /  float(level.get('flag_count')) ) * 100.0 }}%;"></div>
                                         {% else %}
-                                            <div class="bar minibar" style="width: 0%;"></div>
+                                            <div class="bar" style="width: 0%;"></div>
                                         {% end %}
                                     </div>
                                 </div>
