@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: digital-day-ctf
+    env: docker
+    plan: starter # Requires 'starter' for persistent disks
+    region: frankfurt # Or your preferred region
+    envVars:
+      - key: SQL_DIALECT
+        value: sqlite
+      - key: X_HEADERS
+        value: "true"
+      - key: PORT
+        value: "8888"
+    disk:
+      name: ctf-data
+      mountPath: /opt/ctf/files
+      sizeGB: 1
