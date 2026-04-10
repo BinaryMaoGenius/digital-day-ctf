@@ -1,21 +1,54 @@
 ####################################
 #
-#  Dockerfile for Root the Box
-#  v0.1.3 - By Moloch, ElJeffe
+#  Digital Day CTF — Dockerfile
+#  Multi-stage build (optimized image size)
+#
 
-FROM python:3.8
+# ── Stage 1 : Builder ───────────────────────────────────────────────────────
+FROM python:3.11-slim AS builder
 
-RUN mkdir /opt/rtb
-ADD . /opt/rtb
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    zlib1g-dev \
+    rustc \
+    libcurl4-openssl-dev \
+    libssl-dev \
+    python3-pycurl \
+    libsqlite3-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update && apt-get install -y \
-build-essential zlib1g-dev rustc \
-python3-pycurl sqlite3 libsqlite3-dev 
+WORKDIR /build
 
-ADD ./setup/requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt --upgrade
+COPY setup/requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip \
+ && pip install --no-cache-dir -r requirements.txt --prefix=/install
 
-ENV SQL_DIALECT=sqlite
+# ── Stage 2 : Runtime ───────────────────────────────────────────────────────
+FROM python:3.11-slim AS runtime
 
-VOLUME ["/opt/rtb/files"]
-ENTRYPOINT ["python3", "/opt/rtb/rootthebox.py", "--setup=docker"]
+# Runtime-only system deps
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    sqlite3 \
+    libcurl4 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy pre-installed Python packages from builder
+COPY --from=builder /install /usr/local
+
+# Application code
+WORKDIR /opt/ctf
+COPY . .
+
+# Persist game data (DB, uploads, config) outside the container
+VOLUME ["/opt/ctf/files"]
+
+# Tornado listens on 8888 by default
+EXPOSE 8888
+
+ENV SQL_DIALECT=sqlite \
+    PYTHONUNBUFFERED=1
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
+    CMD python3 -c "import urllib.request; urllib.request.urlopen('http://localhost:8888/')" || exit 1
+
+ENTRYPOINT ["python3", "/opt/ctf/rootthebox.py", "--setup=docker"]

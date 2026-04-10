@@ -1,14 +1,39 @@
-version: "3"
+version: "3.8"
+
 services:
-  memcached:
-    image: memcached:latest
+  # ── Reverse proxy (SSL termination + gzip) ─────────────────────────────────
+  nginx:
+    image: nginx:1.25-alpine
     ports:
-      - "11211:11211"
-  webapp:
-    build: .
-    ports:
-      - "8888:8888"
+      - "80:80"
+      - "443:443"
     volumes:
-      - ./files:/opt/rtb/files:rw
+      - ./deploy/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./deploy/nginx/certs:/etc/nginx/certs:ro
+    depends_on:
+      - webapp
+    restart: unless-stopped
+
+  # ── Digital Day CTF Application ────────────────────────────────────────────
+  webapp:
+    build:
+      context: .
+      target: runtime
+    expose:
+      - "8888"
+    volumes:
+      - ctf_data:/opt/ctf/files
     environment:
-      - COMPOSE_CONVERT_WINDOWS_PATHS=1
+      - SQL_DIALECT=sqlite
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8888/')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+volumes:
+  ctf_data:
+    driver: local

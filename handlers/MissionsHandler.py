@@ -32,6 +32,7 @@ from past.utils import old_div
 from tornado.options import options
 
 from handlers.BaseHandlers import BaseHandler
+from libs.RateLimiter import flag_rate_limiter
 from libs.SecurityDecorators import authenticated, game_started
 from libs.StringCoding import decode, encode
 from libs.WebhookHelpers import *
@@ -145,11 +146,31 @@ class BoxHandler(BaseHandler):
     @authenticated
     @game_started
     def post(self, *args, **kwargs):
-        """Check validity of flag submissions"""
+        """Check validity of flag submissions — rate-limited to prevent brute-force."""
+        user = self.get_current_user()
+
+        # --- Rate-limit check (5 attempts per 30 seconds per user) ---
+        allowed, retry_after = flag_rate_limiter.check(str(user.uuid))
+        if not allowed:
+            logging.warning(
+                "[RateLimit] Flag brute-force blocked: user=%s retry_after=%ds",
+                user.handle,
+                retry_after,
+            )
+            self.set_header("Retry-After", str(retry_after))
+            self.render(
+                "missions/status.html",
+                errors=None,
+                info=[
+                    f"Trop de tentatives. Veuillez patienter {retry_after} seconde(s) avant de réessayer."
+                ],
+            )
+            return
+        # --------------------------------------------------------------
+
         box_id = self.get_argument("box_id", None)
         uuid = self.get_argument("uuid", "")
         token = self.get_argument("token", "")
-        user = self.get_current_user()
         if (box_id and Box.by_id(box_id).locked) or (
             box_id is None and uuid and Flag.by_uuid(uuid).box.locked
         ):
@@ -286,6 +307,10 @@ class BoxHandler(BaseHandler):
             reward_added_str_template = "{} points added to your " + teamval + "score."
         reward_dialog += reward_added_str_template.format(str(old_reward))
         success = [reward_dialog]
+
+        # Reset rate-limit bucket on successful capture so the player
+        # isn't penalised for moving on to the next flag immediately.
+        flag_rate_limiter.reset(str(user.uuid))
 
         # Fire capture webhook
         send_capture_webhook(user, flag, old_reward)

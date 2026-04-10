@@ -1,204 +1,71 @@
 {% extends "../main.html" %}
 
-{% block title %}{{ _("Registration") }}{% end %}
+{% block title %}{{ _("Quick Join") }}{% end %}
 
 {% block header %}
     <link rel="stylesheet" href="/static/css/pages/public/registration.css" type="text/css" />
-    <script src="/static/js/pages/public/registration.js"></script>
-{% end %}
-
-{% block modals %}
-    {% from libs.XSSImageCheck import get_new_avatar %}
-    {% from tornado.options import options %}
-    {% from libs.XSSImageCheck import filter_avatars %}
-    {% from libs.XSSImageCheck import existing_avatars %}
-    {% from models.Team import Team %}
-    <!-- Select Avatar -->
-    {% if options.teams %}
-        {% set dir = "user" %}
-    {% else %}
-        {% set dir = "team" %}
-    {% end %}
-    {% set avatars = filter_avatars("user") %}
-    {% set existing = existing_avatars(dir) %}
-    <div id="change-user-avatar-modal" class="modal hide fade" style="display: none; {% if len(avatars) > 0 %}width: 750px; margin-left: -375px;{% end %}">
-        <div class="modal-header">
-            <button id="avatarclose" type="button" class="close" data-dismiss="modal">&times;</button>
-            <h3>{{ _("Select Avatar") }}</h3>
-        </div>
-        <div class="modal-body">
-            {% raw xsrf_form_html() %}
-            {% if len(avatars) > 0 %}
-                <div style="border-top: solid 1px rgb(92, 92, 92); margin-top: -5px; margin-bottom: 20px;"></div>
-                <span style="float: right; padding-right: 10px; margin-top: -15px; font-size: small;"><i class="fa fa-certificate"></i> {{ _("indicates use by another player") }}</span>
-                <br>
-                {% for avatar in avatars[::3] %}
-                    <div class="row">
-                        <div class="span3" style="position: relative;">
-                            <center>
-                                {% if avatar in existing %}<i class="fa fa-certificate avatarused"></i><i class="fa fa-certificate avatarused-top"></i>{% end %}
-                                <a href="#" class="useravatarimg" value="{{avatar}}"><img src="/avatars/{{avatar}}"  class="img-polaroid" style="width: 200px;"></a>
-                            </center>
-                        </div>
-                        {% if avatars.index(avatar) + 1 < len(avatars) %}
-                            {% set avatar1 = avatars[avatars.index(avatar) + 1] %}
-                            <div class="span3" style="position: relative;">
-                                <center>
-                                    {% if avatar1 in existing %}<i class="fa fa-certificate avatarused"></i><i class="fa fa-certificate avatarused-top"></i>{% end %}
-                                    <a href="#" class="useravatarimg" value="{{avatar1}}"><img src="/avatars/{{avatar1}}"  class="img-polaroid" style="width: 200px;"></a>
-                                </center>
-                            </div>
-                        {% end %}
-                        {% if avatars.index(avatar) + 2 < len(avatars) %}
-                            {% set avatar2 = avatars[avatars.index(avatar) + 2] %}
-                            <div class="span3" style="position: relative;">
-                                <center>
-                                    {% if avatar2 in existing %}<i class="fa fa-certificate avatarused"></i><i class="fa fa-certificate avatarused-top"></i>{% end %}
-                                    <a href="#" class="useravatarimg" value="{{avatar2}}"><img src="/avatars/{{avatar2}}"  class="img-polaroid" style="width: 200px;"></a>
-                                </center>
-                            </div>
-                        {% end %}
-                    </div>
-                    <br/>
-                {% end %}
-            {% end %}
-        </div>
-    </div>
 {% end %}
 
 {% block content %}
-    <div class="container">
-        <h1 class="cyber-glow">
-            <i class="fa fa-pencil"></i>
-            {{ _("Registration") }}
+    <div class="container" style="max-width: 500px; margin-top: 80px;">
+        <h1 class="cyber-glow text-center">
+            <i class="fa fa-user-plus"></i>
+            {{ _("NEW AGENT") }}
         </h1>
         <br />
         {% if errors is not None and len(errors) != 0 %}
             {% for error in errors %}
                 <div class="alert alert-error">
-                    <h4 class="alert-heading">{{ _("ERROR") }}</h4>
+                    <h4 class="alert-heading">{{ _("ACCESS DENIED") }}</h4>
                     {{ error }}
                 </div>
             {% end %}
         {% end %}
+        
         <div class="well card-main pulse-primary" style="padding: 40px;">
-        {% if not suspend %}
-            <legend class="matrix-text" style="border: none; font-size: 1.5em;">
-                {{ _("Initialize New Agent") }}
-            </legend>
-            <form class="form-horizontal" action="/registration" method="post" enctype="multipart/form-data">
+            <p class="matrix-text text-center" style="margin-bottom: 30px; font-size: 1.1em;">
+                Initialize your identity in the NEXUS.
+            </p>
+            
+            <form class="form-horizontal" action="/registration" method="post">
                 {% raw xsrf_form_html() %}
-                {% if len(avatars) > 0 %}
-                    {% set avatarimg = get_new_avatar("user", not options.teams) %}
-                    <div class="avatar-container" style="float: right; text-align: center; width: 350px;">
-                        <img id="avatarimage" src="/avatars/{{avatarimg}}" class="img-circle" style="width: 250px; height: 250px; object-fit: cover; border: 3px solid var(--primary-neon); box-shadow: 0 0 20px var(--primary-neon);"/>
-                        <div style="margin-top: 20px;">
-                            <input id="user_avatar_select" name="user_avatar_select" type="hidden" value="{{avatarimg}}" />
-                            <div class="btn-group">
-                                {% if len(avatars) > 0 %}<a data-toggle="modal" class="btn btn-primary" href="#change-user-avatar-modal"> {{ _("Terminal Avatars") }} </a>{% end %}
-                                <a id="uploadbutton" class="btn btn-info" href="#">{{ _("Custom Uplink") }}</a>
-                            </div>
-                            <input id="user-avatar" name="avatar" type="file" accept="image/bmp,image/jpeg,image/gif,image/png" style="display: none;"/>
-                        </div>
-                        {% if options.use_recaptcha %}
-                        <br>
-                        {% module Recaptcha() %}
-                        {% end %}
-                    </div>
-                {% end %}
                 
-                <div style="max-width: 500px;">
-                    <div class="control-group">
-                        <label class="control-label matrix-text" for="handle">{{ _("Handle") }}</label>
-                        <div class="controls">
-                            <input required id="handle" name="handle" maxlength="16" minlength="3" placeholder="{{ _('Agent Alias') }}" type="text" pattern="^[a-zA-Z0-9_\-\.]{3,16}$" />
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label matrix-text" for="playername">{{ _("Real Name") }}</label>
-                        <div class="controls">
-                            <input required id="playername" name="playername" maxlength="64" minlength="3" placeholder="{{_('Identity')}}" type="text" pattern="^[a-zA-Z0-9 ]{3,64}$" />
-                        </div>
-                    </div>
-                    {% if options.require_email %}
-                    <div class="control-group">
-                        <label class="control-label matrix-text" for="email">{{ _("Email") }}</label>
-                        <div class="controls">
-                            <input required id="email" name="email" maxlength="64" minlength="3" placeholder="{{ _('Communication Link') }}" type="text" pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$" />
-                        </div>
-                    </div>
-                    {% end %}
-                    
-                    <hr style="border-top: 1px solid var(--border-color);">
-                    
-                    {% if options.teams %}
-                        <div class="control-group">
-                            <div class="controls">
-                                <label class="radio inline matrix-text">
-                                    <input type="radio" class="teammode" name="teammode" value="join" checked> {{ _("Join Cell") }}
-                                </label>
-                                {% if options.public_teams %}
-                                <label class="radio inline matrix-text">
-                                    <input type="radio" class="teammode" name="teammode" value="create"> {{ _("Found Cell") }}
-                                </label>
-                                {% end %}
-                            </div>
-                        </div>
-                        
-                        <div id="teammode-create" style="display: none;">
-                            <div class="control-group">
-                                <label class="control-label matrix-text" for="team-name">{{ _("Cell Name") }}</label>
-                                <div class="controls">
-                                    <input id="team-name" name="team_name" maxlength="24" minlength="3" type="text" placeholder="{{ _('Cell Name') }}" pattern="^[a-zA-Z0-9 _\-\.]{3,24}$">
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div id="teammode-join" class="control-group">
-                            <label class="control-label matrix-text" for="team-code">{{ _("Cell Code") }}</label>
-                            <div class="controls">
-                                <input id="team-code" name="team-code" type="text" placeholder="{{ _('Access Code') }}">
-                            </div>
-                        </div>
-                    {% end %}
-
-                    <hr style="border-top: 1px solid var(--border-color);">
-                    
-                    <div class="control-group">
-                        <label class="control-label matrix-text" for="pass1">{{ _("Access Key") }}</label>
-                        <div class="controls">
-                            <input required id="pass1" name="pass1" minlength="{{ options.min_user_password_length }}" placeholder="{{ _('Password') }}" type="password" autocomplete="off" />
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label matrix-text" for="pass2">{{ _("Sync Key") }}</label>
-                        <div class="controls">
-                            <input required id="pass2" name="pass2" minlength="{{ options.min_user_password_length }}" placeholder="{{ _('Confirm Password') }}" type="password" autocomplete="off" />
-                        </div>
-                    </div>
-                    
-                    {% if options.restrict_registration %}
-                    <div class="control-group">
-                        <label class="control-label matrix-text" for="token">{{ _("Entry Token") }}</label>
-                        <div class="controls">
-                            <input required id="regtoken" name="token" placeholder="{{ _('Token') }}" type="text" pattern="^[a-fA-F0-9]{1,6}$" />
-                        </div>
-                    </div>
-                    {% end %}
-                    
-                    <div class="control-group" style="margin-top: 30px;">
-                        <div class="controls">
-                            <button class="btn btn-primary btn-large" type="submit">
-                                <i class="fa fa-user-plus"></i>
-                                {{ _("INITIALIZE AGENT") }}
-                            </button>
-                        </div>
+                <input type="hidden" name="playername" value="Anonymous">
+                <input type="hidden" name="teammode" value="create">
+                
+                <div class="control-group">
+                    <label class="control-label matrix-text" for="handle">{{ _("Handle") }}</label>
+                    <div class="controls">
+                        <input required id="handle" name="handle" maxlength="16" minlength="3" placeholder="Choose your Alias" type="text" pattern="^[a-zA-Z0-9_\-\.]{3,16}$" class="input-block-level" />
                     </div>
                 </div>
+
+                <div class="control-group">
+                    <label class="control-label matrix-text" for="pass1">{{ _("Access Key") }}</label>
+                    <div class="controls">
+                        <input required id="pass1" name="pass1" minlength="{{ options.min_user_password_length }}" placeholder="Password" type="password" autocomplete="off" class="input-block-level" />
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label matrix-text" for="pass2">{{ _("Sync Key") }}</label>
+                    <div class="controls">
+                        <input required id="pass2" name="pass2" minlength="{{ options.min_user_password_length }}" placeholder="Confirm Password" type="password" autocomplete="off" class="input-block-level" />
+                    </div>
+                </div>
+                
+                <hr style="border-top: 1px solid var(--border-color); margin: 30px 0;">
+                
+                <div class="text-center">
+                    <button class="btn btn-primary btn-large btn-block" type="submit">
+                        <i class="fa fa-flash"></i>
+                        {{ _("INITIALIZE AGENT") }}
+                    </button>
+                    <p style="margin-top: 15px;">
+                        <a href="/login">{{ _("Already have an account? Login") }}</a>
+                    </p>
+                </div>
             </form>
-        {% else %}
-            <h4 class="text-center matrix-text"><i class="fa fa-warning"></i> {{ _("Recruitment is currently suspended.") }}</h4>
-        {% end %}
         </div>
     </div>
 {% end %}

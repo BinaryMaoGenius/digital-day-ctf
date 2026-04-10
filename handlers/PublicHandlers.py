@@ -425,9 +425,16 @@ class RegistrationHandler(BaseHandler):
                     self.check_regtoken()
                 user = self.create_user()
                 send_user_registered_webhook(user)
-                # Auto-login après inscription (Fast onboarding)
                 self.start_session()
-                self.session.user_id = user.id
+                self.session["user_id"] = int(user.id)
+                self.session["user_uuid"] = user.uuid
+                self.session["handle"] = user.handle
+                if user.team is not None:
+                    self.session["team_id"] = int(user.team.id)
+                theme = Theme.by_id(user.theme_id)
+                self.session["theme"] = [str(f) for f in theme.files]
+                self.session["theme_id"] = int(theme.id)
+                self.session["menu"] = "user"
                 self.session.save()
                 Theme.apply_theme(user.theme)
                 self.redirect("/user/missions/firstlogin" if self.config.story_mode else "/user")
@@ -455,12 +462,13 @@ class RegistrationHandler(BaseHandler):
             is False
         ):
             raise ValidationError("Invalid handle format")
+        playername = self.get_argument("playername", "")
         if (
-            self.get_argument("playername", None)
+            playername
             and bool(
                 re.match(
                     r"^[0-9A-Za-z %s]{3,64}$" % unicodewd,
-                    self.get_argument("playername", ""),
+                    playername,
                     re.UNICODE,
                 )
             )
@@ -608,9 +616,9 @@ class RegistrationHandler(BaseHandler):
                     team.game_levels.append(level)
             return team
         elif self.config.public_teams:
-            team_name = self.get_argument("team_name", "")
+            team_name = self.get_argument("team_name", "").strip()
             if not team_name:
-                team_name = self.get_argument("handle", "") + "_Cell"
+                team_name = "Team " + self.get_argument("handle", "")
             
             if Team.by_name(team_name) is not None:
                 raise ValidationError(

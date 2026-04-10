@@ -61,7 +61,7 @@ $(document).ready(function() {
 
     $("#updatebutton").click(function() {
         $("#update-rtb").hide();
-        $("#gitstatus").html('<hr /><i class="fa fa-info-circle gitstatus info"></i>&nbsp;&nbsp;Updating Root the Box...');
+        $("#gitstatus").html('<hr /><i class="fa fa-info-circle gitstatus info"></i>&nbsp;&nbsp;Mise à jour de la Plateforme CTF...');
         var xsrf = $("#update-rtb").prop("_xsrf");
         $.ajax({
             type: "POST",
@@ -110,7 +110,7 @@ async function updateGitStatus() {
                     '<span title="commands: git fetch ; git status">' + status + '</span>';
                 $("#update-rtb").show();
             } else if (status.includes("Your branch is up to date")) {
-                status = '<hr /><i class="fa fa-check-circle gitstatus ok"></i>&nbsp;&nbsp;Root the Box is up to date.';
+                status = '<hr /><i class="fa fa-check-circle gitstatus ok"></i>&nbsp;&nbsp;La plateforme est à jour.';
             } else {
                 if (status.indexOf(":") > 0) {
                     status = status.slice(0,status.indexOf(":")) + "."

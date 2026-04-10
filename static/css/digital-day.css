@@ -1,6 +1,6 @@
 /* 
     Digital Day - Club IT 
-    Modern UI Overrides for RootTheBox (Bootstrap 2)
+    Modern UI Overrides for Digital Day CTF (Bootstrap 2)
 */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
@@ -14,8 +14,10 @@
     --danger-red: #ff3e3e;
     --text-high: #f0f6fc;
     --text-dim: #8b949e;
-    --border-color: rgba(255, 255, 255, 0.1);
-    --glass-bg: rgba(22, 27, 34, 0.8);
+    --border-color: rgba(255, 255, 255, 0.15);
+    --glass-bg: rgba(22, 27, 34, 0.65);
+    --glass-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.45);
+    --glass-border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 body {
@@ -33,10 +35,11 @@ body {
 /* Navbar Modernization */
 .navbar-inner {
     background: var(--glass-bg) !important;
-    border-bottom: 1px solid var(--border-color) !important;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5) !important;
-    padding: 10px 0 !important;
+    border-bottom: var(--glass-border) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: var(--glass-shadow) !important;
+    padding: 12px 0 !important;
 }
 
 .navbar .nav > li > a {
@@ -61,10 +64,12 @@ body {
 
 /* Card / Well Modernization */
 .well, .hero-unit {
-    background: var(--bg-card) !important;
-    border: 1px solid var(--border-color) !important;
-    border-radius: 12px !important;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37) !important;
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px);
+    border: var(--glass-border) !important;
+    border-radius: 20px !important;
+    box-shadow: var(--glass-shadow) !important;
     color: var(--text-high) !important;
 }
 

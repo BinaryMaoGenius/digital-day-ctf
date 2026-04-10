@@ -78,13 +78,7 @@
                 <br/>
                 <input type="hidden" name="playername" value="Anonymous">
                 
-                {% if options.teams %}
-                    <div class="input-prepend input-block-level" style="display: flex;">
-                        <span class="add-on" style="background: var(--bg-card); border-color: var(--border-color); color: var(--secondary-neon);"><i class="fa fa-users"></i></span>
-                        <input name="team-code" type="text" class="input-block-level" style="margin-bottom:0;" placeholder="Optional: Cell Access Code">
-                    </div>
-                    <br/>
-                {% end %}
+                <input type="hidden" name="teammode" value="create">
 
                 <div class="input-prepend input-block-level" style="display: flex;">
                     <span class="add-on" style="background: var(--bg-card); border-color: var(--border-color); color: var(--secondary-neon);"><i class="fa fa-lock"></i></span>

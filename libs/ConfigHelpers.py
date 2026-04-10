@@ -13,7 +13,7 @@ from libs.XSSImageCheck import is_xss_image
 
 def save_config():
     logging.info("Saving current config to: %s" % options.config)
-    with open(options.config, "w") as fp:
+    with open(options.config, "w", encoding="utf-8") as fp:
         fp.write("##########################")
         fp.write(" Root the Box Config File ")
         fp.write("##########################\n")

@@ -233,7 +233,7 @@ def version():
     from sqlalchemy import __version__ as orm_version
     from tornado import version as tornado_version
 
-    print(bold + "Root the Box%s v%s" % (W, __version__))
+    print(bold + "Digital Day CTF%s v%s" % (W, __version__))
     print(bold + " SQL Alchemy%s v%s" % (W, orm_version))
     print(bold + "     Torando%s v%s" % (W, tornado_version))
 
@@ -618,7 +618,7 @@ except NameError:
 
 define(
     "game_name",
-    default="Root the Box",
+    default="Digital Day CTF",
     group="game",
     help="the name of the current game",
     type=game_type,
@@ -634,7 +634,7 @@ define(
 
 define(
     "ctf_logo",
-    default="/static/images/rtb2.png",
+    default="/static/images/digital_day_logo.png",
     group="game",
     help="the image displayed on the welcome page",
     type=game_type,
@@ -675,7 +675,7 @@ define(
 define(
     "story_signature",
     multiple=True,
-    default=[" ", "Good hunting,\n    -Morris"],
+    default=[" ", "Que le code soit avec vous,\n    -Le Nexus"],
     group="game",
     help="the ending at the end of the communication dialog",
     type=game_type,
@@ -685,13 +685,16 @@ define(
     "story_firstlogin",
     multiple=True,
     default=[
-        "Hello [[b;;]$user],\n",
-        "I am your new employer. You may call me [[b;;]Morris].",
+        "Bienvenue [[b;;]$user] au [[b;;]Digital Day CTF] !\n",
+        "Je suis [[b;;]Le Nexus], l'intelligence de la plateforme.",
         " ",
-        "I hope you're well rested.  We have a lot of work to do.",
-        "I have several assignments which require your... special skill set.",
+        "Un CTF (Capture The Flag) est un jeu de piratage éthique.",
+        "Votre objectif : résoudre des défis (Missions) pour trouver des 'Flags'.",
         " ",
-        'You may view your current assignments by selecting \n"Missions" from the Game menu.',
+        "Un Flag est une preuve de votre hack. Il ressemble à ceci : [[b;#39ff14;]flag{C3C1_3ST_UN_3X3MPL3}]",
+        "Copiez ce Flag et soumettez-le pour gagner des points au classement.",
+        " ",
+        "Allez dans 'Missions' pour commencer votre première infiltration. Bonne chance.",
     ],
     group="game",
     help="the dialog displayed at first login",

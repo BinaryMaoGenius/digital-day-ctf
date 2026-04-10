@@ -49,7 +49,7 @@ if (
     admin_handle = "admin"
     password = "rootthebox"
 else:
-    admin_handle = str(input(PROMPT + "RootTheBox Admin Username [admin]: ")) or "admin"
+    admin_handle = str(input(PROMPT + "Admin Username [admin]: ")) or "admin"
     sys.stdout.write(PROMPT + "New Admin ")
     sys.stdout.flush()
     password1 = getpass.getpass()

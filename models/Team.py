@@ -271,8 +271,8 @@ class Team(DatabaseObject):
     def last_scored(self):
         for item in reversed(self.game_history):
             if item.type == "flag_count":
-                return item.created.strftime("%s")
-        return datetime.now().strftime("%s")
+                return str(int(item.created.timestamp()))
+        return str(int(datetime.now().timestamp()))
 
     def level_flags(self, lvl):
         """Given a level number return all flags captured for that level"""

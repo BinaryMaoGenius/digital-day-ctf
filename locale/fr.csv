@@ -626,7 +626,7 @@ Time,Temps
 "Time to create a botnet. By uploading a small bot program to target machines, you can be periodically rewarded for each bot in your botnet; the larger the botnet the larger the reward.","Il est temps de créer un botnet. En téléchargeant un petit programme de bot sur des machines cibles, vous pouvez être périodiquement récompensé pour chaque bot de votre botnet; plus le botnet est grand, plus la récompense est grande."
 to Add,ajouter
 to Add or Subtract,ajouter ou soustraire
-"To restore this RTB instance, you may also need the contents under the files directory, to include the rootthebox.cfg.","Pour restaurer cette instance RTB, vous aurez peut-être également besoin du contenu situé dans le répertoire 'files', afin d'inclure rootthebox.cfg."
+"To restore this platform instance, you may also need the contents under the files directory to include the platform.cfg.","Pour restaurer cette instance Digital Day, vous aurez peut-être également besoin du contenu situé dans le répertoire 'files' afin d'inclure platform.cfg."
 Token,Jeton
 Token Value,Valeur du jeton
 Tools,Outils
@@ -647,7 +647,7 @@ Unlocks at,Se débloque à
 Update Bank Password,Mettre à jour le mot de passe de la banque
 Update Configuration,Mise à jour de la configuration
 Update Password,Mettre à jour le mot de passe
-Update RootTheBox,Mettre à jour RootTheBox
+Update RootTheBox,Mettre à jour la plateforme
 Upgrade Purchased,Mise à niveau achetée
 Upgrade to,Mise à niveau vers
 Upload,Télécharger

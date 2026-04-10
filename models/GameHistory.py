@@ -76,7 +76,7 @@ class GameHistory(DatabaseObject):
         team = Team.by_id(self.team_id)
         """Returns public data as a dict"""
         return {
-            "timestamp": self.created.strftime("%s"),
+            "timestamp": str(int(self.created.timestamp())),
             "team_name": team.name,
             "value": self._value,
         }
@@ -94,7 +94,7 @@ class GameHistory(DatabaseObject):
         team = Team.by_id(self.team_id)
         return json.dumps(
             {
-                "created": self.created.strftime("%s"),
+                "created": str(int(self.created.timestamp())),
                 "team_uuid": team.uuid,
                 "type": self._type,
                 "value": self._value,
