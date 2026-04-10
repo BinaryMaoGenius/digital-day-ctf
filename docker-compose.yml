@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   # ── Reverse proxy (SSL termination + gzip) ─────────────────────────────────
   nginx:
@@ -22,11 +20,24 @@ services:
     expose:
       - "8888"
     volumes:
+      - .:/opt/ctf
       - ctf_data:/opt/ctf/files
+
     environment:
       - SQL_DIALECT=sqlite
       - PYTHONUNBUFFERED=1
+      - X_HEADERS=True
+      - MEMCACHED=memcached:11211
+      - AUTOSTART_GAME=True
+    depends_on:
+      - memcached
     restart: unless-stopped
+
+  # ── Session Storage (Memcached) ────────────────────────────────────────────
+  memcached:
+    image: memcached:1.6-alpine
+    restart: unless-stopped
+
     healthcheck:
       test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8888/')"]
       interval: 30s

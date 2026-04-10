@@ -89,6 +89,7 @@ urls = [
     (r"/oidc", CodeFlowHandler),
     (r"/about", AboutHandler),
     (r"/", HomePageHandler),
+
     (r"/robots(|\.txt)", FakeRobotsHandler),
     (r"/status", StatusHandler),
     # Scoreboard Handlers - ScoreboardHandlers.py
@@ -207,6 +208,7 @@ urls = [
 # These routes should be disabled if we're not using the database for authentication.
 # If database auth is used add them in.
 if options.auth == "db":
+
     urls.insert(2, (r"/reset/token", ResetPasswordHandler))
     urls.insert(2, (r"/reset", ForgotPasswordHandler))
     urls.insert(2, (r"/registration/token", ValidEmailHandler))

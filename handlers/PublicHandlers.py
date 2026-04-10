@@ -436,14 +436,16 @@ class RegistrationHandler(BaseHandler):
                 self.session["theme_id"] = int(theme.id)
                 self.session["menu"] = "user"
                 self.session.save()
-                Theme.apply_theme(user.theme)
+
                 self.redirect("/user/missions/firstlogin" if self.config.story_mode else "/user")
         except ValidationError as error:
+            logging.error("Registration failed: %s" % error)
             self.render(
                 "public/registration.html",
                 errors=[str(error)],
                 suspend=self.application.settings["suspend_registration"],
             )
+
 
     def check_regtoken(self):
         regtoken = self.get_argument("token", "")

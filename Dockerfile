@@ -33,7 +33,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy pre-installed Python packages from builder
-COPY --from=builder /install /usr/local
+COPY --from=builder /install/bin /usr/local/bin
+COPY --from=builder /install/lib /usr/local/lib
 
 # Application code
 WORKDIR /opt/ctf
@@ -51,4 +52,4 @@ ENV SQL_DIALECT=sqlite \
 HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
     CMD python3 -c "import urllib.request; urllib.request.urlopen('http://localhost:8888/')" || exit 1
 
-ENTRYPOINT ["python3", "/opt/ctf/rootthebox.py", "--setup=docker"]
+ENTRYPOINT ["sh", "-c", "python3 /opt/ctf/rootthebox.py --setup=docker && python3 /opt/ctf/rootthebox.py --start"]
