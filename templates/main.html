@@ -30,6 +30,28 @@
         {% module Theme() %}
     </head>
     {% block modals %}{% end %}
+
+    <!-- Modal des Règles (Ayanokoji Style) -->
+    <div id="ayanokoji-rules-modal" class="modal hide fade" tabindex="-1" style="display: none; background-color: var(--bg-card); border: 2px solid var(--danger-red); color: var(--text-high);">
+        <div class="modal-header" style="border-bottom: 1px solid var(--danger-red);">
+            <button type="button" class="close" data-dismiss="modal" style="color: var(--danger-red);">&times;</button>
+            <h3 style="color: var(--danger-red); font-family: 'Inter', sans-serif;">ATTENTION : PROTOCOLE DE SURVIE</h3>
+        </div>
+        <div class="modal-body" style="font-size: 1.1em; line-height: 1.5;">
+            <p>Bienvenue dans la <strong>Phase de Reconnaissance</strong>. L'Empire Numérique est ouvert, observez-y la Carte et vos adversaires, mais les Missions sont verrouillées tant que l'Oracle n'a pas déclaré le début de la Guerre.</p>
+            <p>Sachez que les Règles ne sont là que pour éprouver vos limites. Dans le Mandé Numérique, la pitié n'existe pas :</p>
+            <ul style="color: #ccc;">
+                <li><strong style="color: var(--primary-neon);">La Loi du Premier Sang (Déchéance) :</strong> La valeur d'une mission chute dramatiquement à mesure que le temps passe et que vos rivaux la piratent. Seuls les plus rapides s'enrichissent.</li>
+                <li><strong style="color: var(--primary-neon);">L'Ignorance a un Prix :</strong> Soumettre un Flag (Code secret) erroné par pure supposition provoquera l'ire des systèmes et <strong>drainera massivement vos Cauris (Pénalité)</strong>.</li>
+                <li><strong style="color: var(--primary-neon);">Le Coup de Poignard (Marché Clandestin) :</strong> Avec les bons Cauris, vous pouvez acheter des lances empoisonnées, voler le code des adversaires, ou les bloquer. La ruse est reine.</li>
+                <li><strong style="color: var(--primary-neon);">L'Armée de Génies :</strong> Déployer des botnets silencieux sur les serveurs vous assure une rente. Ne vous faites pas remarquer.</li>
+            </ul>
+            <p style="text-align: center; color: var(--danger-red); margin-top:20px;"><em>"Le génie ne se contente pas de jouer selon les règles. Il les retourne contre les autres. Préparez-vous psychologiquement."</em></p>
+        </div>
+        <div class="modal-footer" style="background-color: var(--bg-main); border-top: 1px solid var(--danger-red);">
+            <button class="btn btn-danger" data-dismiss="modal">J'AI COMPRIS LES ENJEUX</button>
+        </div>
+    </div>
     <body>
         {% module Menu() %}
         <div class="container-fluid animated fadeIn">
@@ -41,7 +63,8 @@
             <hr style="margin-bottom: -1px;">
             <div class="navbar-inner footernav">
                 <span class="matrix-text" style="font-weight: bold;">Digital Day - Club IT</span> • 
-                Propulsé par la <a href="#" target="_blank">Team Digital Day</a> &copy; {{ datetime.date.today().year }}{% if options.privacy_policy_link %} • <a href="{{ options.privacy_policy_link }}">{{ _("Politique de confidentialité") }}</a>{% end %}
+                Propulsé par la <a href="#" target="_blank">Team Digital Day</a> &copy; {{ datetime.date.today().year }}
+                • <a href="#ayanokoji-rules-modal" data-toggle="modal" style="color: var(--danger-red); font-weight: bold; text-shadow: 0 0 5px var(--danger-red); cursor: pointer;">🚨 RÈGLES DE SURVIE</a>
 
                 <span style="float:right; padding-right: 5px;">{% raw options.org_footer %}</span>
             </div>

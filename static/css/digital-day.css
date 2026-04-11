@@ -6,22 +6,26 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root {
-    --bg-main: #0d1117;
-    --bg-card: #161b22;
-    --primary-neon: #58a6ff;
+    --bg-main: #1A1210;
+    --bg-card: #2B1D16;
+    --primary-neon: #ffb703;
     --secondary-green: #39ff14;
     --accent-violet: #bc13fe;
-    --danger-red: #ff3e3e;
-    --text-high: #f0f6fc;
-    --text-dim: #8b949e;
-    --border-color: rgba(255, 255, 255, 0.15);
-    --glass-bg: rgba(22, 27, 34, 0.65);
-    --glass-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.45);
-    --glass-border: 1px solid rgba(255, 255, 255, 0.12);
+    --danger-red: #d00000;
+    --text-high: #F3EBD3;
+    --text-dim: #a68a64;
+    --border-color: rgba(255, 183, 3, 0.15);
+    --glass-bg: rgba(43, 29, 22, 0.85);
+    --glass-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.6);
+    --glass-border: 1px solid rgba(255, 183, 3, 0.12);
 }
 
 body {
     background-color: var(--bg-main) !important;
+    background-image: url('../images/cyber_bogolan.png') !important;
+    background-size: 500px;
+    background-blend-mode: soft-light;
+    margin: 0;
     color: var(--text-high) !important;
     font-family: 'Inter', sans-serif !important;
     line-height: 1.6;

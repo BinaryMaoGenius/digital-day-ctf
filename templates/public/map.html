@@ -118,5 +118,59 @@
             `, { className: 'cyber-popup' });
     });
 
-</script>
+    // Joueur Avatar ("Vous êtes ici - GTA Style Radar)
+    {% if current_user %}
+    const playerAvatarIcon = L.divIcon({
+        className: 'player-avatar-icon',
+        html: `<img src="/avatars/{{ current_user.avatar }}" style="width: 45px; height: 45px; border-radius: 50%; border: 3px solid var(--danger-red); box-shadow: 0 0 25px var(--danger-red); background-color: var(--bg-card); object-fit: cover; animation: pulse-avatar 2s infinite;">`,
+        iconSize: [45, 45],
+        iconAnchor: [22, 22]
+    });
+    
+    // Position initiale du joueur : Bamako (Nexus Central)
+    const playerPos = [12.6392, -8.0029];
+    
+    // Zone d'influence (Radar)
+    L.circle(playerPos, {
+        color: 'var(--danger-red)',
+        fillColor: 'var(--danger-red)',
+        fillOpacity: 0.05,
+        radius: 350000,
+        className: 'radar-sweep'
+    }).addTo(map);
+
+    // Lignes de ciblages ("Lasers") vers les missions
+    cities.forEach(city => {
+        if (city.name !== "Bamako") {
+            L.polyline([playerPos, city.coords], {
+                color: 'var(--danger-red)',
+                weight: 1.5,
+                opacity: 0.6,
+                dashArray: '10, 15',
+                className: 'laser-targeting'
+            }).addTo(map);
+        }
+    });
+
+    L.marker(playerPos, { icon: playerAvatarIcon, zIndexOffset: 1000 })
+        .addTo(map)
+        .bindPopup(`
+            <div class="cyber-popup" style="text-align: center;">
+                <strong style="color: var(--danger-red); font-size: 1.2em;">{{ current_user.handle.upper() }}</strong><br>
+                <span>Niveau de Menace: <span style="color: var(--danger-red);">Maximal</span></span><hr style="margin: 5px 0;">
+                <em>Ciblage Actif des Reliques...</em>
+            </div>
+        `, { className: 'cyber-popup' });
+    {% end %}
+
+    // Animations CSS Injectées
+    const style = document.createElement('style');
+    style.innerHTML = `
+        @keyframes pulse-avatar { 0% { box-shadow: 0 0 0 0 rgba(208,0,0,0.7); } 70% { box-shadow: 0 0 0 20px rgba(208,0,0,0); } 100% { box-shadow: 0 0 0 0 rgba(208,0,0,0); } }
+        .laser-targeting { animation: dash 40s linear infinite; }
+        @keyframes dash { to { stroke-dashoffset: -1000; } }
+        .radar-sweep { animation: radar 2.5s ease-in-out infinite; transform-origin: center; pointer-events: none; }
+        @keyframes radar { 0% { fill-opacity: 0.02; } 50% { fill-opacity: 0.15; } 100% { fill-opacity: 0.02; } }
+    `;
+    document.head.appendChild(style);</script>
 {% end %}
