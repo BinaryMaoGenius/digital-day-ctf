@@ -4,7 +4,7 @@
     {% if users[user].get("money") > 0 %}
     <tr style="padding-top: 5px;">
         <td>{{ user }}</td>
-        <td class="summarycolumn" style="font-size: large; text-align: center; width: 75px;">{% if options.banking %}{{ _("$") }}{% end %}{{ users[user].get("money") }}</td>
+        <td class="summarycolumn" style="font-size: large; text-align: center; width: 75px;">{% if options.banking %}{{ "C " }}{% end %}{{ users[user].get("money") }}</td>
     </tr>
     {% end %}
     <!-- List only the Top N with money -->

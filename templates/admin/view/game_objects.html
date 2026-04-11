@@ -209,7 +209,7 @@
                 <div class="control-group">
                     <label class="control-label" for="box-value">{% if options.banking %}{{ _("Reward") }}{% else %}{{ _("Points") }}{% end %}</label>
                     <div class="controls">
-                        <input id="box-value" name="value" type="number" pattern="[0-9]+" placeholder="{% if options.banking %}{{_('$')}} {{_('Reward')}}{% else %}{{_('Points')}}{% end %}" />
+                        <input id="box-value" name="value" type="number" pattern="[0-9]+" placeholder="{% if options.banking %}{{'C '}} {{_('Reward')}}{% else %}{{_('Points')}}{% end %}" />
                     </div>
                 </div>
                 <div class="control-group">
@@ -960,7 +960,7 @@
                                                     {% for index, hint in enumerate(flaghints) %}
                                                         <tr>
                                                             <td class="shortcolumn">{{ index + 1 }}</td>
-                                                            <td class="shortcolumn" style="text-align: center;">{% if options.banking %}{{_("$")}}{% end %}{{ hint.price }}</td>
+                                                            <td class="shortcolumn" style="text-align: center;">{% if options.banking %}{{"C "}}{% end %}{{ hint.price }}</td>
                                                             <td class="shortcolumn flagname" style="padding-right: 25px;">{{ Flag.by_id(hint.flag_id).name }}</td>
                                                             <td class="descriptioncol markdown">{{ hint.description }}</td>
                                                             <td class="shortcolumn">
@@ -996,7 +996,7 @@
                                                     {% for index, hint in enumerate(boxhints) %}
                                                         <tr>
                                                             <td class="shortcolumn">{{ index + 1 }}</td>
-                                                            <td class="shortcolumn" style="text-align: center;">{% if options.banking %}{{_("$")}}{% end %}{{ hint.price }}</td>
+                                                            <td class="shortcolumn" style="text-align: center;">{% if options.banking %}{{"C "}}{% end %}{{ hint.price }}</td>
                                                             <td class="descriptioncol markdown">{{ hint.description }}</td>
                                                             <td class="shortcolumn">
                                                                 <a id="edit-hint-button-{{ hint.uuid }}" class="btn btn-mini" data-toggle="modal" href="#edit-hint-modal" data-uuid="{{ hint.uuid }}" data-box-uuid="{{ hint.box.uuid }}">

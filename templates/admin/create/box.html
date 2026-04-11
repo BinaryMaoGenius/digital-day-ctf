@@ -158,7 +158,7 @@
             <div class="control-group">
                 <label class="control-label" for="reward">{% if options.banking %}{{_("Reward")}}{% else %}{{_("Points")}}{% end %}</label>
                 <div class="controls">
-                    <input id="reward" name="reward" type="number" pattern="[0-9]+" value="0" placeholder="{% if options.banking %}{{_('$')}} {{_('Reward')}}{% else %}{{_('Points')}}{% end %}"
+                    <input id="reward" name="reward" type="number" pattern="[0-9]+" value="0" placeholder="{% if options.banking %}{{'C '}} {{_('Reward')}}{% else %}{{_('Points')}}{% end %}"
                            rel="popover"
                            data-original-title="{% if options.banking %}{{_('Reward')}}{% else %}{{_('Points')}}{% end %}"
                            data-content="{{_('This is the amount awarded for completion of the box.')}}">

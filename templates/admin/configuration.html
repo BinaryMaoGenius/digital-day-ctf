@@ -154,7 +154,7 @@
                         data-original-title="{{ _('Rank By') }}"
                         data-content="{{ _('This selection determines the method by which the scoreboard is primarily ranked.') }}">
                         <option id="moneyname" value="money" {% if config.rank_by == "money" %}selected{% end %}>
-                            {% if config.banking %}{{ _("Money") }}{% else %}{{ _("Points") }}{% end %}
+                            {% if config.banking %}{{ _("Cauris") }}{% else %}{{ _("Points") }}{% end %}
                         </option>
                         <option value="flags" {% if config.rank_by == "flags" %}selected{% end %}>{{ _("Flags") }}</option>
                     </select>
@@ -526,7 +526,7 @@
             <div class="control-group">
                 <label class="control-label" for="market">
                     <i class="fa fa-shopping-cart"></i>
-                    {{ _("Black Market") }}
+                    {{ _("Marché Clandestin") }}
                 </label>
                 <div class="controls">
                     <input id="use-black-market" name="use_black_market" type="hidden" value="{{ str(config.use_black_market).lower() }}" />

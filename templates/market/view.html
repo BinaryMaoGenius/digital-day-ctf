@@ -1,6 +1,6 @@
 {% extends "../main.html" %}
 
-{% block title %}{{ _("Black Market") }}{% end %}
+{% block title %}{{ _("Marché Clandestin") }}{% end %}
 
 {% block header %}
 <script src="/static/js/pages/market/view.js"></script>
@@ -26,7 +26,7 @@
                 <div class="span2">
                     <p>
                         <i class="icon-bookmark"></i>
-                        {% if options.banking %}{{ _("Price") }}: {{ _("$") }}{% else %}{{ _("Cost") }}:{% end %} <span id="price"></span>
+                        {% if options.banking %}{{ _("Price") }}: {{ "C " }}{% else %}{{ _("Cost") }}:{% end %} <span id="price"></span>
                     </p>
                     <p>
                         <i class="icon-book"></i>
@@ -56,7 +56,7 @@
 <div class="container">
     <h2>
         <i class="fa fa-shopping-cart"></i>
-        {{ _("Black Market") }}
+        {{ _("Marché Clandestin") }}
     </h2>
     <br />
     {% if errors is not None and len(errors) != 0 %}
@@ -87,8 +87,20 @@
 					{% end %}
 					<tr>
 						<td>{{ index + 1 }}</td>
-						<td>{{ item.name }}</td>
-						<td>{% if options.banking %}{{ _("$") }}{% end %}{{ item.price }}</td>
+						<td>
+                            {% if item.name == 'SWAT' %}
+                                La Garde Royale
+                            {% elif item.name == 'Federal Reserve' %}
+                                Trésorerie de l'Empire
+                            {% elif item.name == 'Source Code Market' %}
+                                Marché des Manuscrits
+                            {% elif item.name == 'Password Security' %}
+                                Sceau de Protection
+                            {% else %}
+                                {{ item.name }}
+                            {% end %}
+                        </td>
+						<td>{% if options.banking %}{{ "C " }}{% end %}{{ item.price }}</td>
 						<td>
 							{% if not user.has_item(item.name) %}
 							<a id="item-details-button{{ index }}" class="btn btn-mini" data-toggle="modal" href="#buy-market-item-modal" data-uuid="{{ item.uuid }}">

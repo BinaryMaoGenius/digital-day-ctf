@@ -1,0 +1,122 @@
+{% extends "../main.html" %}
+
+{% block title %}Carte du Mandé Numérique{% end %}
+
+{% block header %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<style>
+    #game-map {
+        height: calc(100vh - 120px);
+        width: 100%;
+        background: #0a0a0c;
+        border: 2px solid var(--border-color);
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+        border-radius: 12px;
+    }
+    
+    .cyber-popup .leaflet-popup-content-wrapper {
+        background: rgba(15, 15, 20, 0.9);
+        color: #fff;
+        border: 1px solid var(--primary-neon);
+        border-radius: 4px;
+        backdrop-filter: blur(10px);
+    }
+    
+    .city-marker {
+        width: 20px;
+        height: 20px;
+        background: var(--primary-neon);
+        border: 4px solid rgba(0, 255, 153, 0.3);
+        border-radius: 50%;
+        box-shadow: 0 0 15px var(--primary-neon);
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 255, 153, 0.7); }
+        70% { transform: scale(1.2); box-shadow: 0 0 0 20px rgba(0, 255, 153, 0); }
+        100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 255, 153, 0); }
+    }
+
+    .map-hud {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+        width: 300px;
+        pointer-events: none;
+    }
+    
+    .hud-box {
+        background: rgba(10, 10, 15, 0.85);
+        border-left: 4px solid var(--secondary-neon);
+        padding: 15px;
+        margin-bottom: 10px;
+        backdrop-filter: blur(5px);
+        color: var(--text-color);
+        font-family: 'Space Mono', monospace;
+        pointer-events: auto;
+    }
+</style>
+{% end %}
+
+{% block content %}
+<div style="position: relative;">
+    <div id="game-map"></div>
+    
+    <div class="map-hud">
+        <div class="hud-box card-main">
+            <h4 class="cyber-glow" style="margin: 0; font-size: 1.1em;">ÉTAT DU RÉSEAU</h4>
+            <hr style="border-color: #333; margin: 10px 0;">
+            <p style="font-size: 0.8em; margin: 0;"> Empire du Mandé : STABLE<br> Zone de conflit : GAO / KIDAL<br> Activité : ÉLEVÉE</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Initialisation de la carte centrée sur le Mali
+    var map = L.map('game-map', {
+        zoomControl: false,
+        attributionControl: false
+    }).setView([17.5, -3.5], 6);
+
+    // Style de la carte (Sombre / Minimaliste)
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        maxZoom: 19
+    }).addTo(map);
+
+    // Villes avec coordonnées précises
+    const cities = [
+        { name: "Bamako", coords: [12.6392, -8.0029], zone: "Nexus Central", difficulty: "Admin" },
+        { name: "Sikasso", coords: [11.3175, -5.6664], zone: "Grenier Agricole", difficulty: "Facile" },
+        { name: "Mopti", coords: [14.4843, -4.1830], zone: "Port des Données", difficulty: "Réseau" },
+        { name: "Tombouctou", coords: [16.7666, -3.0026], zone: "Bibliothèque Ancestrale", difficulty: "OSINT" },
+        { name: "Gao", coords: [16.2717, -0.0447], zone: "Avant-poste Nord", difficulty: "Exploit" },
+        { name: "Kayes", coords: [14.4469, -11.4442], zone: "Forge Industrielle", difficulty: "Pwn" },
+        { name: "Ségou", coords: [13.4317, -6.2157], zone: "Archives du Royaume", difficulty: "Crypto" }
+    ];
+
+    // Ajout des marqueurs animés
+    cities.forEach(city => {
+        let markerIcon = L.divIcon({
+            className: 'custom-div-icon',
+            html: `<div class="city-marker"></div>`,
+            iconSize: [20, 20],
+            iconAnchor: [10, 10]
+        });
+
+        L.marker(city.coords, { icon: markerIcon })
+            .addTo(map)
+            .bindPopup(`
+                <div class="cyber-popup">
+                    <strong style="color: var(--secondary-neon); font-size: 1.2em;">${city.name.toUpperCase()}</strong><br>
+                    <span style="color: #ccc; font-style: italic;">${city.zone}</span><hr style="margin: 5px 0;">
+                    Type: ${city.difficulty}<br>
+                    <a href="/user/missions" class="btn btn-mini btn-info" style="margin-top: 5px; width: 100%;">INFILTRER</a>
+                </div>
+            `, { className: 'cyber-popup' });
+    });
+
+</script>
+{% end %}

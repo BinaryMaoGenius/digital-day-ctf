@@ -30,6 +30,9 @@ services:
       - MEMCACHED=memcached:11211
       - AUTOSTART_GAME=True
       - DEMO=1
+      - FORCE_LOCALE=fr
+      - CTF_TAGLINE=Le Jeu des Hackers
+
 
     depends_on:
       - memcached

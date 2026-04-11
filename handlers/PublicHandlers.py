@@ -956,3 +956,9 @@ class ValidEmailHandler(BaseHandler):
             self.render("public/login.html", info=info, errors=error)
         else:
             self.redirect("public/404")
+
+class MapHandler(BaseHandler):
+    def get(self, *args, **kwargs):
+        """Renders the game map"""
+        self.render("public/map.html")
+

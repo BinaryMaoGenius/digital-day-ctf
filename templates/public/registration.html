@@ -24,7 +24,7 @@
         
         <div class="well card-main pulse-primary" style="padding: 40px;">
             <p class="matrix-text text-center" style="margin-bottom: 30px; font-size: 1.1em;">
-                Initialize your identity in the NEXUS.
+                Initialisez votre identité dans le NEXUS.
             </p>
             
             <form class="form-horizontal" action="/registration" method="post">
@@ -34,25 +34,26 @@
                 <input type="hidden" name="teammode" value="create">
                 
                 <div class="control-group">
-                    <label class="control-label matrix-text" for="handle">{{ _("Handle") }}</label>
+                    <label class="control-label matrix-text" for="handle">{{ _("Alias") }}</label>
                     <div class="controls">
-                        <input required id="handle" name="handle" maxlength="16" minlength="3" placeholder="Choose your Alias" type="text" pattern="^[a-zA-Z0-9_\-\.]{3,16}$" class="input-block-level" />
+                        <input required id="handle" name="handle" maxlength="16" minlength="3" placeholder="Choisissez votre pseudo" type="text" pattern="^[a-zA-Z0-9_\-\.]{3,16}$" class="input-block-level" />
                     </div>
                 </div>
 
                 <div class="control-group">
-                    <label class="control-label matrix-text" for="pass1">{{ _("Access Key") }}</label>
+                    <label class="control-label matrix-text" for="pass1">{{ _("Clé d'accès") }}</label>
                     <div class="controls">
-                        <input required id="pass1" name="pass1" minlength="{{ handler.config.min_user_password_length }}" placeholder="Password" type="password" autocomplete="off" class="input-block-level" />
+                        <input required id="pass1" name="pass1" minlength="{{ handler.config.min_user_password_length }}" placeholder="Mot de passe" type="password" autocomplete="off" class="input-block-level" />
                     </div>
                 </div>
                 
                 <div class="control-group">
-                    <label class="control-label matrix-text" for="pass2">{{ _("Sync Key") }}</label>
+                    <label class="control-label matrix-text" for="pass2">{{ _("Sync Clé") }}</label>
                     <div class="controls">
-                        <input required id="pass2" name="pass2" minlength="{{ handler.config.min_user_password_length }}" placeholder="Confirm Password" type="password" autocomplete="off" class="input-block-level" />
+                        <input required id="pass2" name="pass2" minlength="{{ handler.config.min_user_password_length }}" placeholder="Confirmer mot de passe" type="password" autocomplete="off" class="input-block-level" />
                     </div>
                 </div>
+
                 
                 <hr style="border-top: 1px solid var(--border-color); margin: 30px 0;">
                 
@@ -62,8 +63,9 @@
                         {{ _("INITIALIZE AGENT") }}
                     </button>
                     <p style="margin-top: 15px;">
-                        <a href="/login">{{ _("Already have an account? Login") }}</a>
+                        <a href="/login">{{ _("Déjà un compte ? Connexion") }}</a>
                     </p>
+
                 </div>
             </form>
         </div>

@@ -89,6 +89,7 @@ urls = [
     (r"/oidc", CodeFlowHandler),
     (r"/about", AboutHandler),
     (r"/", HomePageHandler),
+    (r"/map", MapHandler),
 
     (r"/robots(|\.txt)", FakeRobotsHandler),
     (r"/status", StatusHandler),

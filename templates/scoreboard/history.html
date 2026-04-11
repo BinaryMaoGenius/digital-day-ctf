@@ -13,8 +13,8 @@
     {% if not hide_scoreboard %}
         <script type="application/javascript">
             setGraphTitle("{% if options.banking %}{{ _('Bank Account Balance') }}{% else %}{{ _('Score') }}{% end %}");
-            setGraphScale("{% if options.banking %}{{ _('Money') }}{% else %}{{ _('Points') }}{% end %}");
-            setGraphSymbol("{% if options.banking %}{{ _('$') }}{% end %}");
+            setGraphScale("{% if options.banking %}{{ _('Cauris') }}{% else %}{{ _('Points') }}{% end %}");
+            setGraphSymbol("{% if options.banking %}{{ 'C ' }}{% end %}");
         </script>
         <div class="row-fluid">
             {% if timer %}
@@ -46,7 +46,7 @@
                                         <a id="money-history-button" href="#">
                                             {% if options.banking %}
                                                 <i class="fa fa-dollar"></i>
-                                                {{ _("Money") }}
+                                                {{ _("Cauris") }}
                                             {% else %}
                                                 <i class="fa fa-fw fa-bar-chart-o"></i>
                                                 {{ _("Score") }}
@@ -57,7 +57,7 @@
                                         <li>
                                             <a id="bots-history-button" href="#">
                                                 <i class="fa fa-android"></i>
-                                                {{ _("Bots") }}
+                                                {{ _("Génies") }}
                                             </a>
                                         </li>
                                     {% end %}
@@ -96,7 +96,7 @@
                 <div class="well span5">
                     <div id="pie_money" style="height:300px;" 
                         data-name="{% if options.banking %}{{ _('Bank Account') }}{% else %}{{ _('Score') }}{% end %}  ({{ _('Top 10') }})" 
-                        data-symbol="{% if options.banking %}{{ _('$') }}{% end %}">
+                        data-symbol="{% if options.banking %}{{ 'C ' }}{% end %}">
                         <!-- Pie Chart Here -->
                     </div>
                 </div>

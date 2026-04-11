@@ -35,7 +35,7 @@
                     <div class="control-group">
                         <label class="control-label" for="price">{{_("Cost")}}</label>
                         <div class="controls">
-                            <input autofocus required id="price" name="price" min="0" type="number" placeholder="{% if options.banking %}{{_('$')}} {{_('Price')}}{% else %}{{_('Points')}}{% end %}"
+                            <input autofocus required id="price" name="price" min="0" type="number" placeholder="{% if options.banking %}{{'C '}} {{_('Price')}}{% else %}{{_('Points')}}{% end %}"
                                     rel="popover"
                                     data-original-title="{{_('Cost')}}"
                                     data-content="{{_('The cost to take the hint.  Can be >= 0.')}}">

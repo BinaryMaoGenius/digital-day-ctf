@@ -19,11 +19,18 @@
             <div class="nav-collapse pull-right">
                 <ul class="nav">
                     <li>
-                        <a href="/login">
-                            <i class="fa fa-fw fa-sign-in"></i>
-                            {{ _("Login") }}
+                        <a href="/map">
+                            <i class="fa fa-fw fa-map-marker"></i>
+                            {{ _("Carte du Mandé") }}
                         </a>
                     </li>
+                    <li>
+                        <a href="/login">
+                            <i class="fa fa-fw fa-sign-in"></i>
+                            {{ _("Connexion") }}
+                        </a>
+                    </li>
+
                     {% if registration_visible %}
                     <li>
                         <a href="/registration">

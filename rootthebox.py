@@ -1204,7 +1204,8 @@ if __name__ == "__main__":
     options.parse_command_line()
 
     if os.environ.get("DEMO"):
-        setup_xml(["setup/demo_juiceshop.xml"])
+        setup_xml(["setup/digital_day_missions_fr.xml"])
+
         from libs.ConfigHelpers import create_demo_user
 
         logging.info("Setting Up Demo Environment...")

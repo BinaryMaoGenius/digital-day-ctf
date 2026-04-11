@@ -1,6 +1,6 @@
 {% extends "../main.html" %}
 
-{% block title %}Authentication Portal{% end %}
+{% block title %}Portail d'Authentification{% end %}
 
 {% block header %}
 <link href="/static/css/pages/public/login.css" rel="stylesheet">
@@ -21,18 +21,18 @@
     <div class="well card-main pulse-primary">
         <h2 class="cyber-glow text-center" style="margin-bottom: 25px;">
             <i class="fa fa-shield"></i>
-            NEXUS ACCESS
+            ACCÈS NEXUS
         </h2>
         
         <div class="auth-tabs">
-            <div id="tab-login" class="auth-tab active" onclick="switchTab('login')">LOGIN</div>
-            <div id="tab-register" class="auth-tab" onclick="switchTab('register')">REGISTER</div>
+            <div id="tab-login" class="auth-tab active" onclick="switchTab('login')">CONNEXION</div>
+            <div id="tab-register" class="auth-tab" onclick="switchTab('register')">S'INSCRIRE</div>
         </div>
 
         {% if errors is not None and len(errors) != 0 %}
             {% for error in errors %}
                 <div class="alert alert-error" >
-                    <h4 class="alert-heading">{{ _("System Error") }}</h4>
+                    <h4 class="alert-heading">{{ _("Erreur Système") }}</h4>
                     {{ error }}
                 </div>
             {% end %}
@@ -51,18 +51,18 @@
                 {% raw xsrf_form_html() %}
                 <div class="input-prepend input-block-level" style="display: flex;">
                     <span class="add-on" style="background: var(--bg-card); border-color: var(--border-color); color: var(--primary-neon);"><i class="fa fa-user"></i></span>
-                    <input name="account" type="text" class="input-block-level" style="margin-bottom:0;" placeholder="Agent Alias" autofocus>
+                    <input name="account" type="text" class="input-block-level" style="margin-bottom:0;" placeholder="Alias Agent" autofocus>
                 </div>
                 <br/>
                 <div class="input-prepend input-block-level" style="display: flex;">
                     <span class="add-on" style="background: var(--bg-card); border-color: var(--border-color); color: var(--primary-neon);"><i class="fa fa-lock"></i></span>
-                    <input name="password" type="password" class="input-block-level" style="margin-bottom:0;" placeholder="Access Key" autocomplete="off">
+                    <input name="password" type="password" class="input-block-level" style="margin-bottom:0;" placeholder="Clé d'Accès" autocomplete="off">
                 </div>
                 
                 <br />
                 <button class="btn btn-primary btn-large btn-block" type="submit">
                     <i class="fa fa-sign-in"></i>
-                    AUTHENTICATE
+                    S'AUTHENTIFIER
                 </button>
             </form>
         </div>
@@ -73,7 +73,7 @@
                 {% raw xsrf_form_html() %}
                 <div class="input-prepend input-block-level" style="display: flex;">
                     <span class="add-on" style="background: var(--bg-card); border-color: var(--border-color); color: var(--secondary-neon);"><i class="fa fa-user-secret"></i></span>
-                    <input required name="handle" type="text" class="input-block-level" style="margin-bottom:0;" maxlength="16" minlength="3" pattern="^[a-zA-Z0-9_\-\.]{3,16}$" placeholder="New Agent Alias (3-16 chars)">
+                    <input required name="handle" type="text" class="input-block-level" style="margin-bottom:0;" maxlength="16" minlength="3" pattern="^[a-zA-Z0-9_\-\.]{3,16}$" placeholder="Nouvel Alias (3-16 chars)">
                 </div>
                 <br/>
                 <input type="hidden" name="playername" value="Anonymous">
@@ -82,18 +82,18 @@
 
                 <div class="input-prepend input-block-level" style="display: flex;">
                     <span class="add-on" style="background: var(--bg-card); border-color: var(--border-color); color: var(--secondary-neon);"><i class="fa fa-lock"></i></span>
-                    <input required name="pass1" type="password" class="input-block-level" style="margin-bottom:0;" minlength="7" placeholder="Create Access Key" autocomplete="off">
+                    <input required name="pass1" type="password" class="input-block-level" style="margin-bottom:0;" minlength="{{ options.min_user_password_length }}" placeholder="Créer Clé d'Accès" autocomplete="off">
                 </div>
                 <br/>
                 <div class="input-prepend input-block-level" style="display: flex;">
                     <span class="add-on" style="background: var(--bg-card); border-color: var(--border-color); color: var(--secondary-neon);"><i class="fa fa-lock"></i></span>
-                    <input required name="pass2" type="password" class="input-block-level" style="margin-bottom:0;" minlength="7" placeholder="Confirm Access Key" autocomplete="off">
+                    <input required name="pass2" type="password" class="input-block-level" style="margin-bottom:0;" minlength="{{ options.min_user_password_length }}" placeholder="Confirmer Clé d'Accès" autocomplete="off">
                 </div>
                 
                 <br />
                 <button class="btn btn-info btn-large btn-block" type="submit">
                     <i class="fa fa-user-plus"></i>
-                    INITIALIZE NEW AGENT
+                    INITIALISER AGENT
                 </button>
             </form>
         </div>
@@ -101,4 +101,4 @@
     </div>
 </div>
 <br />
-{% end %}
+{% end %}

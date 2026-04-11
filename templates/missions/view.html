@@ -238,7 +238,7 @@
                         {{ _("Unlock") }}
                     </a>
                     {% elif level._type == "points" %}
-                        {{ _("This level will unlock at") }} {% if options.banking %}{{ _("$") }}{% end %}{{ level.buyout }}{% if not options.banking %} {{ _("points") }}{% end %}
+                        {{ _("This level will unlock at") }} {% if options.banking %}{{ "C " }}{% end %}{{ level.buyout }}{% if not options.banking %} {{ _("points") }}{% end %}
                     {% elif level._type == "progress" %}
                         {{ _("This level will unlock at") }} {{ level.buyout }}% {{ _("completion of prior level") }}
                     {% end %}

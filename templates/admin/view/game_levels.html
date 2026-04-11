@@ -260,9 +260,9 @@
                     {% elif level.type == "none" or level.buyout == 0 %}
                         <i class="fa fa-unlock-alt"></i> {{ _("No Lock") }}
                     {% elif level.type == "buyout" %}
-                        <i class="fa fa-lock"></i> {{ _("Unlocks for") }} {% if options.banking %}{{ _("$") }}{% end %}{{ level.buyout }}{% if not options.banking %} {{ _("points") }}{% end %}
+                        <i class="fa fa-lock"></i> {{ _("Unlocks for") }} {% if options.banking %}{{ "C " }}{% end %}{{ level.buyout }}{% if not options.banking %} {{ _("points") }}{% end %}
                     {% elif level.type == "points" %}
-                        <i class="fa fa-lock"></i> {{ _("Unlocks at") }} {% if options.banking %}{{ _("$") }}{% end %}{{ level.buyout }}{% if not options.banking %} {{ _("points") }}{% end %}
+                        <i class="fa fa-lock"></i> {{ _("Unlocks at") }} {% if options.banking %}{{ "C " }}{% end %}{{ level.buyout }}{% if not options.banking %} {{ _("points") }}{% end %}
                     {% elif level.type == "level" %}
                         {% for lv in game_levels %}
                             {% if lv.id == level.buyout %}
