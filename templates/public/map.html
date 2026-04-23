@@ -49,14 +49,20 @@
         to { opacity: 1; transform: translateY(0); }
     }
 
+    @keyframes radarPulse {
+        0% { box-shadow: 0 0 0 0 var(--accent-color); }
+        70% { box-shadow: 0 0 0 15px rgba(0,0,0,0); }
+        100% { box-shadow: 0 0 0 0 rgba(0,0,0,0); }
+    }
+
     .city-marker {
         width: 16px;
         height: 16px;
         background: var(--accent-color);
         border: 3px solid #fff;
         border-radius: 50%;
-        box-shadow: 0 0 15px var(--accent-color);
         cursor: pointer;
+        animation: radarPulse 2s infinite;
     }
 
     .city-marker.selected {
@@ -65,12 +71,36 @@
         box-shadow: 0 0 25px #fff;
     }
 
+    .city-marker.captured {
+        background: var(--success);
+        box-shadow: 0 0 10px var(--success);
+        animation: none;
+        border-color: var(--success);
+    }
+
+    .dust-overlay {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        pointer-events: none;
+        z-index: 500;
+        background-image: radial-gradient(var(--accent-color) 1px, transparent 1px);
+        background-size: 80px 80px;
+        opacity: 0.15;
+        animation: dustDrift 40s linear infinite;
+    }
+
+    @keyframes dustDrift {
+        0% { background-position: 0 0; }
+        100% { background-position: 100px 100px; }
+    }
+
 </style>
 {% end %}
 
 {% block content %}
 <div class="map-container">
     <div id="game-map"></div>
+    <div class="dust-overlay"></div>
     
     <div class="tactical-sidebar">
         <!-- Dashboard Card -->
@@ -138,16 +168,22 @@
         L.tileLayer(tileUrl).addTo(map);
 
         const markers = [];
+        const capturedCoords = [];
+        const baseCoord = coordMap["Bamako"] || [12.6392, -8.0029];
+
         {% for box in boxes %}
             (function() {
                 const boxName = "{{ box.name }}";
+                const isCaptured = {{ "true" if box.uuid in captured_uuids else "false" }};
                 // Extract city name from box name (e.g., "Bamako : Oracle" -> "Bamako")
                 const cityName = boxName.split(':')[0].trim();
                 const coords = coordMap[cityName] || [17.5, -4.0];
                 
+                if (isCaptured) capturedCoords.push(coords);
+
                 const icon = L.divIcon({
                     className: 'city-marker-icon',
-                    html: `<div class="city-marker" id="marker-{{ box.uuid }}"></div>`,
+                    html: `<div class="city-marker ${isCaptured ? 'captured' : ''}" id="marker-{{ box.uuid }}"></div>`,
                     iconSize: [20, 20],
                     iconAnchor: [10, 10]
                 });
@@ -174,6 +210,20 @@
                 markers.push(marker);
             })();
         {% end %}
+
+        // Dessiner les routes sécurisées depuis Bamako
+        if (capturedCoords.length > 0) {
+            capturedCoords.forEach(coord => {
+                if (coord !== baseCoord) {
+                    L.polyline([baseCoord, coord], {
+                        color: 'var(--success)',
+                        weight: 2,
+                        dashArray: '5, 10',
+                        opacity: 0.4
+                    }).addTo(map);
+                }
+            });
+        }
 
         L.control.zoom({ position: 'topright' }).addTo(map);
     });

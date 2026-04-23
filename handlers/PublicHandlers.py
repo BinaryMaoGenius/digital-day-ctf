@@ -962,5 +962,12 @@ class MapHandler(BaseHandler):
         """Renders the game map"""
         from models.Box import Box
         boxes = Box.all()
-        self.render("public/map.html", boxes=boxes)
+        user = self.get_current_user()
+        captured_uuids = []
+        if user and user.team:
+            for box in boxes:
+                if box.flags and all(f in user.team.flags for f in box.flags):
+                    captured_uuids.append(box.uuid)
+                    
+        self.render("public/map.html", boxes=boxes, captured_uuids=captured_uuids, user=user)
 

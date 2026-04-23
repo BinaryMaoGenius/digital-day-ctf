@@ -96,6 +96,104 @@
         background: rgba(0,0,0,0.3) !important;
         border: 1px solid var(--border-color) !important;
         color: var(--accent-color) !important;
+{% extends "../main.html" %}
+
+{% block title %}MISSION: {{ box.name }}{% end %}
+
+{% block header %}
+<link rel="stylesheet" href="/static/css/jstree.css" />
+<link rel="stylesheet" href="/static/css/icons.css" />
+<script src="/static/js/pages/missions/view.js"></script>
+<script src="/static/js/pages/missions/box.js"></script>
+<script src="/static/js/pages/missions/flag-ratelimit.js"></script>
+<script src="/static/js/libs/commonmark.min.js"></script>
+<script src="/static/js/libs/jstree.js"></script>
+<style>
+    .mission-header {
+        margin-bottom: 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 20px;
+    }
+
+    .mission-title-area h1 {
+        margin: 0;
+        font-size: 2.5rem;
+        text-transform: uppercase;
+    }
+
+    .mission-hud {
+        display: flex;
+        gap: 30px;
+        margin-top: 20px;
+    }
+
+    .hud-item {
+        font-family: 'JetBrains Mono', monospace;
+    }
+
+    .hud-label {
+        font-size: 0.7rem;
+        opacity: 0.6;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .hud-value {
+        font-size: 1.1rem;
+        font-weight: bold;
+    }
+
+    .briefing-box {
+        margin-bottom: 40px;
+        border-left: 4px solid var(--accent-color);
+    }
+
+    .briefing-header {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.8rem;
+        padding: 10px 20px;
+        background: var(--accent-glow);
+        color: var(--accent-color);
+        border-radius: 0 8px 0 0;
+    }
+
+    .briefing-content {
+        padding: 30px;
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    .target-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        margin-bottom: 40px;
+    }
+
+    .flag-card {
+        margin-bottom: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .flag-card.captured {
+        border-color: var(--success);
+        opacity: 0.8;
+    }
+
+    .flag-status-icon {
+        font-size: 1.2rem;
+        float: right;
+    }
+
+    .console-input {
+        background: rgba(0,0,0,0.3) !important;
+        border: 1px solid var(--border-color) !important;
+        color: var(--accent-color) !important;
         font-family: 'JetBrains Mono', monospace !important;
         padding: 12px !important;
         width: 100%;
@@ -105,6 +203,36 @@
     .console-input:focus {
         border-color: var(--accent-color) !important;
         outline: none;
+    }
+
+    @keyframes glitch-anim {
+        0% { clip-path: inset(20% 0 80% 0); transform: translate(-2px, 2px); }
+        20% { clip-path: inset(60% 0 10% 0); transform: translate(2px, -2px); }
+        40% { clip-path: inset(40% 0 50% 0); transform: translate(-2px, 0); }
+        60% { clip-path: inset(80% 0 5% 0); transform: translate(2px, 2px); }
+        80% { clip-path: inset(10% 0 70% 0); transform: translate(-2px, -2px); }
+        100% { clip-path: inset(0 0 0 0); transform: translate(0); }
+    }
+    .glitch-text {
+        animation: glitch-anim 0.4s cubic-bezier(.25, .46, .45, .94) both;
+        animation-delay: 0.2s;
+    }
+    
+    .telemetry-terminal {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.7rem;
+        color: var(--accent-color);
+        opacity: 0.6;
+        height: 120px;
+        overflow: hidden;
+        position: relative;
+        line-height: 1.4;
+    }
+    .telemetry-terminal::after {
+        content: '';
+        position: absolute;
+        bottom: 0; left: 0; right: 0; height: 40px;
+        background: linear-gradient(transparent, var(--bg-card));
     }
 </style>
 {% end %}
@@ -155,7 +283,7 @@
 <div class="mission-header">
     <div class="mission-title-area">
         <div class="accent-text mono" style="font-size: 0.8rem; margin-bottom: 5px;">OBJECTIF_IDENTIFIÉ: {{ box.category or "INFILTRATION" }}</div>
-        <h1 class="accent-text">
+        <h1 class="accent-text glitch-text">
             {% if box.operating_system.lower() == 'windows' %}<i class="fa fa-windows"></i>
             {% elif box.operating_system.lower() == 'linux' %}<i class="fa fa-linux"></i>
             {% else %}<i class="fa fa-terminal"></i>{% end %}
@@ -216,6 +344,12 @@
         </div>
     </div>
     {% end %}
+    
+    <!-- Telemetry Log (Faux Logs) -->
+    <div class="glass-panel modern-card">
+        <h3 class="mono accent-text" style="font-size: 1rem; margin-bottom: 15px;"><i class="fa fa-terminal"></i> TÉLÉMÉTRIE_RÉSEAU</h3>
+        <div id="telemetry-terminal" class="telemetry-terminal"></div>
+    </div>
 </div>
 
 <!-- FLAGS SECTION -->
@@ -259,4 +393,88 @@
     {% end %}
 </div>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const briefing = document.querySelector('.briefing-content.markdown');
+        if (briefing) {
+            // Attendre un instant que le script Markdown natif fasse son rendu
+            setTimeout(() => {
+                const htmlStr = briefing.innerHTML;
+                briefing.innerHTML = '';
+                briefing.style.visibility = 'visible';
+                
+                let i = 0;
+                let isTag = false;
+                let currentHTML = '';
+                
+                function type() {
+                    if (i < htmlStr.length) {
+                        let char = htmlStr.charAt(i);
+                        currentHTML += char;
+                        
+                        if (char === '<') isTag = true;
+                        if (char === '>') isTag = false;
+                        
+                        if (isTag) {
+                            i++;
+                            type(); // Pas de délai pour les balises HTML
+                        } else {
+                            // On injecte le HTML + un curseur clignotant
+                            briefing.innerHTML = currentHTML + '<span style="border-right: 2px solid var(--accent-color); animation: blink 1s infinite;">&nbsp;</span>';
+                            i++;
+                            // Vitesse de frappe légèrement aléatoire pour plus de réalisme
+                            setTimeout(type, Math.random() * 20 + 10);
+                        }
+                    } else {
+                        // Fin de la frappe, on fixe le HTML
+                        briefing.innerHTML = currentHTML;
+                    }
+                }
+                
+                // Petite animation CSS pour le curseur
+                const style = document.createElement('style');
+                style.innerHTML = '@keyframes blink { 50% { border-color: transparent; } }';
+                document.head.appendChild(style);
+
+                type();
+            }, 200);
+        }
+
+        // Télémétrie Faux Logs
+        const terminal = document.getElementById('telemetry-terminal');
+        if (terminal) {
+            const lines = [];
+            const maxLines = 15;
+            
+            function addLogLine() {
+                const types = ['[SCAN]', '[PING]', '[TRC]', '[INT]', '[AUTH]'];
+                const type = types[Math.floor(Math.random() * types.length)];
+                const ip = Math.floor(Math.random()*255) + '.' + Math.floor(Math.random()*255) + '.x.x';
+                const ms = Math.floor(Math.random()*100) + 'ms';
+                const hex = Array(8).fill(0).map(()=>Math.floor(Math.random()*16).toString(16)).join('').toUpperCase();
+                
+                const str = `${type} ${ip} - RECV 0x${hex} ${ms}`;
+                lines.push(str);
+                if(lines.length > maxLines) lines.shift();
+                
+                terminal.innerHTML = lines.join('<br>');
+                
+                setTimeout(addLogLine, Math.random() * 800 + 200);
+            }
+            addLogLine();
+        }
+
+        // Feedback tactile sur les boutons
+        const buttons = document.querySelectorAll('.btn-modern');
+        buttons.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                // Flash vert de validation
+                document.body.style.boxShadow = 'inset 0 0 150px var(--success)';
+                setTimeout(() => {
+                    document.body.style.boxShadow = 'none';
+                }, 150);
+            });
+        });
+    });
+</script>
 {% end %}

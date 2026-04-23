@@ -72,19 +72,16 @@
             <a href="/user/market"><i class="fa fa-shopping-cart"></i> {{ _("MARCHÉ") }}</a>
         {% end %}
         <a href="/scoreboard"><i class="fa fa-trophy"></i> {{ _("SCORE") }}</a>
+        <a href="#" id="comm-link-btn" style="cursor: pointer; margin-left: 20px;"><i class="fa fa-volume-off"></i> COMM-LINK OFF</a>
     </div>
 
     <div style="margin-right: 20px; display: flex; gap: 20px; align-items: center;">
-        <div class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="color: var(--text-primary); text-decoration: none;">
-                <i class="fa fa-user-circle" style="font-size: 1.5rem;"></i>
-            </a>
-            <ul class="dropdown-menu pull-right">
-                <li><a href="/user/settings"><i class="fa fa-gears"></i> {{ _("Settings") }}</a></li>
-                <li class="divider"></li>
-                <li><a href="/logout"><i class="fa fa-sign-out"></i> {{ _("Logout") }}</a></li>
-            </ul>
-        </div>
+        <a href="/user/settings" style="color: var(--text-primary); text-decoration: none;" title="Paramètres">
+            <i class="fa fa-gears" style="font-size: 1.2rem;"></i>
+        </a>
+        <a href="/logout" style="color: var(--danger); text-decoration: none; margin-left: 15px;" title="Déconnexion">
+            <i class="fa fa-sign-out" style="font-size: 1.2rem;"></i>
+        </a>
     </div>
 </div>
 
@@ -93,3 +90,86 @@
     <span>SOLDE: <span class="accent-text">{{ user.team.money if user.team else 0 }} CAURIS</span></span>
     <span style="margin-left: auto;">STATUT: <span style="color: var(--success);">EN LIGNE</span></span>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const audioBtn = document.getElementById('comm-link-btn');
+        let audioCtx = null;
+        let isMuted = true;
+        let windGainNode = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
+            // Générateur de vent (Bruit blanc filtré)
+            const bufferSize = audioCtx.sampleRate * 2;
+            const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+            const output = noiseBuffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) {
+                output[i] = Math.random() * 2 - 1;
+            }
+
+            const windNoiseNode = audioCtx.createBufferSource();
+            windNoiseNode.buffer = noiseBuffer;
+            windNoiseNode.loop = true;
+
+            const bandpass = audioCtx.createBiquadFilter();
+            bandpass.type = 'lowpass';
+            bandpass.frequency.value = 350; // Fréquence sourde (vent lointain)
+            bandpass.Q.value = 0.5;
+
+            windGainNode = audioCtx.createGain();
+            windGainNode.gain.value = 0.05; // Très discret
+
+            windNoiseNode.connect(bandpass);
+            bandpass.connect(windGainNode);
+            windGainNode.connect(audioCtx.destination);
+            windNoiseNode.start(0);
+
+            // Bip tactique (Square wave)
+            const btnClickBeep = () => {
+                if (isMuted || !audioCtx) return;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1500, audioCtx.currentTime + 0.03);
+                
+                gain.gain.setValueAtTime(0.03, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+                
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.05);
+            };
+
+            // Attache le son à tous les liens et boutons de l'interface
+            document.querySelectorAll('a, button, .btn-modern, .city-marker, .glass-panel').forEach(el => {
+                el.addEventListener('mousedown', btnClickBeep);
+            });
+        }
+
+        if (audioBtn) {
+            audioBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                isMuted = !isMuted;
+                if (!isMuted) {
+                    if (!audioCtx) initAudio();
+                    if (windGainNode) windGainNode.gain.value = 0.05;
+                    audioBtn.innerHTML = '<i class="fa fa-volume-up"></i> COMM-LINK ON';
+                    audioBtn.style.color = 'var(--success)';
+                } else {
+                    if (windGainNode) windGainNode.gain.value = 0;
+                    audioBtn.innerHTML = '<i class="fa fa-volume-off"></i> COMM-LINK OFF';
+                    audioBtn.style.color = '';
+                }
+            });
+        }
+    });
+</script>
