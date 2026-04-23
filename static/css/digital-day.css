@@ -314,3 +314,75 @@ footer {
 .highcharts-series-group path {
  filter: drop-shadow(0 0 5px var(--primary-neon));
 }
+/* Geographic Journey UI */
+.journey-map-container {
+    width: 100%;
+    height: 450px;
+    background-image: url('../images/mali_journey_map.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 183, 3, 0.3);
+    margin-bottom: 40px;
+    position: relative;
+    overflow: hidden;
+    background-color: #0a0a0a;
+    box-shadow: inset 0 0 50px rgba(0,0,0,0.8), 0 0 20px rgba(255, 183, 3, 0.1);
+}
+
+.journey-map-container::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(0deg, rgba(0,0,0,0.05) 0px, rgba(0,0,0,0.05) 1px, transparent 1px, transparent 2px);
+    pointer-events: none;
+}
+
+.journey-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 30px;
+    background: linear-gradient(to top, rgba(10, 10, 10, 1) 0%, rgba(10, 10, 10, 0.8) 50%, transparent 100%);
+    text-align: left;
+    z-index: 2;
+}
+
+.region-pulse {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background: var(--primary-neon);
+    border-radius: 50%;
+    box-shadow: 0 0 0 rgba(255, 183, 3, 0.4);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(255, 183, 3, 0.7); }
+    70% { box-shadow: 0 0 0 20px rgba(255, 183, 3, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 183, 3, 0); }
+}
+
+.matrix-text {
+    font-family: 'Courier New', Courier, monospace;
+    color: var(--primary-neon);
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+/* Mission Card Enhancements */
+.box-city-card {
+    background: rgba(30, 30, 30, 0.6) !important;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.box-city-card:hover {
+    transform: scale(1.02) translateY(-10px);
+    border-color: var(--primary-neon) !important;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.5), 0 0 15px rgba(255, 183, 3, 0.2);
+}

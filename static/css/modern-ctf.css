@@ -1,0 +1,190 @@
+:root {
+    /* -------------------------------------------
+       MODE MOON : NUIT DANS LA SAVANE
+       ------------------------------------------- */
+    --bg-main: #141115;
+    --bg-gradient: linear-gradient(180deg, #100d14 0%, #2b1820 50%, #45211b 100%);
+    --bg-card: rgba(30, 25, 28, 0.8);
+    
+    --accent-color: #fca311;       /* Or / Braise */
+    --accent-secondary: #e63946;   /* Rouge Crépuscule */
+    --accent-glow: rgba(252, 163, 17, 0.25);
+    --accent-glow-secondary: rgba(230, 57, 70, 0.25);
+    
+    --text-primary: #fff3e0;
+    --text-secondary: #d4a373;
+    
+    --glass-bg: rgba(45, 30, 30, 0.4);
+    --glass-border: rgba(252, 163, 17, 0.2);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6), inset 0 0 0 1px rgba(255, 243, 224, 0.05);
+    
+    --danger: #d90429;
+    --success: #606c38;
+    --warning: #f4a261;
+}
+
+[data-theme="sun"] {
+    /* -------------------------------------------
+       MODE SUN : SAVANE DORÉE (GOLDEN HOUR)
+       ------------------------------------------- */
+    --bg-main: #fefae0;
+    --bg-gradient: linear-gradient(180deg, #fefae0 0%, #faedcd 50%, #e9edc9 100%);
+    --bg-card: rgba(255, 255, 255, 0.8);
+    
+    --accent-color: #bc6c25;       /* Terre Cuite / Rich Earth */
+    --accent-secondary: #606c38;   /* Vert Acacia */
+    --accent-glow: rgba(188, 108, 37, 0.15);
+    --accent-glow-secondary: rgba(96, 108, 56, 0.15);
+    
+    --text-primary: #283618;
+    --text-secondary: #6b705c;
+    
+    --glass-bg: rgba(250, 237, 205, 0.6);
+    --glass-border: rgba(188, 108, 37, 0.2);
+    --glass-shadow: 0 8px 32px 0 rgba(40, 54, 24, 0.08), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+    
+    --danger: #e63946;
+    --success: #386641;
+    --warning: #f4a261;
+}
+
+html, body {
+    background-color: var(--bg-main) !important;
+    background-image: var(--bg-gradient) !important;
+    background-attachment: fixed !important;
+    color: var(--text-primary) !important;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+    transition: background-color 0.6s ease, background-image 0.6s ease, color 0.6s ease;
+    margin: 0;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+.container-fluid {
+    background: transparent !important;
+}
+
+/* -------------------------------------------
+   GLASSMORPHISM & CARDS
+   ------------------------------------------- */
+.glass-panel {
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(16px) saturate(140%) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(140%) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 16px !important;
+    box-shadow: var(--glass-shadow) !important;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.modern-card {
+    background: var(--bg-card) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 16px !important;
+    padding: 1.5rem;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.modern-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, var(--accent-color), var(--accent-secondary));
+    opacity: 0.8;
+    transition: height 0.3s ease;
+}
+
+.modern-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 15px 35px var(--accent-glow) !important;
+}
+
+.modern-card:hover::before {
+    height: 6px;
+}
+
+/* -------------------------------------------
+   TYPOGRAPHY & ACCENTS
+   ------------------------------------------- */
+h1, h2, h3, .mono {
+    font-family: 'JetBrains Mono', monospace !important;
+    letter-spacing: -0.01em;
+}
+
+.accent-text {
+    background: linear-gradient(90deg, var(--accent-color), var(--accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+}
+
+/* -------------------------------------------
+   MAP OVERRIDES FOR WARMTH
+   ------------------------------------------- */
+#game-map {
+    border-radius: 20px;
+    overflow: hidden;
+    filter: sepia(0.2) contrast(1.1);
+}
+
+[data-theme="moon"] #game-map {
+    /* Transforms the map into a warm night map */
+    filter: invert(90%) sepia(30%) hue-rotate(330deg) brightness(0.8) contrast(1.1);
+}
+
+/* -------------------------------------------
+   BUTTONS & INTERACTIONS
+   ------------------------------------------- */
+.btn-modern {
+    background: linear-gradient(135deg, var(--accent-color), var(--accent-secondary)) !important;
+    color: #fff !important;
+    border: none !important;
+    padding: 12px 24px !important;
+    border-radius: 8px !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 4px 15px var(--accent-glow) !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn-modern:hover {
+    transform: translateY(-2px) scale(1.02) !important;
+    box-shadow: 0 8px 25px var(--accent-glow-secondary) !important;
+}
+
+.status-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+/* -------------------------------------------
+   SCROLLBAR & SELECTION
+   ------------------------------------------- */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: var(--bg-main);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--accent-color);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-secondary);
+}
+
+::selection {
+    background: var(--accent-secondary);
+    color: #fff;
+}

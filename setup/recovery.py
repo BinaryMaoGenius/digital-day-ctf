@@ -91,6 +91,20 @@ class RecoveryConsole(cmd.Cmd):
         else:
             print(WARN + "Syntax error; see 'help ls'.")
 
+    def do_debug(self, obj):
+        """
+        Debug: List game levels and boxes
+        Usage: debug
+        """
+        from models.GameLevel import GameLevel
+        from models.Box import Box
+        print(INFO + "--- Game Levels ---")
+        for level in GameLevel.all():
+            print(INFO + "Level #%d (ID: %d): %s" % (level.number, level.id, level.name))
+        print(INFO + "--- Boxes ---")
+        for box in Box.all():
+            print(INFO + "Box: %s (Level ID: %s)" % (box.name, box.game_level_id))
+
     def do_rmuser(self, username):
         """
         Delete a user from the database

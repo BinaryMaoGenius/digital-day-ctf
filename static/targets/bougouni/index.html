@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Marché de Bougouni - Gestion des Commandes</title>
+    <link rel="stylesheet" href="../../css/digital-day.css">
+    <style>
+        body { background: #121212; color: #e0e0e0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 50px; }
+        .card { background: #1e1e1e; border: 1px solid #333; padding: 20px; border-radius: 10px; max-width: 500px; margin: auto; }
+        .neon-text { color: #ffb703; text-shadow: 0 0 5px #ffb703; }
+        .hidden { display: none; }
+        input { background: #333; border: 1px solid #444; color: white; padding: 5px; width: 50px; }
+        button { background: #ffb703; color: black; border: none; padding: 5px 15px; cursor: pointer; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2 class="neon-text">Marché de Bougouni</h2>
+        <p>Consultation de la commande n° <input type="number" id="orderId" value="42"> <button onclick="checkOrder()">Voir</button></p>
+        <hr>
+        <div id="content">
+            <p><strong>Commande #42</strong></p>
+            <p>Client : Chasseur de Savane</p>
+            <p>Article : Arc en bois de Karité</p>
+            <p>Statut : Livré</p>
+        </div>
+        <div id="secret" class="hidden">
+            <p class="neon-text"><strong>COMMANDE #1 (CONFIDENTIEL)</strong></p>
+            <p>Client : Administrateur du CTF</p>
+            <p>Article : Clé d'accès à la Région II</p>
+            <p>FLAG : <span style="background: white; color: black; padding: 2px;">flag{idor_market_success_001}</span></p>
+        </div>
+        <div id="error" class="hidden">
+            <p style="color: #ff4d4d;">Commande introuvable.</p>
+        </div>
+    </div>
+
+    <script>
+        function checkOrder() {
+            const id = document.getElementById('orderId').value;
+            const content = document.getElementById('content');
+            const secret = document.getElementById('secret');
+            const error = document.getElementById('error');
+
+            content.classList.add('hidden');
+            secret.classList.add('hidden');
+            error.classList.add('hidden');
+
+            if (id == "1") {
+                secret.classList.remove('hidden');
+            } else if (id == "42") {
+                content.classList.remove('hidden');
+            } else {
+                error.classList.remove('hidden');
+            }
+        }
+    </script>
+</body>
+</html>

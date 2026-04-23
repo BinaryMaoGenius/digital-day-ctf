@@ -213,36 +213,31 @@ class MemcachedSession(BaseSession):
         self.connection.delete(str(self.session_id))
 
 
+class LocalMemoryClient(object):
+    _data = {}
+    def set(self, key, value, time=0):
+        self._data[key] = value
+        return True
+    def get(self, key):
+        return self._data.get(key)
+    def delete(self, key):
+        self._data.pop(key, None)
+        return True
+    def flush_all(self):
+        self._data.clear()
+    def get_stats(self):
+        return [("local", "running")]
+
 def MemcachedConnect():
     try:
-        if os.environ.get("MEMCACHIER_SERVERS", None) is not None:
-            servers = os.environ.get("MEMCACHIER_SERVERS", "").split(",")
-            user = os.environ.get("MEMCACHIER_USERNAME", None)
-            passw = os.environ.get("MEMCACHIER_PASSWORD", None)
-        elif os.environ.get("MEMCACHEDCLOUD_SERVERS", None) is not None:
-            servers = os.environ.get("MEMCACHEDCLOUD_SERVERS", "").split(",")
-            user = os.environ.get("MEMCACHEDCLOUD_USERNAME", None)
-            passw = os.environ.get("MEMCACHEDCLOUD_PASSWORD", None)
-        elif (
-            os.environ.get("MEMCACHED", None) is not None
-            or os.environ.get("MEMCACHED_SERVERS", None) is not None
-        ):
-            if os.environ.get("MEMCACHED", None) is not None:
-                servers = os.environ.get("MEMCACHED", "").split(",")
-            else:
-                servers = os.environ.get("MEMCACHED_SERVERS").split(",")
-            user = os.environ.get("MEMCACHED_USER", None)
-            passw = os.environ.get("MEMCACHED_PASSWORD", None)
-        else:
-            servers = options.memcached.split(",")
-            user = None if options.memcached_user == "" else options.memcached_user
-            passw = (
-                None if options.memcached_password == "" else options.memcached_password
-            )
-
+        servers = options.memcached.split(",")
+        user = None if options.memcached_user == "" else options.memcached_user
+        passw = None if options.memcached_password == "" else options.memcached_password
         client = memcache.Client(servers, username=user, password=passw)
-    except TypeError:
-        client = memcache.Client(options.memcached.split(","), debug=0)
-        if len(client.get_stats()) == 0:
-            raise ValueError("Unable to connect to memcached")
-    return client
+        # Test connection
+        if not client.get_stats():
+            raise ValueError("No memcached servers found")
+        return client
+    except Exception as e:
+        logging.warning("Memcached not found, using local memory for sessions: %s" % e)
+        return LocalMemoryClient()

@@ -339,11 +339,14 @@ class LogoutHandler(BaseHandler):
     """Log user out of current session"""
 
     def get(self, *args, **kwargs):
-        """Redirect"""
+        """Log the user out"""
         if self.session is not None:
-            self.redirect("/user")
-        else:
-            self.redirect("/login")
+            user = self.get_current_user()
+            if user:
+                EventManager.instance().deauth(user)
+            self.session.delete()
+        self.clear_all_cookies()
+        self.redirect("/")
 
     def post(self, *args, **kwargs):
         """Clears cookies and session data"""

@@ -960,5 +960,7 @@ class ValidEmailHandler(BaseHandler):
 class MapHandler(BaseHandler):
     def get(self, *args, **kwargs):
         """Renders the game map"""
-        self.render("public/map.html")
+        from models.Box import Box
+        boxes = Box.all()
+        self.render("public/map.html", boxes=boxes)
 

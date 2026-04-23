@@ -75,10 +75,7 @@ io_loop = IOLoop.instance()
 
 
 def get_cookie_secret():
-    if options.debug:
-        return "Don't use this in production"
-    else:
-        return encode(urandom(32), "hex")
+    return "digital_day_secret_key_2024"
 
 
 # Main URL Configuration

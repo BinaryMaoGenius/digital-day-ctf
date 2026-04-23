@@ -88,7 +88,7 @@ def create_levels(levels):
     for index, level_elem in enumerate(levels):
         # GameLevel 0 is created automatically by the bootstrap
         try:
-            number = get_child_text(level_elem, "number")            
+            number = get_child_text(level_elem, "number")
             if GameLevel.by_number(number) is None:
                 game_level = GameLevel()
                 game_level.number = int(number)
@@ -104,6 +104,7 @@ def create_levels(levels):
                     else:
                         missing_level_buyouts[game_level.number] = game_level.buyout
                 dbsession.add(game_level)
+                dbsession.flush()
             else:
                 logging.info("GameLevel %d already exists, skipping" % int(number))
         except:
@@ -227,9 +228,10 @@ def create_boxes(parent, corporation):
     for index, box_elem in enumerate(parent):
         try:
             name = get_child_text(box_elem, "name")
-            game_level = GameLevel.by_number(get_child_text(box_elem, "gamelevel", "0"))
+            game_level_num = get_child_text(box_elem, "gamelevel", "0")
+            game_level = GameLevel.by_number(game_level_num)
             if game_level is None:
-                logging.warning("GameLevel does not exist for box %s, skipping" % name)
+                logging.warning("GameLevel %s does not exist for box %s, skipping (Levels in DB: %s)" % (game_level_num, name, [l.number for l in GameLevel.all()]))
             elif Box.by_name(name) is None:
                 box = Box(corporation_id=corporation.id)
                 box.name = name

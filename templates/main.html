@@ -15,6 +15,8 @@
         <link href="/static/css/notifier.css" rel="stylesheet" />
         <link href="/static/css/main.css" rel="stylesheet" />
         <link href="/static/css/digital-day.css" rel="stylesheet" />
+        <link href="/static/css/modern-ctf.css?v=3.0" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
         <!--[if lt IE 9]>
             <script src="/static/js/libs/html5.js"></script>
         <![endif]-->
@@ -52,7 +54,35 @@
             <button class="btn btn-danger" data-dismiss="modal">J'AI COMPRIS LES ENJEUX</button>
         </div>
     </div>
-    <body>
+    <body data-theme="moon">
+        <div id="theme-toggle" class="glass-panel" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; padding: 10px; cursor: pointer; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%;">
+            <i id="theme-icon" class="fa fa-moon-o" style="font-size: 20px; color: var(--accent-color);"></i>
+        </div>
+        <script>
+            const body = document.body;
+            const themeToggle = document.getElementById('theme-toggle');
+            const themeIcon = document.getElementById('theme-icon');
+            
+            // Load preference
+            const currentTheme = localStorage.getItem('theme') || 'moon';
+            body.setAttribute('data-theme', currentTheme);
+            updateIcon(currentTheme);
+
+            themeToggle.addEventListener('click', () => {
+                const newTheme = body.getAttribute('data-theme') === 'moon' ? 'sun' : 'moon';
+                body.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                updateIcon(newTheme);
+            });
+
+            function updateIcon(theme) {
+                if (theme === 'sun') {
+                    themeIcon.className = 'fa fa-sun-o';
+                } else {
+                    themeIcon.className = 'fa fa-moon-o';
+                }
+            }
+        </script>
         {% module Menu() %}
         <div class="container-fluid animated fadeIn">
             {% block content %} {{ _("Contenu manquant") }} {% end %}

@@ -1,176 +1,181 @@
 {% extends "../main.html" %}
 
-{% block title %}Carte du Mandé Numérique{% end %}
+{% block title %}{{ _("Centre de Commandement Tactique") }}{% end %}
 
 {% block header %}
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
     #game-map {
-        height: calc(100vh - 120px);
+        height: calc(100vh - 180px);
         width: 100%;
-        background: #0a0a0c;
-        border: 2px solid var(--border-color);
-        box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
-        border-radius: 12px;
+        background: #000;
+        border-radius: 24px;
+        z-index: 1;
+        border: 1px solid var(--accent-color);
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
     }
     
-    .cyber-popup .leaflet-popup-content-wrapper {
-        background: rgba(15, 15, 20, 0.9);
-        color: #fff;
-        border: 1px solid var(--primary-neon);
-        border-radius: 4px;
-        backdrop-filter: blur(10px);
-    }
-    
-    .city-marker {
-        width: 20px;
-        height: 20px;
-        background: var(--primary-neon);
-        border: 4px solid rgba(0, 255, 153, 0.3);
-        border-radius: 50%;
-        box-shadow: 0 0 15px var(--primary-neon);
-        animation: pulse 2s infinite;
+    .map-container {
+        position: relative;
+        padding: 20px;
     }
 
-    @keyframes pulse {
-        0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 255, 153, 0.7); }
-        70% { transform: scale(1.2); box-shadow: 0 0 0 20px rgba(0, 255, 153, 0); }
-        100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 255, 153, 0); }
-    }
-
-    .map-hud {
+    .tactical-sidebar {
         position: absolute;
-        top: 20px;
-        right: 20px;
+        top: 40px;
+        left: 40px;
+        width: 360px;
         z-index: 1000;
-        width: 300px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
         pointer-events: none;
     }
-    
-    .hud-box {
-        background: rgba(10, 10, 15, 0.85);
-        border-left: 4px solid var(--secondary-neon);
-        padding: 15px;
-        margin-bottom: 10px;
-        backdrop-filter: blur(5px);
-        color: var(--text-color);
-        font-family: 'Space Mono', monospace;
+
+    .sidebar-card {
         pointer-events: auto;
+        border-left: 4px solid var(--accent-color);
+        backdrop-filter: blur(15px);
     }
+
+    .mission-details-panel {
+        display: none;
+        animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .city-marker {
+        width: 16px;
+        height: 16px;
+        background: var(--accent-color);
+        border: 3px solid #fff;
+        border-radius: 50%;
+        box-shadow: 0 0 15px var(--accent-color);
+        cursor: pointer;
+    }
+
+    .city-marker.selected {
+        background: #fff;
+        transform: scale(1.4);
+        box-shadow: 0 0 25px #fff;
+    }
+
 </style>
 {% end %}
 
 {% block content %}
-<div style="position: relative;">
+<div class="map-container">
     <div id="game-map"></div>
     
-    <div class="map-hud">
-        <div class="hud-box card-main">
-            <h4 class="cyber-glow" style="margin: 0; font-size: 1.1em;">ÉTAT DU RÉSEAU</h4>
-            <hr style="border-color: #333; margin: 10px 0;">
-            <p style="font-size: 0.8em; margin: 0;"> Empire du Mandé : STABLE<br> Zone de conflit : GAO / KIDAL<br> Activité : ÉLEVÉE</p>
+    <div class="tactical-sidebar">
+        <!-- Dashboard Card -->
+        <div class="glass-panel sidebar-card modern-card" style="padding: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h4 class="accent-text mono" style="margin: 0;">NEXUS_SCANNER</h4>
+                <div class="status-badge" style="background: var(--accent-glow); color: var(--accent-color); padding: 2px 10px; border-radius: 20px; font-size: 0.6rem;">ACTIF</div>
+            </div>
+            <p class="mono" style="font-size: 0.7rem; margin-top: 10px; opacity: 0.6;">SURVEILLANCE DU RÉSEAU SOUVERAIN MALITÉLÉCOM</p>
+        </div>
+
+        <!-- Dynamic Mission Panel -->
+        <div id="mission-info" class="glass-panel sidebar-card modern-card mission-details-panel" style="padding: 25px;">
+            <div class="status-badge" style="background: var(--accent-color); color: #000; margin-bottom: 15px; display: inline-block;">CIBLE DÉTECTÉE</div>
+            <h2 id="m-name" class="mono" style="margin: 0; font-size: 1.4rem;">NOM_CIBLE</h2>
+            <p id="m-corp" class="accent-text mono" style="font-size: 0.8rem; margin-bottom: 15px;">CORPORATION</p>
+            <p id="m-desc" style="font-size: 0.9rem; line-height: 1.5; opacity: 0.8; margin-bottom: 20px;">Description tactique de la mission...</p>
+            
+            <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 12px; margin-bottom: 25px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                    <span class="mono" style="font-size: 0.7rem;">GÉOLOC:</span>
+                    <span id="m-coords" class="mono accent-text" style="font-size: 0.7rem;">0.00, 0.00</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span class="mono" style="font-size: 0.7rem;">VULNÉRABILITÉ:</span>
+                    <span id="m-diff" class="mono" style="font-size: 0.7rem; color: var(--success);">FACILE</span>
+                </div>
+            </div>
+
+            <a id="m-link" href="#" class="btn-modern" style="display: block; text-align: center; text-decoration: none; padding: 15px; background: var(--accent-color); color: #000;">LANCER L'EXPLOITATION</a>
         </div>
     </div>
 </div>
 
 <script>
-    // Initialisation de la carte centrée sur le Mali
-    var map = L.map('game-map', {
-        zoomControl: false,
-        attributionControl: false
-    }).setView([17.5, -3.5], 6);
+    const coordMap = {
+        "Bamako": [12.6392, -8.0029],
+        "Siby": [12.386, -8.324],
+        "Sikasso": [11.3175, -5.666],
+        "Bougouni": [11.417, -7.483],
+        "Koulikoro": [12.863, -7.560],
+        "Ségou": [13.432, -6.216],
+        "Djenné": [13.904, -4.554],
+        "Mopti": [14.484, -4.183],
+        "Bandiagara": [14.350, -3.610],
+        "San": [13.300, -4.900],
+        "Tombouctou": [16.767, -3.003],
+        "Gao": [16.272, -0.045],
+        "Kidal": [18.4411, 1.408],
+        "Tessalit": [20.203, 0.973],
+        "Taoudéni": [22.674, -3.982]
+    };
 
-    // Style de la carte (Sombre / Minimaliste)
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-        maxZoom: 19
-    }).addTo(map);
+    document.addEventListener('DOMContentLoaded', function() {
+        const map = L.map('game-map', {
+            zoomControl: false,
+            attributionControl: false
+        }).setView([16.5, -3.0], 6);
 
-    // Villes avec coordonnées précises
-    const cities = [
-        { name: "Bamako", coords: [12.6392, -8.0029], zone: "Nexus Central", difficulty: "Admin" },
-        { name: "Sikasso", coords: [11.3175, -5.6664], zone: "Grenier Agricole", difficulty: "Facile" },
-        { name: "Mopti", coords: [14.4843, -4.1830], zone: "Port des Données", difficulty: "Réseau" },
-        { name: "Tombouctou", coords: [16.7666, -3.0026], zone: "Bibliothèque Ancestrale", difficulty: "OSINT" },
-        { name: "Gao", coords: [16.2717, -0.0447], zone: "Avant-poste Nord", difficulty: "Exploit" },
-        { name: "Kayes", coords: [14.4469, -11.4442], zone: "Forge Industrielle", difficulty: "Pwn" },
-        { name: "Ségou", coords: [13.4317, -6.2157], zone: "Archives du Royaume", difficulty: "Crypto" }
-    ];
+        const isMoon = document.body.getAttribute('data-theme') !== 'sun';
+        const tileUrl = isMoon 
+            ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+            : 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
 
-    // Ajout des marqueurs animés
-    cities.forEach(city => {
-        let markerIcon = L.divIcon({
-            className: 'custom-div-icon',
-            html: `<div class="city-marker"></div>`,
-            iconSize: [20, 20],
-            iconAnchor: [10, 10]
-        });
+        L.tileLayer(tileUrl).addTo(map);
 
-        L.marker(city.coords, { icon: markerIcon })
-            .addTo(map)
-            .bindPopup(`
-                <div class="cyber-popup">
-                    <strong style="color: var(--secondary-neon); font-size: 1.2em;">${city.name.toUpperCase()}</strong><br>
-                    <span style="color: #ccc; font-style: italic;">${city.zone}</span><hr style="margin: 5px 0;">
-                    Type: ${city.difficulty}<br>
-                    <a href="/user/missions" class="btn btn-mini btn-info" style="margin-top: 5px; width: 100%;">INFILTRER</a>
-                </div>
-            `, { className: 'cyber-popup' });
+        const markers = [];
+        {% for box in boxes %}
+            (function() {
+                const boxName = "{{ box.name }}";
+                // Extract city name from box name (e.g., "Bamako : Oracle" -> "Bamako")
+                const cityName = boxName.split(':')[0].trim();
+                const coords = coordMap[cityName] || [17.5, -4.0];
+                
+                const icon = L.divIcon({
+                    className: 'city-marker-icon',
+                    html: `<div class="city-marker" id="marker-{{ box.uuid }}"></div>`,
+                    iconSize: [20, 20],
+                    iconAnchor: [10, 10]
+                });
+
+                const marker = L.marker(coords, { icon: icon }).addTo(map);
+                
+                marker.on('click', function() {
+                    // Visual updates
+                    document.querySelectorAll('.city-marker').forEach(m => m.classList.remove('selected'));
+                    document.getElementById('marker-{{ box.uuid }}').classList.add('selected');
+                    
+                    // Sidebar updates
+                    const panel = document.getElementById('mission-info');
+                    panel.style.display = 'block';
+                    document.getElementById('m-name').innerText = boxName.toUpperCase();
+                    document.getElementById('m-corp').innerText = "{{ box.corporation.name if box.corporation else 'Empire du Mandé' }}";
+                    document.getElementById('m-desc').innerText = "{{ box.description.replace('\n', ' ') }}";
+                    document.getElementById('m-coords').innerText = coords[0].toFixed(4) + ", " + coords[1].toFixed(4);
+                    document.getElementById('m-diff').innerText = "{{ box.difficulty }}";
+                    document.getElementById('m-link').href = "/user/missions/boxes?uuid={{ box.uuid }}";
+                    
+                    map.flyTo(coords, 9, { duration: 1.5 });
+                });
+                markers.push(marker);
+            })();
+        {% end %}
+
+        L.control.zoom({ position: 'topright' }).addTo(map);
     });
-
-    // Joueur Avatar ("Vous êtes ici - GTA Style Radar)
-    {% if current_user %}
-    const playerAvatarIcon = L.divIcon({
-        className: 'player-avatar-icon',
-        html: `<img src="/avatars/{{ current_user.avatar }}" style="width: 45px; height: 45px; border-radius: 50%; border: 3px solid var(--danger-red); box-shadow: 0 0 25px var(--danger-red); background-color: var(--bg-card); object-fit: cover; animation: pulse-avatar 2s infinite;">`,
-        iconSize: [45, 45],
-        iconAnchor: [22, 22]
-    });
-    
-    // Position initiale du joueur : Bamako (Nexus Central)
-    const playerPos = [12.6392, -8.0029];
-    
-    // Zone d'influence (Radar)
-    L.circle(playerPos, {
-        color: 'var(--danger-red)',
-        fillColor: 'var(--danger-red)',
-        fillOpacity: 0.05,
-        radius: 350000,
-        className: 'radar-sweep'
-    }).addTo(map);
-
-    // Lignes de ciblages ("Lasers") vers les missions
-    cities.forEach(city => {
-        if (city.name !== "Bamako") {
-            L.polyline([playerPos, city.coords], {
-                color: 'var(--danger-red)',
-                weight: 1.5,
-                opacity: 0.6,
-                dashArray: '10, 15',
-                className: 'laser-targeting'
-            }).addTo(map);
-        }
-    });
-
-    L.marker(playerPos, { icon: playerAvatarIcon, zIndexOffset: 1000 })
-        .addTo(map)
-        .bindPopup(`
-            <div class="cyber-popup" style="text-align: center;">
-                <strong style="color: var(--danger-red); font-size: 1.2em;">{{ current_user.handle.upper() }}</strong><br>
-                <span>Niveau de Menace: <span style="color: var(--danger-red);">Maximal</span></span><hr style="margin: 5px 0;">
-                <em>Ciblage Actif des Reliques...</em>
-            </div>
-        `, { className: 'cyber-popup' });
-    {% end %}
-
-    // Animations CSS Injectées
-    const style = document.createElement('style');
-    style.innerHTML = `
-        @keyframes pulse-avatar { 0% { box-shadow: 0 0 0 0 rgba(208,0,0,0.7); } 70% { box-shadow: 0 0 0 20px rgba(208,0,0,0); } 100% { box-shadow: 0 0 0 0 rgba(208,0,0,0); } }
-        .laser-targeting { animation: dash 40s linear infinite; }
-        @keyframes dash { to { stroke-dashoffset: -1000; } }
-        .radar-sweep { animation: radar 2.5s ease-in-out infinite; transform-origin: center; pointer-events: none; }
-        @keyframes radar { 0% { fill-opacity: 0.02; } 50% { fill-opacity: 0.15; } 100% { fill-opacity: 0.02; } }
-    `;
-    document.head.appendChild(style);</script>
+</script>
 {% end %}
