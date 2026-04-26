@@ -54,66 +54,94 @@
 {% block content %}
 {% from models.MarketItem import MarketItem %}
 <div class="container">
-    <h2>
-        <i class="fa fa-shopping-cart"></i>
-        {{ _("Marché Clandestin") }}
-    </h2>
-    <br />
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 30px;">
+        <div>
+            <h1 class="accent-text" style="margin: 0; font-size: 2.5rem;">LE GRAND BAZAR</h1>
+            <p class="mono" style="opacity: 0.7; margin: 5px 0 0 0;">Échangez vos Cauris contre des avantages tactiques</p>
+        </div>
+        <div class="glass-panel" style="padding: 10px 20px; border-radius: 12px;">
+            <span class="label mono">{{ _("Votre Solde") }}</span>
+            <div class="value accent-text" style="font-size: 1.5rem;">{{ "C " }}{{ user.team.money if user.team else user.money }}</div>
+        </div>
+    </div>
+
     {% if errors is not None and len(errors) != 0 %}
         {% for error in errors %}
-        <div class="alert alert-error">
+        <div class="alert alert-error glass-panel" style="border-left: 4px solid var(--danger); margin-bottom: 20px;">
             <a class="close" data-dismiss="alert" href="#">&times;</a>
-            <h4 class="alert-heading">{{ _("ERROR") }}</h4>
-            {{ error }}
+            <h4 class="alert-heading mono">{{ _("AVERTISSEMENT") }}</h4>
+            <p class="mono">{{ error }}</p>
         </div>
         {% end %}
     {% end %}
-    <div class="well">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>{{ _("Name") }}</th>
-                    <th>{% if options.banking %}{{ _("Price") }}{% else %}{{ _("Cost") }}{% end %}</th>
-                    <th>
-                        <!-- Button -->
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for index, item in enumerate(MarketItem.all()) %}
-					{% if item.name not in options.allowed_market_items %}
-						{% continue %}
-					{% end %}
-					<tr>
-						<td>{{ index + 1 }}</td>
-						<td>
-                            {% if item.name == 'SWAT' %}
-                                Lance Empoisonnée
-                            {% elif item.name == 'Federal Reserve' %}
-                                Vision du Marabout
-                            {% elif item.name == 'Source Code Market' %}
-                                Parchemins de Djenné
-                            {% elif item.name == 'Password Security' %}
-                                Bouclier Cauri
-                            {% else %}
-                                {{ item.name }}
-                            {% end %}
-                        </td>
-						<td>{% if options.banking %}{{ "C " }}{% end %}{{ item.price }}</td>
-						<td>
-							{% if not user.has_item(item.name) %}
-							<a id="item-details-button{{ index }}" class="btn btn-mini" data-toggle="modal" href="#buy-market-item-modal" data-uuid="{{ item.uuid }}">
-								{{ _("Details") }}
-							</a>
-							{% else %}
-							<i>{{ _("Purchased") }}</i>
-							{% end %}
-						</td>
-					</tr>
-                {% end %}
-            </tbody>
-        </table>
+
+    <div class="market-grid">
+        {% for index, item in enumerate(MarketItem.all()) %}
+            {% if item.name not in options.allowed_market_items %}
+                {% continue %}
+            {% end %}
+            
+            {% set is_purchased = user.has_item(item.name) %}
+            <div class="glass-panel modern-card market-card" style="{{ 'opacity: 0.8;' if is_purchased else '' }}">
+                <div>
+                    <div class="market-item-icon">
+                        {% if item.name == 'SWAT' %}
+                            <i class="fa fa-crosshairs"></i>
+                        {% elif item.name == 'Federal Reserve' %}
+                            <i class="fa fa-eye"></i>
+                        {% elif item.name == 'Source Code Market' %}
+                            <i class="fa fa-file-code-o"></i>
+                        {% elif item.name == 'Password Security' %}
+                            <i class="fa fa-shield"></i>
+                        {% else %}
+                            <i class="fa fa-cube"></i>
+                        {% end %}
+                    </div>
+                    <h3 class="mono" style="margin: 0; font-size: 1.2rem;">
+                        {% if item.name == 'SWAT' %}
+                            LANCE EMPOISONNÉE
+                        {% elif item.name == 'Federal Reserve' %}
+                            VISION DU MARABOUT
+                        {% elif item.name == 'Source Code Market' %}
+                            PARCHEMINS DE DJENNÉ
+                        {% elif item.name == 'Password Security' %}
+                            BOUCLIER CAURI
+                        {% else %}
+                            {{ item.name.upper() }}
+                        {% end %}
+                    </h3>
+                    <p class="mono" style="font-size: 0.8rem; opacity: 0.6; margin-top: 10px;">
+                        {% if item.name == 'SWAT' %}
+                            Neutralisez temporairement une équipe rivale.
+                        {% elif item.name == 'Federal Reserve' %}
+                            Révélez des secrets cachés dans le flux.
+                        {% elif item.name == 'Source Code Market' %}
+                            Accédez aux entrailles des systèmes.
+                        {% elif item.name == 'Password Security' %}
+                            Renforcez l'âme de votre clan.
+                        {% else %}
+                            Amélioration tactique spéciale.
+                        {% end %}
+                    </p>
+                </div>
+
+                <div>
+                    <div class="market-price">
+                        {{ "C " if options.banking else "" }}{{ item.price }}
+                    </div>
+                    
+                    {% if not is_purchased %}
+                        <a id="item-details-button{{ index }}" class="btn-modern" style="width: 100%; padding: 10px !important; font-size: 0.8rem;" data-toggle="modal" href="#buy-market-item-modal" data-uuid="{{ item.uuid }}">
+                            {{ _("ACQUÉRIR") }}
+                        </a>
+                    {% else %}
+                        <div class="market-status mono" style="text-align: center; color: var(--success); background: rgba(96, 108, 56, 0.2);">
+                            <i class="fa fa-check"></i> {{ _("DÉJÀ ACQUIS") }}
+                        </div>
+                    {% end %}
+                </div>
+            </div>
+        {% end %}
     </div>
 </div>
 {% end %}

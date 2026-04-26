@@ -42,6 +42,16 @@ services:
     image: memcached:1.6-alpine
     restart: unless-stopped
 
+  # ── Cloudflare Tunnel (Global Access) ──────────────────────────────────────
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
+    command: tunnel run
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARE_TOKEN}
+    depends_on:
+      - webapp
+
 volumes:
   ctf_data:
     driver: local

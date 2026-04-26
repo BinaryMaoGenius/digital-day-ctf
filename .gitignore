@@ -1,90 +1,16 @@
-# Bytecode
-*.py[co]
-
-# Leftovers from merges
-*.orig
-
-# File uploads and what not
-files/avatars/*-*
-files/avatars/user/*
-
-files/avatars/team/*
-files/avatars/box/*
-files/avatars/upload/*
-files/story/*
-files/icons/*-*
-files/shares/*-*
-files/source_code_market/*-*
-files/game_materials/*
-files/flag_attachments/*
+# Fichiers de données
 files/*.db
-files/*.cfg
+files/*.db-journal
+files/uploads/
+files/avatars/
 
-#Alembic
-alembic/alembic.ini
+# Configuration sensible
+.env
+*.pyc
+__pycache__/
 
-#Locale
-locale/.~*
-
-# Packages
-*.egg
-*.egg-info
-dist
-build
-eggs
-parts
-bin
-var
-sdist
-develop-eggs
-.installed.cfg
-
-# SSL Stuff
-*.crt
-*.key
-
-# XML exports
-*.xml
-!demo_juiceshop.xml
-
-# SQLite3 databases
-*.db
-*.db-journal
-
-# Screen files
-*.0
-
-# Log files
+# Logs et temporaires
 *.log
-
-# Installer logs
-pip-log.txt
-
-# IDE
-.project
-.pydevproject
-.idea/*
-.vscode/*
-
-# OSX
-.DS_Store
-.dccache
-
-__pycache__
-*/__pycache__
-
-# Backups
-*.bak
-
-# Readme
-!*README.md
-
-# Virtual environment
-root/
-venv/
-env/
-.venv/
-
-# Sensitive files
-cookies.txt
-*.cfg
+scratch/
+.tempmediaStorage/
+.gemini/

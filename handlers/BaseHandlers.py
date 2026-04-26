@@ -185,6 +185,8 @@ class BaseHandler(RequestHandler):
         self.add_header("X-XSS-Protection", "1; mode=block")
         self.add_header("X-Content-Type-Options", "nosniff")
         self._refresh_csp()
+        if "/static/" in self.request.path or "/materials/" in self.request.path:
+            self.set_header("Cache-Control", "public, max-age=3600")
         if self.config.ssl:
             self.add_header(
                 "Strict-Transport-Security", "max-age=31536000; includeSubDomains;"

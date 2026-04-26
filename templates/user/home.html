@@ -84,15 +84,27 @@
             {% set score = team.money if team else user.money %}
             {% if score < 100 %}
                 {% set agent_title = "ÉCLAIREUR DU SAHEL" %}
+                {% set next_title = "ANALYSTE DES SABLES" %}
+                {% set progress = (score / 100.0) * 100 %}
             {% elif score < 500 %}
                 {% set agent_title = "ANALYSTE DES SABLES" %}
+                {% set next_title = "OPÉRATEUR NEXUS" %}
+                {% set progress = ((score - 100) / 400.0) * 100 %}
             {% elif score < 1000 %}
                 {% set agent_title = "OPÉRATEUR NEXUS" %}
+                {% set next_title = "FANTÔME DU SAHARA" %}
+                {% set progress = ((score - 500) / 500.0) * 100 %}
             {% else %}
                 {% set agent_title = "FANTÔME DU SAHARA" %}
+                {% set next_title = "MAÎTRE DU MANDÉ" %}
+                {% set progress = 100 %}
             {% end %}
-            <div class="label">Titre d'Opérateur</div>
-            <div class="value" style="font-size: 1rem;">{{ agent_title }}</div>
+            <div class="label">Réputation de Clan</div>
+            <div class="value" style="font-size: 0.9rem; margin-bottom: 5px;">{{ agent_title }}</div>
+            <div class="reputation-bar">
+                <div class="reputation-fill" style="width: {{ progress }}%;"></div>
+            </div>
+            <div class="mono" style="font-size: 0.6rem; opacity: 0.6;">VERS: {{ next_title }}</div>
         </div>
     </div>
 
@@ -114,6 +126,35 @@
                         <strong class="accent-text">Fantôme.</strong> Les rumeurs disent que vous n'existez pas, mais les bases de données s'effacent sur votre passage. Vous avez le contrôle total du théâtre d'opération. Terminez le travail.
                     {% end %}
                 </p>
+            </div>
+
+            <!-- Team Resources / Inventory -->
+            <div class="glass-panel modern-card" style="padding: 25px; margin-bottom: 20px;">
+                <div class="section-title">
+                    <i class="fa fa-briefcase accent-text"></i> ARSENAL DU CLAN
+                </div>
+                <div class="resource-grid">
+                    {% set market_items = ['Source Code Market', 'Password Security', 'Federal Reserve', 'SWAT'] %}
+                    {% for item_name in market_items %}
+                        {% set active = user.has_item(item_name) %}
+                        <div class="resource-item {{ 'active' if active else '' }}">
+                            {% if item_name == 'SWAT' %}
+                                <i class="fa fa-crosshairs"></i>
+                                <div class="mono" style="font-size: 0.6rem;">LANCE</div>
+                            {% elif item_name == 'Federal Reserve' %}
+                                <i class="fa fa-eye"></i>
+                                <div class="mono" style="font-size: 0.6rem;">VISION</div>
+                            {% elif item_name == 'Source Code Market' %}
+                                <i class="fa fa-file-code-o"></i>
+                                <div class="mono" style="font-size: 0.6rem;">PARCHEMINS</div>
+                            {% elif item_name == 'Password Security' %}
+                                <i class="fa fa-shield"></i>
+                                <div class="mono" style="font-size: 0.6rem;">BOUCLIER</div>
+                            {% end %}
+                            <div class="mono" style="font-size: 0.5rem; opacity: 0.5; margin-top: 5px;">{{ 'OPÉRATIONNEL' if active else 'NON ACQUIS' }}</div>
+                        </div>
+                    {% end %}
+                </div>
             </div>
 
             <!-- Mission Status -->

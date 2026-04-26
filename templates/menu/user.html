@@ -75,7 +75,11 @@
         <a href="#" id="comm-link-btn" style="cursor: pointer; margin-left: 20px;"><i class="fa fa-volume-off"></i> COMM-LINK OFF</a>
     </div>
 
-    <div style="margin-right: 20px; display: flex; gap: 20px; align-items: center;">
+        <!-- PWA Install Button (Omnipresent Ecosystem) -->
+        <a href="#" id="pwa-install-btn" style="display: none; color: var(--accent-color); text-decoration: none; border: 1px solid var(--accent-color); padding: 2px 8px; border-radius: 4px; font-size: 0.8rem;" title="Installer l'App Nexus">
+            <i class="fa fa-download"></i> INSTALLER L'APP
+        </a>
+        
         <a href="/user/settings" style="color: var(--text-primary); text-decoration: none;" title="Paramètres">
             <i class="fa fa-gears" style="font-size: 1.2rem;"></i>
         </a>
@@ -84,6 +88,40 @@
         </a>
     </div>
 </div>
+
+<script>
+    // PWA Install Logic
+    let deferredPrompt;
+    const installBtn = document.getElementById('pwa-install-btn');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+        // Prevent Chrome 67 and earlier from automatically showing the prompt
+        e.preventDefault();
+        // Stash the event so it can be triggered later.
+        deferredPrompt = e;
+        // Update UI notify the user they can add to home screen
+        if (installBtn) installBtn.style.display = 'block';
+    });
+
+    if (installBtn) {
+        installBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            // Hide our user interface that shows our A2HS button
+            installBtn.style.display = 'none';
+            // Show the prompt
+            deferredPrompt.prompt();
+            // Wait for the user to respond to the prompt
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('User accepted the Nexus installation');
+                } else {
+                    console.log('User dismissed the Nexus installation');
+                }
+                deferredPrompt = null;
+            });
+        });
+    }
+</script>
 
 <div class="status-bar">
     <span>AGENCE: <span class="accent-text">{{ user.team.name if user.team else "INDÉPENDANT" }}</span></span>

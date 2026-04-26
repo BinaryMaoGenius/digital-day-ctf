@@ -42,6 +42,7 @@ from tornado.web import Application
 from alembic.config import Config, command
 from handlers.AdminHandlers import *
 from handlers.APIHanders import *
+from handlers.SocialMarketHandlers import *
 from handlers.BotnetHandlers import *
 from handlers.ChefHandler import *
 from handlers.ErrorHandlers import *
@@ -129,6 +130,8 @@ urls = [
     # Market handlers - MarketHandlers.py
     (r"/user/market", MarketViewHandler),
     (r"/user/market/details", MarketDetailsHandler),
+    (r"/user/market/social", SocialMarketHandler),
+    (r"/user/market/social/create", CreateInformationTradeHandler),
     # Upgrade handlers - UpgradeHandlers.py
     (r"/password_security", PasswordSecurityHandler),
     (r"/federal_reserve", FederalReserveHandler),
@@ -244,6 +247,8 @@ app = Application(
     failed_logins={},
     # Debug mode
     debug=options.debug,
+    # Enable Gzip compression
+    compress_response=True,
     # Flags used to run the game
     game_started=options.autostart_game,
     suspend_registration=options.suspend_registration,

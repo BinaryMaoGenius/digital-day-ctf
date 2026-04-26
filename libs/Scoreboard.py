@@ -46,6 +46,8 @@ from models.User import User
 class Scoreboard(object):
     """Manages websocket connections (mostly thread safe)"""
 
+    last_update = 0
+
     @classmethod
     def now(cls, app):
         """Returns the current game state"""
@@ -53,6 +55,9 @@ class Scoreboard(object):
 
     @classmethod
     def update_gamestate(cls, app):
+        if time.time() - cls.last_update < 15:
+            return
+        cls.last_update = time.time()
         game_levels = GameLevel.all()
         teams = Team.ranks()
         users = User.ranks()

@@ -10,104 +10,8 @@
 <script src="/static/js/pages/missions/flag-ratelimit.js"></script>
 <script src="/static/js/libs/commonmark.min.js"></script>
 <script src="/static/js/libs/jstree.js"></script>
-<style>
-    .mission-header {
-        margin-bottom: 40px;
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-end;
-        border-bottom: 1px solid var(--border-color);
-        padding-bottom: 20px;
-    }
+<script src="/static/js/pages/missions/tactical-analysis.js"></script>
 
-    .mission-title-area h1 {
-        margin: 0;
-        font-size: 2.5rem;
-        text-transform: uppercase;
-    }
-
-    .mission-hud {
-        display: flex;
-        gap: 30px;
-        margin-top: 20px;
-    }
-
-    .hud-item {
-        font-family: 'JetBrains Mono', monospace;
-    }
-
-    .hud-label {
-        font-size: 0.7rem;
-        opacity: 0.6;
-        display: block;
-        margin-bottom: 5px;
-    }
-
-    .hud-value {
-        font-size: 1.1rem;
-        font-weight: bold;
-    }
-
-    .briefing-box {
-        margin-bottom: 40px;
-        border-left: 4px solid var(--accent-color);
-    }
-
-    .briefing-header {
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 0.8rem;
-        padding: 10px 20px;
-        background: var(--accent-glow);
-        color: var(--accent-color);
-        border-radius: 0 8px 0 0;
-    }
-
-    .briefing-content {
-        padding: 30px;
-        font-size: 1.1rem;
-        line-height: 1.6;
-    }
-
-    .target-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 20px;
-        margin-bottom: 40px;
-    }
-
-    .flag-card {
-        margin-bottom: 15px;
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-    }
-
-    .flag-card.captured {
-        border-color: var(--success);
-        opacity: 0.8;
-    }
-
-    .flag-status-icon {
-        font-size: 1.2rem;
-        float: right;
-    }
-
-    .console-input {
-        background: rgba(0,0,0,0.3) !important;
-        border: 1px solid var(--border-color) !important;
-        color: var(--accent-color) !important;
-{% extends "../main.html" %}
-
-{% block title %}MISSION: {{ box.name }}{% end %}
-
-{% block header %}
-<link rel="stylesheet" href="/static/css/jstree.css" />
-<link rel="stylesheet" href="/static/css/icons.css" />
-<script src="/static/js/pages/missions/view.js"></script>
-<script src="/static/js/pages/missions/box.js"></script>
-<script src="/static/js/pages/missions/flag-ratelimit.js"></script>
-<script src="/static/js/libs/commonmark.min.js"></script>
-<script src="/static/js/libs/jstree.js"></script>
 <style>
     .mission-header {
         margin-bottom: 40px;
@@ -277,6 +181,33 @@
             <button id="purchase-hint-submit" class="btn-modern">CONFIRMER</button>
         </div>
     </div>
+
+    <!-- Create Information Trade Modal -->
+    <div id="create-trade-modal" class="modal hide fade">
+        <div class="modal-header"><h3>{{ _("Proposer un Murmure") }}</h3></div>
+        <div class="modal-body">
+            <p class="mono" style="font-size: 0.8rem; opacity: 0.7;">Vendez vos trouvailles aux autres clans. Soyez précis pour gagner en réputation (ou trompeur pour dominer).</p>
+            <form id="create-trade-form" method="post" action="/user/market/social/create">
+                {% raw xsrf_form_html() %}
+                <input name="box_uuid" type="hidden" value="{{ box.uuid }}" />
+                <div class="control-group">
+                    <label class="control-label mono">TITRE DU MURMURE</label>
+                    <input class="console-input" name="title" type="text" placeholder="Ex: Chemin vers le flag root" required />
+                </div>
+                <div class="control-group">
+                    <label class="control-label mono">CONTENU SECRET</label>
+                    <textarea class="console-input" name="content" rows="4" placeholder="Tapez ici le renseignement à vendre..." required></textarea>
+                </div>
+                <div class="control-group">
+                    <label class="control-label mono">PRIX (CAURIS)</label>
+                    <input class="console-input" name="price" type="number" value="100" min="10" step="10" />
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button onclick="document.getElementById('create-trade-form').submit();" class="btn-modern">PUBLIER LE MURMURE</button>
+        </div>
+    </div>
 {% end %}
 
 {% block content %}
@@ -305,6 +236,9 @@
         </div>
     </div>
     <div style="display: flex; gap: 10px;">
+        {% if len(team.box_flags(box)) > 0 %}
+            <a href="#create-trade-modal" data-toggle="modal" class="btn-modern" style="background: var(--accent-glow) !important; color: var(--accent-color) !important; font-size: 0.7rem;">PROPOSER_MURMURE</a>
+        {% end %}
         <a href="/user/missions" class="glass-panel" style="padding: 10px 20px; text-decoration: none; font-family: 'JetBrains Mono'; font-size: 0.8rem; color: var(--text-primary);">RETOUR_CARTE</a>
     </div>
 </div>
@@ -351,6 +285,9 @@
         <div id="telemetry-terminal" class="telemetry-terminal"></div>
     </div>
 </div>
+
+<!-- TACTICAL ANALYSIS PANEL -->
+<div id="tactical-analysis-panel" data-category="{{ box.category }}" data-box-uuid="{{ box.uuid }}"></div>
 
 <!-- FLAGS SECTION -->
 <div class="mission-section">

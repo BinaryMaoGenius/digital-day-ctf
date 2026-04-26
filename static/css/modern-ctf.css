@@ -169,6 +169,50 @@ h1, h2, h3, .mono {
 /* -------------------------------------------
    SCROLLBAR & SELECTION
    ------------------------------------------- */
+/* --- OMNIPRESENT ECOSYSTEM : MOBILE OPTIMIZATION --- */
+@media (max-width: 768px) {
+    .navbar .nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .navbar .nav > li > a {
+        padding: 5px 10px;
+        font-size: 0.8em;
+    }
+
+    /* Scoreboard simplification for mobile */
+    .scoreboard-table th:nth-child(3),
+    .scoreboard-table td:nth-child(3),
+    .scoreboard-table th:nth-child(4),
+    .scoreboard-table td:nth-child(4) {
+        display: none; /* Hide secondary stats on mobile */
+    }
+
+    .glass-panel {
+        padding: 15px;
+        margin-bottom: 10px;
+    }
+
+    h1, h2 {
+        font-size: 1.5em;
+    }
+
+    /* Bigger tap targets for mobile */
+    .btn, .market-card, .murmure-card {
+        min-height: 44px;
+        padding: 12px;
+    }
+    
+    #theme-toggle {
+        bottom: 10px;
+        right: 10px;
+        width: 50px;
+        height: 50px;
+    }
+}
+
 ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
@@ -182,6 +226,95 @@ h1, h2, h3, .mono {
 }
 ::-webkit-scrollbar-thumb:hover {
     background: var(--accent-secondary);
+}
+
+/* -------------------------------------------
+   CYBER-BAZAR (MARKET)
+   ------------------------------------------- */
+.market-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+    margin-top: 2rem;
+}
+
+.market-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 220px;
+    border-top: 4px solid var(--accent-color);
+}
+
+.market-item-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, var(--accent-color), var(--accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.market-price {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--accent-color);
+    margin: 1rem 0;
+}
+
+.market-status {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* -------------------------------------------
+   TEAM COMMAND CENTER
+   ------------------------------------------- */
+.resource-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 15px;
+    margin-top: 1rem;
+}
+
+.resource-item {
+    padding: 15px;
+    text-align: center;
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    transition: all 0.3s ease;
+}
+
+.resource-item i {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.resource-item.active {
+    border-color: var(--accent-color);
+    background: var(--accent-glow);
+}
+
+.reputation-bar {
+    height: 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 6px;
+    margin: 10px 0;
+    overflow: hidden;
+    border: 1px solid var(--glass-border);
+}
+
+.reputation-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-color), var(--accent-secondary));
+    box-shadow: 0 0 10px var(--accent-glow);
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 ::selection {

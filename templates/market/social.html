@@ -1,0 +1,139 @@
+{% extends "../main.html" %}
+
+{% block title %}{{ _("Marché de l'Information") }}{% end %}
+
+{% block header %}
+<style>
+    .trade-card {
+        border-left: 4px solid var(--accent-color);
+        margin-bottom: 20px;
+        position: relative;
+    }
+    .trade-seller {
+        font-size: 0.8rem;
+        opacity: 0.6;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    .trade-content-locked {
+        filter: blur(4px);
+        user-select: none;
+        opacity: 0.5;
+    }
+    .trade-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: var(--accent-glow);
+        color: var(--accent-color);
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 0.7rem;
+        font-weight: bold;
+    }
+</style>
+{% end %}
+
+{% block content %}
+<div class="container">
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 30px;">
+        <div>
+            <h1 class="accent-text" style="margin: 0; font-size: 2.5rem;">LE BAZAR DES MURMURES</h1>
+            <p class="mono" style="opacity: 0.7; margin: 5px 0 0 0;">Achetez des renseignements aux autres clans... à vos risques et périls.</p>
+        </div>
+        <div class="glass-panel" style="padding: 10px 20px; border-radius: 12px;">
+            <span class="label mono">{{ _("Votre Solde") }}</span>
+            <div class="value accent-text" style="font-size: 1.5rem;">{{ "C " }}{{ user.team.money }}</div>
+        </div>
+    </div>
+
+    {% if errors is not None and len(errors) != 0 %}
+        {% for error in errors %}
+        <div class="alert alert-error glass-panel" style="border-left: 4px solid var(--danger); margin-bottom: 20px;">
+            <a class="close" data-dismiss="alert" href="#">&times;</a>
+            <h4 class="alert-heading mono">{{ _("AVERTISSEMENT") }}</h4>
+            <p class="mono">{{ error }}</p>
+        </div>
+        {% end %}
+    {% end %}
+
+    <div class="row">
+        <div class="span8">
+            <h3 class="mono"><i class="fa fa-comments-o"></i> RENSEIGNEMENTS DISPONIBLES</h3>
+            <br>
+            {% if len(trades) == 0 %}
+                <div class="glass-panel modern-card" style="text-align: center; padding: 40px; opacity: 0.5;">
+                    <p class="mono">Aucun murmure ne circule pour le moment...</p>
+                </div>
+            {% end %}
+
+            {% for trade in trades %}
+                {% set has_bought = user.team in trade.buyers %}
+                <div class="glass-panel modern-card trade-card">
+                    <div class="trade-seller mono">
+                        <i class="fa fa-users"></i> Clan Vendeur: <span class="accent-text">{{ trade.seller_team.name }}</span>
+                        <span style="margin-left: 20px;"><i class="fa fa-calendar"></i> {{ trade.created.strftime("%H:%M") }}</span>
+                        <span style="margin-left: 20px;"><i class="fa fa-cube"></i> Cible: {{ trade.box.name }}</span>
+                    </div>
+                    <h3 class="mono" style="margin: 10px 0;">{{ trade.title }}</h3>
+                    
+                    <div class="trade-body" style="margin-bottom: 15px;">
+                        {% if has_bought %}
+                            <div class="mono" style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; border: 1px dashed var(--accent-color);">
+                                {{ trade.content }}
+                            </div>
+                        {% else %}
+                            <p class="mono trade-content-locked">
+                                Contenu crypté. Le clan vendeur demande une compensation pour déverrouiller ce fragment de mémoire...
+                            </p>
+                        {% end %}
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div class="mono" style="font-size: 0.8rem; opacity: 0.6;">
+                            <i class="fa fa-shopping-cart"></i> {{ len(trade.buyers) }} acquéreurs
+                        </div>
+                        {% if not has_bought %}
+                            <form action="/user/market/social" method="post" style="margin: 0;">
+                                {% raw xsrf_form_html() %}
+                                <input type="hidden" name="uuid" value="{{ trade.uuid }}">
+                                <button type="submit" class="btn-modern" style="padding: 5px 15px !important; font-size: 0.7rem;">
+                                    ACQUÉRIR POUR {{ trade.price }} C
+                                </button>
+                            </form>
+                        {% else %}
+                            <div class="mono accent-text" style="font-size: 0.7rem;"><i class="fa fa-check"></i> TRANSMISSION DÉCRYPTÉE</div>
+                        {% end %}
+                    </div>
+                </div>
+            {% end %}
+        </div>
+
+        <div class="span4">
+            <div class="glass-panel modern-card">
+                <h4 class="mono"><i class="fa fa-info-circle accent-text"></i> LOGIQUE AYANOKOJI</h4>
+                <p class="mono" style="font-size: 0.75rem; opacity: 0.8;">
+                    Ici, l'information est une arme. <br><br>
+                    Le Nexus ne garantit pas la véracité des renseignements vendus par les autres clans. Un clan peut vous vendre une vérité salvatrice ou un mensonge dévastateur pour vider vos coffres. <br><br>
+                    <strong>Choisissez bien à qui vous donnez votre confiance.</strong>
+                </p>
+            </div>
+            <br>
+            <div class="glass-panel modern-card">
+                <h4 class="mono"><i class="fa fa-share-alt accent-text"></i> VOS ACQUISITIONS</h4>
+                <div id="purchased-list">
+                    {% for trade in user.team.purchased_trades %}
+                        <div style="font-size: 0.7rem; padding: 5px 0; border-bottom: 1px solid var(--glass-border);">
+                            <span class="mono">{{ trade.title }}</span>
+                        </div>
+                    {% end %}
+                    {% if len(user.team.purchased_trades) == 0 %}
+                        <p class="mono" style="font-size: 0.7rem; opacity: 0.4;">Aucune archive achetée.</p>
+                    {% end %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% end %}

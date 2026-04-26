@@ -276,11 +276,19 @@ class Team(DatabaseObject):
 
     def level_flags(self, lvl):
         """Given a level number return all flags captured for that level"""
-        return [flag for flag in self.flags if flag.game_level.number == lvl]
+        if not hasattr(self, "_level_flags_cache"):
+            self._level_flags_cache = {}
+        if lvl not in self._level_flags_cache:
+            self._level_flags_cache[lvl] = [flag for flag in self.flags if flag.game_level.number == lvl]
+        return self._level_flags_cache[lvl]
 
     def box_flags(self, box):
         """Given a box return all flags captured for that box"""
-        return [flag for flag in self.flags if flag.box == box]
+        if not hasattr(self, "_box_flags_cache"):
+            self._box_flags_cache = {}
+        if box.id not in self._box_flags_cache:
+            self._box_flags_cache[box.id] = [flag for flag in self.flags if flag.box_id == box.id]
+        return self._box_flags_cache[box.id]
 
     @property
     def bot_count(self):
