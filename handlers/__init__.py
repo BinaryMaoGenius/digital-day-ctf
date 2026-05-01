@@ -119,11 +119,11 @@ urls = [
     (r"/user/missions/hint", PurchaseHintHandler),
     ### BOTNET URLS ###
     # Bot Handlers - BotHandlers.py
-    (r"/botnet/connect", BotSocketHandler),
-    (r"/botnet/climonitor", BotCliMonitorSocketHandler),
-    (r"/botnet/webmonitor", BotWebMonitorSocketHandler),
-    (r"/user/bots/download/(windows|linux|monitor)", BotDownloadHandler),
-    (r"/user/bots/webmonitor", BotWebMonitorHandler),
+    # (r"/botnet/connect", BotSocketHandler),
+    # (r"/botnet/climonitor", BotCliMonitorSocketHandler),
+    # (r"/botnet/webmonitor", BotWebMonitorSocketHandler),
+    # (r"/user/bots/download/(windows|linux|monitor)", BotDownloadHandler),
+    # (r"/user/bots/webmonitor", BotWebMonitorHandler),
     ### BLACK MARKET URLS ###
     # This is only relevant if the black market is enabled
     (r"/scoreboard/wall_of_sheep", ScoreboardWallOfSheepHandler),
@@ -167,8 +167,8 @@ urls = [
     # Game Materials
     (r"/materials/?", MaterialsHandler),
     (r"/materials/(.*)/", MaterialsHandler),
-    (r"/cyberchef/", ChefHandler),
-    (r"/cyberchef/(.*)", StaticFileHandler, {"path": "cyberchef/"}),
+    # (r"/cyberchef/", ChefHandler),
+    # (r"/cyberchef/(.*)", StaticFileHandler, {"path": "cyberchef/"}),
     # Admin Handlers
     (r"/admin/game", AdminGameHandler),
     (r"/admin/message", AdminMessageHandler),
@@ -204,6 +204,7 @@ urls = [
     (r"/admin", NoobHandler),
     (r"/(.*)phpmyadmin(.*)", NoobHandler),
     (r"/administrator(.*)", NoobHandler),
+    (r"/gate/(.*)", TargetRedirectHandler),
 ]
 
 # These routes should be disabled if we're not using the database for authentication.

@@ -2,296 +2,297 @@
 <rootthebox api="1">
 <import_options clear_levels="1" clear_corps="1" />
 <configuration>
-<game_name>Digital Day CTF : Le Périple du Mandé</game_name>
-<org_footer>Propulsé par la Team Digital Day - Mali</org_footer>
-<ctf_tagline>De Bamako à Tombouctou, sécurisez l'Empire !</ctf_tagline>
+<game_name>Digital Day CTF : L'Équation du Mandé</game_name>
+<org_footer>Protulsé par la Logique de l'Ordre | 2024</org_footer>
+<ctf_tagline>L'émotion est une faiblesse. La donnée est la seule vérité.</ctf_tagline>
 </configuration>
 <gamelevels>
 <gamelevel>
 <number>1</number>
-<name>Région I : Terres du Mandé</name>
+<name>Phase I : Observation</name>
 <type>none</type>
-<description>L'initiation commence dans le sud verdoyant.</description>
+<description>Analysez les failles de surface. Ne laissez aucune trace.</description>
 <buyout>0</buyout>
 </gamelevel>
 <gamelevel>
 <number>2</number>
-<name>Région II : Delta Central</name>
+<name>Phase II : Infiltration</name>
 <type>none</type>
-<description>Naviguez sur le Djoliba vers les cités historiques.</description>
+<description>Le système commence à céder. Pénétrez les couches profondes.</description>
 <buyout>0</buyout>
 </gamelevel>
 <gamelevel>
 <number>3</number>
-<name>Région III : Sables de l'Empire</name>
+<name>Phase III : Éradication</name>
 <type>none</type>
-<description>Le désert cache des secrets millénaires.</description>
+<description>L'Empire est à votre portée. Seule la perfection technique prévaudra.</description>
 <buyout>0</buyout>
 </gamelevel>
 </gamelevels>
 
   <categories count="8">
-    <item><category>Reconnaissance</category></item>
-    <item><category>Web Infiltration</category></item>
+    <item><category>Web Exploitation</category></item>
     <item><category>Cryptographie</category></item>
-    <item><category>Injections</category></item>
-    <item><category>Privilege Escalation</category></item>
-    <item><category>OSINT</category></item>
+    <item><category>OSINT &amp; Recon</category></item>
     <item><category>Forensics</category></item>
     <item><category>Reverse Engineering</category></item>
+    <item><category>Injections</category></item>
+    <item><category>Privilege Escalation</category></item>
+    <item><category>Binary Exploitation</category></item>
   </categories>
 
   <corporations count="1">
     <corporation>
-      <name>L'Empire du Mandé Numérique</name>
-      <description>Le réseau souverain protégeant les richesses du Mali.</description>
+      <name>L'Ordre des Cyber-Héritiers</name>
+      <description>Une entité agissant dans l'ombre pour réinitialiser l'héritage numérique du Mali.</description>
       <boxes count="15">
         
-        <!-- REGION I : SUD -->
         <box>
-          <name>Bamako : L'Oracle de Koulouba</name>
-          <category>Reconnaissance</category>
-          <description>Le serveur de la capitale cache un secret dans ses fichiers de configuration. Trouvez le chemin caché.</description>
-          <difficulty>Facile</difficulty>
-          <gamelevel>1</gamelevel>
-          <flags count="2">
-            <flag submission_type="static">
-              <name>Les Tambours de Robots</name>
-              <token>flag{bamako_robots_txt_2024}</token>
-              <description>Cherchez dans le fichier robots.txt.</description>
-              <reward>50</reward>
-            </flag>
-            <flag submission_type="static">
-              <name>Le Code Source du Palais</name>
-              <token>flag{html_comments_hidden_secret}</token>
-              <description>Un secret a été oublié dans les commentaires HTML.</description>
-              <reward>50</reward>
-            </flag>
-          </flags>
-        </box>
-
-        <box>
-          <name>Siby : Le Serment du Chasseur</name>
-          <category>OSINT</category>
-          <description>Près de l'arche de Siby, un ancien message circule. Trouvez le nom du premier empereur cité dans la charte du Mandé.</description>
+          <name>Bamako : Le Silence de Koulouba</name>
+          <category>OSINT &amp; Recon</category>
+          <description>
+            L'observation est la première étape du contrôle. Le Palais communique via des canaux que la masse ignore. 
+            Analysez les métadonnées de la communication.
+          </description>
           <difficulty>Facile</difficulty>
           <gamelevel>1</gamelevel>
           <flags count="1">
             <flag submission_type="static">
-              <name>Le Nom du Lion</name>
-              <token>flag{sundiata_keita_1235}</token>
-              <description>Format : flag{prenom_nom_annee}</description>
+              <token>flag{koulouba_custom_header_detected}</token>
               <reward>100</reward>
             </flag>
           </flags>
         </box>
 
         <box>
-          <name>Sikasso : Le Tata de Fer</name>
+          <name>Siby : L'Arche du Savoir</name>
           <category>Cryptographie</category>
-          <description>Un message intercepté près des remparts du Tata : 'Qm9nb2xhbiBlc3QgbGEgY2zDqQ=='</description>
+          <description>
+            Le code n'est qu'un langage. Le décrypter, c'est comprendre la pensée de celui qui l'a écrit.
+            'Z3JpdmUgbGEgbWFuZGUgc291cyBsZSBsaW9u'
+          </description>
           <difficulty>Facile</difficulty>
           <gamelevel>1</gamelevel>
           <flags count="1">
             <flag submission_type="static">
-              <name>Le Secret du Rempart</name>
-              <token>flag{Bogolan_est_la_clé}</token>
-              <description>Déchiffrez le message base64. (Indice : Le Fragment A est 'SANK')</description>
-              <reward>75</reward>
-            </flag>
-          </flags>
-        </box>
-
-        <box>
-          <name>Bougouni : Marché des Chasseurs</name>
-          <category>Web Infiltration</category>
-          <description>Le portail de gestion du marché permet de voir les commandes. Essayez d'accéder à la commande n°1.</description>
-          <url>/static/targets/bougouni/index.html</url>
-          <difficulty>Facile</difficulty>
-          <gamelevel>1</gamelevel>
-          <flags count="1">
-            <flag submission_type="static">
-              <name>IDOR au Marché</name>
-              <token>flag{idor_market_success_001}</token>
-              <description>Changez l'ID dans l'URL pour voir d'autres données.</description>
+              <token>flag{Gloire_a_la_Mande}</token>
               <reward>100</reward>
             </flag>
           </flags>
         </box>
 
         <box>
-          <name>Koulikoro : Les Nyamakalaw</name>
+          <name>Sikasso : Le Secret du Tata</name>
           <category>Forensics</category>
-          <description>Une image Bogolan semble contenir un message invisible à l'oeil nu.</description>
+          <description>
+            L'image est un mensonge. La vérité est enfouie dans les strates invisibles des données.
+            Note : Fragment A détecté : 'MAL1_'
+          </description>
           <difficulty>Moyen</difficulty>
           <gamelevel>1</gamelevel>
           <flags count="1">
             <flag submission_type="static">
-              <name>L'Art Invisible</name>
-              <token>flag{stego_bogolan_mande}</token>
-              <description>Utilisez un outil de stéganographie sur l'image.</description>
-              <reward>150</reward>
+              <token>flag{lsb_stego_tata_secrets}</token>
+              <reward>200</reward>
             </flag>
           </flags>
         </box>
 
-        <!-- REGION II : CENTRE -->
         <box>
-          <name>Ségou : Cité des Balanzans</name>
-          <category>Injections</category>
-          <description>Le registre des citoyens de Ségou est vulnérable. Connectez-vous en tant qu'administrateur sans mot de passe.</description>
+          <name>Bougouni : Le Marché des Ombres</name>
+          <category>Web Exploitation</category>
+          <description>
+            L'identité est une variable. Manipulez le jeton de confiance pour accéder aux privilèges supérieurs.
+            Cible : /gate/bougouni
+          </description>
           <difficulty>Moyen</difficulty>
-          <gamelevel>2</gamelevel>
+          <gamelevel>1</gamelevel>
           <flags count="1">
             <flag submission_type="static">
-              <name>L'Injection du Roi</name>
-              <token>flag{sqli_segou_king_access}</token>
-              <description>Utilisez une injection SQL classique sur le formulaire de login.</description>
+              <token>flag{jwt_identity_theft_market_real}</token>
               <reward>250</reward>
             </flag>
           </flags>
         </box>
 
         <box>
-          <name>Djenné : Le Grand Marché</name>
-          <category>Web Infiltration</category>
-          <description>Un script malveillant peut être injecté dans le livre d'or de la Grande Mosquée.</description>
+          <name>Koulikoro : Les Archives du Nyamakala</name>
+          <category>Forensics</category>
+          <description>
+            Rien ne disparaît vraiment. Les archives contiennent des couches de données que seule une analyse chirurgicale peut extraire.
+          </description>
           <difficulty>Moyen</difficulty>
-          <gamelevel>2</gamelevel>
+          <gamelevel>1</gamelevel>
           <flags count="1">
             <flag submission_type="static">
-              <name>L'Empreinte de l'Architecte</name>
-              <token>flag{xss_djenne_mosque_alert}</token>
-              <description>Réalisez une attaque XSS pour afficher un message.</description>
+              <token>flag{stego_bogolan_layer_extracted}</token>
               <reward>200</reward>
             </flag>
           </flags>
         </box>
 
         <box>
-          <name>Mopti : La Venise Malienne</name>
-          <category>OSINT</category>
-          <description>Trouvez les coordonnées GPS exactes du confluent entre le Bani et le Niger.</description>
-          <difficulty>Moyen</difficulty>
+          <name>Ségou : Le Registre des Balanzans</name>
+          <category>Injections</category>
+          <description>
+            Le temps est la seule constante. Utilisez-le pour arracher les secrets à une base de données silencieuse.
+            Cible : /gate/segou
+          </description>
+          <difficulty>Difficile</difficulty>
           <gamelevel>2</gamelevel>
           <flags count="1">
             <flag submission_type="static">
-              <name>Le Confluent</name>
-              <token>flag{14.48_4.20_mopti}</token>
-              <description>Format : flag{lat_long_ville} (Note : Un scribe a laissé le Fragment B : 'ORE_')</description>
-              <reward>150</reward>
+              <token>flag{blind_sqli_segou_king_secret}</token>
+              <reward>400</reward>
             </flag>
           </flags>
         </box>
 
         <box>
-          <name>Bandiagara : Falaises Dogon</name>
-          <category>Forensics</category>
-          <description>Un fichier PCAP contient des échanges entre les anciens de la falaise. Trouvez le mot de passe transmis en clair.</description>
-          <difficulty>Difficile</difficulty>
+          <name>Djenné : Le Script de la Mosquée</name>
+          <category>Web Exploitation</category>
+          <description>
+            L'exécution d'un code tiers est la faille ultime. Devenez l'ombre de l'administrateur.
+          </description>
+          <difficulty>Moyen</difficulty>
           <gamelevel>2</gamelevel>
           <flags count="1">
             <flag submission_type="static">
-              <name>Le Secret des Falaises</name>
-              <token>flag{wireshark_dogon_detective}</token>
-              <description>Analysez le trafic réseau.</description>
+              <token>flag{xss_djenne_admin_cookie_stolen}</token>
               <reward>300</reward>
             </flag>
           </flags>
         </box>
 
         <box>
-          <name>San : Le Sanké Mon</name>
-          <category>Web Infiltration</category>
-          <description>L'API de gestion de la pêche sacrée laisse fuiter des informations sensibles.</description>
+          <name>Mopti : La Confluence Numérique</name>
+          <category>OSINT &amp; Recon</category>
+          <description>
+            La géographie est un code. Trouvez l'intersection parfaite entre deux mondes.
+            Note : Fragment B détecté : 'C0DE_'
+          </description>
           <difficulty>Moyen</difficulty>
           <gamelevel>2</gamelevel>
           <flags count="1">
             <flag submission_type="static">
-              <name>Le Filet Numérique</name>
-              <token>flag{api_leak_sanke_mon}</token>
-              <description>Inspectez les appels API dans la console développeur.</description>
+              <token>flag{14.50_4.18_mopti_nexus}</token>
               <reward>200</reward>
             </flag>
           </flags>
         </box>
 
-        <!-- REGION III : NORD -->
         <box>
-          <name>Tombouctou : Manuscrits Sacrés</name>
-          <category>Cryptographie</category>
-          <description>Un cryptogramme complexe protège l'accès à la bibliothèque de Sankoré. Assemblez les fragments A+B+C trouvés lors de votre voyage pour former la clé finale.</description>
+          <name>Bandiagara : Le Signal Dogon</name>
+          <category>Forensics</category>
+          <description>
+            Le bruit cache le signal. Analysez les paquets perdus pour reconstruire la vérité.
+          </description>
           <difficulty>Difficile</difficulty>
-          <gamelevel>3</gamelevel>
+          <gamelevel>2</gamelevel>
           <flags count="1">
             <flag submission_type="static">
-              <name>La Sagesse de Sankoré</name>
-              <token>flag{SANKORE_2024_WISDOM}</token>
-              <description>Déchiffrez le code Vigenère.</description>
+              <token>flag{icmp_tunneling_dogon_shaman}</token>
+              <reward>450</reward>
+            </flag>
+          </flags>
+        </box>
+
+        <box>
+          <name>San : La Pêche Sacrée</name>
+          <category>Web Exploitation</category>
+          <description>
+            La vitesse est votre arme. Exploitez la faille temporelle entre la vérification et l'action.
+            Cible : /gate/san
+          </description>
+          <difficulty>Difficile</difficulty>
+          <gamelevel>2</gamelevel>
+          <flags count="1">
+            <flag submission_type="static">
+              <token>flag{race_condition_sanke_mon_2024}</token>
               <reward>500</reward>
             </flag>
           </flags>
         </box>
 
         <box>
-          <name>Gao : Le Tombeau des Askia</name>
-          <category>Privilege Escalation</category>
-          <description>Vous avez un accès limité au serveur du tombeau. Devenez 'root' pour lire le fichier sacré.</description>
-          <difficulty>Extrême</difficulty>
-          <gamelevel>3</gamelevel>
-          <flags count="1">
-            <flag submission_type="static">
-              <name>Le Sceptre des Askia</name>
-              <token>flag{root_access_gao_empire}</token>
-              <description>Exploitez une mauvaise configuration sudo.</description>
-              <reward>1000</reward>
-            </flag>
-          </flags>
-        </box>
-
-        <box>
-          <name>Kidal : Murmures de l'Adrar</name>
+          <name>Tombouctou : Le Grimoire de Sankoré</name>
           <category>Reverse Engineering</category>
-          <description>Un binaire mystérieux a été trouvé dans les montagnes. Trouvez le mot de passe pour l'activer.</description>
+          <description>
+            Le code est une boucle. Seul celui qui sait l'inverser peut prétendre à la maîtrise du savoir.
+          </description>
           <difficulty>Difficile</difficulty>
           <gamelevel>3</gamelevel>
           <flags count="1">
             <flag submission_type="static">
-              <name>L'Echo des Montagnes</name>
-              <token>flag{reverse_adrar_kidal_2024}</token>
-              <description>Désassemblez le fichier pour trouver la clé.</description>
+              <token>flag{SANKORE_REVERSE_MASTER_2024}</token>
               <reward>600</reward>
             </flag>
           </flags>
         </box>
 
         <box>
-          <name>Tessalit : La Sentinelle</name>
-          <category>Injections</category>
-          <description>Une injection NoSQL permet de bypasser l'authentification de la base de données nomade.</description>
+          <name>Gao : L'Ascension des Askia</name>
+          <category>Privilege Escalation</category>
+          <description>
+            La hiérarchie est une construction sociale. Brisez-la techniquement pour prendre le contrôle total.
+            Cible : /gate/gao
+          </description>
+          <difficulty>Extrême</difficulty>
+          <gamelevel>3</gamelevel>
+          <flags count="1">
+            <flag submission_type="static">
+              <token>flag{suid_path_hijack_gao_root}</token>
+              <reward>1000</reward>
+            </flag>
+          </flags>
+        </box>
+
+        <box>
+          <name>Kidal : Les Montagnes Invisibles</name>
+          <category>Binary Exploitation</category>
+          <description>
+            Le binaire est un labyrinthe. Les pièges anti-débogage ne sont que des distractions pour les faibles.
+          </description>
           <difficulty>Difficile</difficulty>
           <gamelevel>3</gamelevel>
           <flags count="1">
             <flag submission_type="static">
-              <name>Le Regard du Nomade</name>
-              <token>flag{nosql_injection_desert_sentinel}</token>
-              <description>Utilisez des opérateurs NoSQL ($gt, $ne) pour vous connecter. (System Log : Fragment C detecté -> '2024')</description>
+              <token>flag{anti_debug_kidal_mountain_bypass}</token>
               <reward>700</reward>
             </flag>
           </flags>
         </box>
 
         <box>
-          <name>Taoudéni : Les Mines de Sel</name>
-          <category>Web Infiltration</category>
-          <description>Le serveur de la mine de sel permet de charger des images via une URL. Accédez au fichier local /etc/passwd.</description>
+          <name>Tessalit : La Sentinelle Nomade</name>
+          <category>Injections</category>
+          <description>
+            Les bases de données NoSQL croient en la structure des objets. Injectez le chaos pour déjouer leur garde.
+            Cible : /gate/tessalit
+          </description>
+          <difficulty>Difficile</difficulty>
+          <gamelevel>3</gamelevel>
+          <flags count="1">
+            <flag submission_type="static">
+              <token>flag{nosql_injection_tessalit_sentinel_2024}</token>
+              <reward>650</reward>
+            </flag>
+          </flags>
+        </box>
+
+        <box>
+          <name>Taoudéni : Le Paradoxe de l'Or Blanc</name>
+          <category>Web Exploitation</category>
+          <description>
+            La cible n'est jamais celle qu'on croit. Utilisez le serveur comme un levier pour pénétrer l'inaccessible.
+            Cible : /gate/taoudeni
+            Note : Fragment C détecté : '2024'
+          </description>
           <difficulty>Extrême</difficulty>
           <gamelevel>3</gamelevel>
           <flags count="1">
             <flag submission_type="static">
-              <name>L'Or Blanc</name>
-              <token>flag{ssrf_taoudeni_salt_mines}</token>
-              <description>Exploitez une faille SSRF (Server Side Request Forgery).</description>
+              <token>flag{ssrf_master_taoudeni_final_access_2024}</token>
               <reward>1200</reward>
             </flag>
           </flags>

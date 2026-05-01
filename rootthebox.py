@@ -505,7 +505,7 @@ define(
     "tool_links",
     multiple=True,
     type=dict,
-    default=[{"name": "CyberChef", "url": "/cyberchef/", "target": "_blank"}],
+    default=[],
     group="application",
     help="links to add to the tool menu",
 )

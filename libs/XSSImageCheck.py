@@ -13,10 +13,10 @@ http://jklmnn.de/imagejs/
 
 import io
 import os
+import filetype
 from random import randint, sample
 from string import printable
 from pathlib import Path
-import imghdr
 
 from PIL import Image
 from resizeimage import resizeimage
@@ -109,7 +109,10 @@ def avatar_validation(image_data) -> str:
     Returns image extension as str if checks pass
     """
     if MIN_AVATAR_SIZE < len(image_data) < MAX_AVATAR_SIZE:
-        ext = imghdr.what("", h=image_data)
+        kind = filetype.guess(image_data)
+        if kind is None:
+             raise ValidationError("Invalid image format")
+        ext = kind.extension
         if ext in IMG_FORMATS and not is_xss_image(image_data):
             verify_image_size(image_data)                                
             return ext

@@ -971,3 +971,20 @@ class MapHandler(BaseHandler):
                     
         self.render("public/map.html", boxes=boxes, captured_uuids=captured_uuids, user=user)
 
+class TargetRedirectHandler(BaseHandler):
+    def get(self, target):
+        ports = {
+            "segou": 8001,
+            "bougouni": 8002,
+            "taoudeni": 8003,
+            "tessalit": 8004,
+            "san": 8005,
+            "gao": 8006
+        }
+        port = ports.get(target.lower())
+        if port:
+            # Redirection vers l'IP de l'hôte mais sur le port cible
+            self.redirect(f"http://{self.request.host.split(':')[0]}:{port}")
+        else:
+            self.redirect("/404")
+

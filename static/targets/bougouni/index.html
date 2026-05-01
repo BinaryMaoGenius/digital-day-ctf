@@ -2,58 +2,148 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Marché de Bougouni - Gestion des Commandes</title>
+    <title>Marché des Ombres - Bougouni</title>
     <link rel="stylesheet" href="../../css/digital-day.css">
     <style>
-        body { background: #121212; color: #e0e0e0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 50px; }
-        .card { background: #1e1e1e; border: 1px solid #333; padding: 20px; border-radius: 10px; max-width: 500px; margin: auto; }
-        .neon-text { color: #ffb703; text-shadow: 0 0 5px #ffb703; }
+        body { 
+            background: #1A1210; 
+            color: #F3EBD3; 
+            font-family: 'Inter', sans-serif; 
+            padding: 50px; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .market-terminal {
+            background: rgba(43, 29, 22, 0.9);
+            border: 1px solid #ffb703;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(255, 183, 3, 0.2);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+        .neon-text { 
+            color: #ffb703; 
+            text-shadow: 0 0 10px #ffb703; 
+            font-family: 'JetBrains Mono', monospace;
+            text-transform: uppercase;
+        }
+        .status-box {
+            background: #121212;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #ffb703;
+            text-align: left;
+        }
         .hidden { display: none; }
-        input { background: #333; border: 1px solid #444; color: white; padding: 5px; width: 50px; }
-        button { background: #ffb703; color: black; border: none; padding: 5px 15px; cursor: pointer; font-weight: bold; }
+        .btn-action {
+            background: transparent;
+            border: 1px solid #ffb703;
+            color: #ffb703;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+        .btn-action:hover {
+            background: #ffb703;
+            color: #1A1210;
+            box-shadow: 0 0 15px #ffb703;
+        }
+        .bogolan-pattern {
+            height: 50px;
+            background-image: url('../images/cyber_bogolan.png');
+            background-size: 100px;
+            opacity: 0.3;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h2 class="neon-text">Marché de Bougouni</h2>
-        <p>Consultation de la commande n° <input type="number" id="orderId" value="42"> <button onclick="checkOrder()">Voir</button></p>
-        <hr>
-        <div id="content">
-            <p><strong>Commande #42</strong></p>
-            <p>Client : Chasseur de Savane</p>
-            <p>Article : Arc en bois de Karité</p>
-            <p>Statut : Livré</p>
+    <div class="market-terminal">
+        <div class="bogolan-pattern"></div>
+        <h1 class="neon-text">Marché des Ombres</h1>
+        <p>Système de Gestion des Accès Nomades (v2.1)</p>
+        
+        <div class="status-box">
+            <p><strong>Utilisateur :</strong> <span id="username">Invité</span></p>
+            <p><strong>Rôle :</strong> <span id="role">Anonyme</span></p>
+            <p><strong>Statut :</strong> <span id="status" style="color: #a68a64;">Accès Restreint</span></p>
         </div>
-        <div id="secret" class="hidden">
-            <p class="neon-text"><strong>COMMANDE #1 (CONFIDENTIEL)</strong></p>
-            <p>Client : Administrateur du CTF</p>
-            <p>Article : Clé d'accès à la Région II</p>
-            <p>FLAG : <span style="background: white; color: black; padding: 2px;">flag{idor_market_success_001}</span></p>
+
+        <div id="admin-panel" class="hidden">
+            <h2 class="neon-text" style="color: #39ff14; text-shadow: 0 0 10px #39ff14;">Console Administrateur Déverrouillée</h2>
+            <div class="status-box" style="border-color: #39ff14;">
+                <p><strong>MESSAGE SACRÉ :</strong> Les archives du Sud sont à vous.</p>
+                <p><strong>FLAG :</strong> <span style="background: #39ff14; color: #000; padding: 5px; font-weight: bold;">flag{jwt_identity_theft_market}</span></p>
+            </div>
         </div>
-        <div id="error" class="hidden">
-            <p style="color: #ff4d4d;">Commande introuvable.</p>
+
+        <div id="guest-panel">
+            <p>Seuls les marchands de l'Ordre avec un rôle <strong>'admin'</strong> peuvent accéder aux registres secrets.</p>
+            <button class="btn-action" onclick="checkAccess()">Vérifier les Droits</button>
         </div>
     </div>
 
     <script>
-        function checkOrder() {
-            const id = document.getElementById('orderId').value;
-            const content = document.getElementById('content');
-            const secret = document.getElementById('secret');
-            const error = document.getElementById('error');
+        // Initialisation du JWT fictif dans le localStorage si absent
+        // Format : base64(header).base64(payload).signature
+        // Payload : {"user": "invité", "role": "guest", "iat": 1714521600}
+        const defaultJWT = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiaW52aXTDqSIsInJvbGUiOiJndWVzdCIsImlhdCI6MTcxNDUyMTYwMH0.signature_hidden";
+        
+        if (!localStorage.getItem('access_token')) {
+            localStorage.setItem('access_token', defaultJWT);
+        }
 
-            content.classList.add('hidden');
-            secret.classList.add('hidden');
-            error.classList.add('hidden');
-
-            if (id == "1") {
-                secret.classList.remove('hidden');
-            } else if (id == "42") {
-                content.classList.remove('hidden');
-            } else {
-                error.classList.remove('hidden');
+        function decodeJWT(token) {
+            try {
+                const base64Url = token.split('.')[1];
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join(''));
+                return JSON.parse(jsonPayload);
+            } catch (e) {
+                return null;
             }
         }
+
+        function checkAccess() {
+            const token = localStorage.getItem('access_token');
+            const payload = decodeJWT(token);
+            
+            if (payload) {
+                document.getElementById('username').innerText = payload.user || "Inconnu";
+                document.getElementById('role').innerText = payload.role || "Inconnu";
+                
+                if (payload.role === 'admin') {
+                    document.getElementById('status').innerText = "Accès Maître";
+                    document.getElementById('status').style.color = "#39ff14";
+                    document.getElementById('admin-panel').classList.remove('hidden');
+                    document.getElementById('guest-panel').classList.add('hidden');
+                } else {
+                    alert("Accès refusé : Le rôle '" + payload.role + "' n'a pas les permissions nécessaires.");
+                }
+            } else {
+                alert("Erreur : Jeton d'accès corrompu ou manquant.");
+            }
+        }
+
+        // Première vérification au chargement
+        window.onload = () => {
+            const token = localStorage.getItem('access_token');
+            const payload = decodeJWT(token);
+            if (payload) {
+                document.getElementById('username').innerText = payload.user;
+                document.getElementById('role').innerText = payload.role;
+            }
+        };
     </script>
 </body>
 </html>

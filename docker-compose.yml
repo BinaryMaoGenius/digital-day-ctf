@@ -52,6 +52,49 @@ services:
     depends_on:
       - webapp
 
+  # ── TECHNICAL TARGETS (The Engine) ─────────────────────────────────────────
+  target-segou:
+    build:
+      context: ./targets/segou
+    ports:
+      - "8001:8001"
+    restart: unless-stopped
+
+  target-bougouni:
+    build:
+      context: ./targets/bougouni
+    ports:
+      - "8002:8002"
+    restart: unless-stopped
+
+  target-taoudeni:
+    build:
+      context: ./targets/taoudeni
+    ports:
+      - "8003:8003"
+    restart: unless-stopped
+
+  target-tessalit:
+    build:
+      context: ./targets/tessalit
+    ports:
+      - "8004:8004"
+    restart: unless-stopped
+
+  target-san:
+    build:
+      context: ./targets/san
+    ports:
+      - "8005:8005"
+    restart: unless-stopped
+
+  target-gao:
+    build:
+      context: ./targets/gao
+    ports:
+      - "8006:8006"
+    restart: unless-stopped
+
 volumes:
   ctf_data:
     driver: local

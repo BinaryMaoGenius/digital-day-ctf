@@ -1,5 +1,5 @@
 import hashlib
-import imghdr
+import filetype
 import logging
 from base64 import b64decode
 from datetime import datetime
@@ -46,9 +46,12 @@ def save_config():
 def save_config_image(b64_data):
     image_data = bytearray(b64decode(b64_data))
     if len(image_data) < (2048 * 2048):
-        ext = imghdr.what("", h=image_data)
+        kind = filetype.guess(image_data)
+        if kind is None:
+            raise ValidationError("Invalid image format")
+        ext = kind.extension
         file_name = "/story/%s.%s" % (hashlib.sha1(image_data).hexdigest(), ext)
-        if ext in ["png", "jpeg", "gif", "bmp"] and not is_xss_image(image_data):
+        if ext in ["png", "jpg", "jpeg", "gif", "bmp"] and not is_xss_image(image_data):
             with open("files" + file_name, "wb") as fp:
                 fp.write(image_data)
             return file_name

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Registre des Balanzans - Ségou</title>
+    <link rel="stylesheet" href="../../css/digital-day.css">
+    <style>
+        body { 
+            background: #1A1210; 
+            color: #F3EBD3; 
+            font-family: 'Inter', sans-serif; 
+            padding: 50px; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .royal-registry {
+            background: rgba(43, 29, 22, 0.95);
+            border: 1px solid #ffb703;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+        .neon-text { 
+            color: #ffb703; 
+            text-shadow: 0 0 10px #ffb703; 
+        }
+        input {
+            width: 80%;
+            padding: 12px;
+            margin: 10px 0;
+            background: #121212;
+            border: 1px solid #a68a64;
+            color: #F3EBD3;
+            border-radius: 5px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .btn-query {
+            background: #ffb703;
+            color: #1A1210;
+            border: none;
+            padding: 12px 30px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            text-transform: uppercase;
+        }
+        .loader {
+            display: none;
+            margin: 20px auto;
+            border: 4px solid #2B1D16;
+            border-top: 4px solid #ffb703;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        #response {
+            margin-top: 20px;
+            font-weight: bold;
+            min-height: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div class="royal-registry">
+        <h1 class="neon-text">Registre des Balanzans</h1>
+        <p>Interroger la base de données des citoyens</p>
+        
+        <input type="text" id="queryInput" placeholder="Entrez un ID de citoyen (ex: 42)">
+        <br>
+        <button class="btn-query" onclick="executeQuery()">Interroger le Gardien</button>
+        
+        <div id="loader" class="loader"></div>
+        <div id="response"></div>
+
+        <p style="font-size: 0.8rem; color: #a68a64; margin-top: 30px;">
+            "Le gardien est lent à répondre quand la vérité est proche."
+        </p>
+    </div>
+
+    <script>
+        // Simulation d'une DB
+        // Password Admin : 'B4l4nz4n_2024'
+        const ADMIN_PASS = "B4l4nz4n_2024";
+
+        async function executeQuery() {
+            const input = document.getElementById('queryInput').value.toLowerCase();
+            const responseDiv = document.getElementById('response');
+            const loader = document.getElementById('loader');
+            
+            responseDiv.innerText = "";
+            loader.style.display = "block";
+
+            // Simulation du délai SQL
+            let delay = 300; // Délai normal
+
+            // Détection simplifiée d'une Blind SQLi (SLEEP / timing)
+            // Exemple : ' OR IF(SUBSTR((SELECT pass FROM users),1,1)='B', SLEEP(3), 0) --
+            if (input.includes("sleep")) {
+                // On simule le succès de l'injection sur le password admin
+                // Pour le CTF, on va vérifier si l'utilisateur teste le bon caractère
+                const regex = /substr.*,\s*(\d+)\s*,\s*1\s*\)\s*=\s*['"](.*?)['"]/i;
+                const match = input.match(regex);
+                
+                if (match) {
+                    const index = parseInt(match[1]) - 1;
+                    const char = match[2];
+                    
+                    if (ADMIN_PASS[index] === char) {
+                        delay = 3000; // Simulation du SLEEP(3)
+                    }
+                }
+            }
+
+            setTimeout(() => {
+                loader.style.display = "none";
+                if (input === "1") {
+                    responseDiv.innerText = "Citoyen trouvé : Roi Biton Coulibaly";
+                    responseDiv.style.color = "#39ff14";
+                } else if (input.includes("'") || input.includes("or")) {
+                    // Réponse générique pour une injection
+                    responseDiv.innerText = "Le gardien acquiesce en silence.";
+                    responseDiv.style.color = "#ffb703";
+                } else {
+                    responseDiv.innerText = "Aucun citoyen ne correspond à cet appel.";
+                    responseDiv.style.color = "#d00000";
+                }
+            }, delay);
+        }
+    </script>
+</body>
+</html>
