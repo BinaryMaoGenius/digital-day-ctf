@@ -4,7 +4,7 @@ from flask import Flask, request, jsonify, render_template_string
 
 app = Flask(__name__)
 
-PREMIUM_CSS = open('static/css/targets_premium.css', 'r').read()
+from premium_css import PREMIUM_CSS
 
 inventory = {"fish": 1, "cauris": 0}
 

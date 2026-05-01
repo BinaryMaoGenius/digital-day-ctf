@@ -3,7 +3,7 @@ import os
 
 app = Flask(__name__)
 
-PREMIUM_CSS = open('static/css/targets_premium.css', 'r').read()
+from premium_css import PREMIUM_CSS
 
 # État simulé du système de fichiers
 FILESYSTEM = {

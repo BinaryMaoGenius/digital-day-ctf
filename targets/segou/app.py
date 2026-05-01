@@ -5,7 +5,7 @@ import time
 app = Flask(__name__)
 
 # Design System Intégré (Zugenberg Style)
-PREMIUM_CSS = open('static/css/targets_premium.css', 'r').read()
+from premium_css import PREMIUM_CSS
 
 HTML_TEMPLATE = """
 <!DOCTYPE html>

@@ -5,7 +5,7 @@ import datetime
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'mande_secret_key_2024'
 
-PREMIUM_CSS = open('static/css/targets_premium.css', 'r').read()
+from premium_css import PREMIUM_CSS
 
 HTML_TEMPLATE = """
 <!DOCTYPE html>

@@ -4,6 +4,7 @@ WORKDIR /app
 
 RUN pip install flask
 
+COPY premium_css.py .
 COPY app.py .
 
 EXPOSE 8004

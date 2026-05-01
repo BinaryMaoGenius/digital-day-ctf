@@ -4,7 +4,7 @@ import json
 
 app = Flask(__name__)
 
-PREMIUM_CSS = open('static/css/targets_premium.css', 'r').read()
+from premium_css import PREMIUM_CSS
 
 SENTINELS = [
     {"username": "admin_sentinel", "access_code": "flag{nosql_injection_tessalit_sentinel_2024}"}

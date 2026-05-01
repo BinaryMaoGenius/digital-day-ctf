@@ -1,0 +1,135 @@
+PREMIUM_CSS = """
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&family=JetBrains+Mono:wght@300;500&display=swap');
+
+:root {
+    --bg-color: #0d0d0d;
+    --card-bg: rgba(25, 25, 25, 0.7);
+    --accent-color: #ffb703;
+    --accent-glow: rgba(255, 183, 3, 0.3);
+    --text-primary: #f2f2f2;
+    --text-dim: #a6a6a6;
+    --border-color: rgba(255, 183, 3, 0.2);
+    --success: #39ff14;
+}
+
+body {
+    background-color: var(--bg-color);
+    background-image: 
+        radial-gradient(circle at 50% 50%, rgba(20, 20, 20, 0.8), var(--bg-color)),
+        url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l30 30-30 30L0 30z' fill='%231a1a1a' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E");
+    color: var(--text-primary);
+    font-family: 'Outfit', sans-serif;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.cockpit-frame {
+    width: 90%;
+    max-width: 1000px;
+    background: var(--card-bg);
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 0 40px rgba(0,0,0,0.5), inset 0 0 20px var(--accent-glow);
+    position: relative;
+    animation: fadeIn 0.8s ease-out;
+}
+
+.cockpit-frame::before {
+    content: '';
+    position: absolute;
+    top: -2px; left: -2px; right: -2px; bottom: -2px;
+    border: 2px solid var(--accent-color);
+    border-radius: 14px;
+    clip-path: polygon(0 0, 15% 0, 15% 2%, 0 2%, 0 15%, 2% 15%, 2% 0, 0 0, 85% 0, 100% 0, 100% 15%, 98% 15%, 98% 2%, 85% 2%, 85% 0, 100% 85%, 100% 100%, 85% 100%, 85% 98%, 98% 98%, 98% 85%, 100% 85%, 0 100%, 0 85%, 2% 85%, 2% 98%, 15% 98%, 15% 100%, 0 100%);
+}
+
+.terminal-header {
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--success);
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: 0 0 10px var(--success);
+    margin-right: 10px;
+}
+
+h1 {
+    font-size: 1.8rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent-color);
+    margin: 0;
+}
+
+.input-field {
+    background: rgba(0,0,0,0.3);
+    border: 1px solid var(--border-color);
+    padding: 15px;
+    color: var(--accent-color);
+    font-family: 'JetBrains Mono', monospace;
+    width: 100%;
+    border-radius: 6px;
+    margin-top: 10px;
+    transition: all 0.3s;
+}
+
+.input-field:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 15px var(--accent-glow);
+}
+
+.action-btn {
+    background: var(--accent-color);
+    color: #000;
+    border: none;
+    padding: 15px 30px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 20px;
+}
+
+.action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 25px var(--accent-color);
+}
+
+.lore-text {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text-dim);
+    margin-bottom: 30px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Specific for Cyber-Bogolan visual accents */
+.bogolan-divider {
+    height: 4px;
+    background-image: repeating-linear-gradient(45deg, var(--accent-color), var(--accent-color) 10px, transparent 10px, transparent 20px);
+    margin: 20px 0;
+    opacity: 0.5;
+}
+"""
