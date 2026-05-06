@@ -246,6 +246,28 @@
 {% if errors %}{% for error in errors %}<div class="glass-panel" style="border-color: var(--danger); color: var(--danger); padding: 15px; margin-bottom: 20px;">{{ error }}</div>{% end %}{% end %}
 {% if success %}{% for msg in success %}<div class="glass-panel" style="border-color: var(--success); color: var(--success); padding: 15px; margin-bottom: 20px;">{{ msg }}</div>{% end %}{% end %}
 
+<div class="glass-panel" style="margin-bottom: 30px; border: 2px solid var(--accent-color); background: rgba(var(--accent-rgb), 0.1);">
+    <div style="padding: 20px; display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <h3 class="mono accent-text" style="margin: 0; font-size: 1.2rem;">TERMINAL_D_ACCÈS_TACTIQUE</h3>
+            <p class="mono" style="font-size: 0.7rem; opacity: 0.7; margin: 5px 0 0 0;">STATUT: LIAISON_OPÉRATIONNELLE_ÉTABLIE</p>
+        </div>
+        <div>
+            {% if len(box.visible_ips) > 0 %}
+                {% for ip in box.visible_ips %}
+                    <a href="http://{{ str(ip) }}" target="_blank" class="btn-modern" style="padding: 15px 30px; font-size: 1rem; background: var(--accent-color) !important; color: #000 !important; box-shadow: 0 0 20px var(--accent-glow);">
+                        <i class="fa fa-terminal"></i> LANCER_L_EXPLOITATION
+                    </a>
+                {% end %}
+            {% elif box.category == "Forensics" %}
+                <div class="mono" style="color: var(--accent-color);">VOIR_ARCHIVES_TACTIQUES_CI-DESSOUS</div>
+            {% else %}
+                <div class="mono" style="color: var(--danger);">EN_ATTENTE_DE_COORDONNÉES...</div>
+            {% end %}
+        </div>
+    </div>
+</div>
+
 <div class="glass-panel briefing-box">
     <div class="briefing-header">COMMUNIQUÉ_SÉCURISÉ_NEXUS</div>
     <div class="briefing-content markdown">{{ box.description }}</div>

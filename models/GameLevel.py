@@ -45,7 +45,7 @@ class GameLevel(DatabaseObject):
     _buyout = Column(Integer, nullable=False)
     _type = Column(Unicode(16), nullable=False, default=str("none"))
     _reward = Column(Integer, nullable=False, default=0)
-    _name = Column(Unicode(32), nullable=True)
+    _name = Column(Unicode(128), nullable=True)
     _description = Column(Unicode(512))
     _locked = Column(Boolean, default=False, nullable=False)
 
@@ -138,10 +138,10 @@ class GameLevel(DatabaseObject):
 
     @name.setter
     def name(self, value):
-        if len(value) <= 32:
+        if len(value) <= 128:
             self._name = value
         else:
-            raise ValidationError("Max name length is 32")
+            raise ValidationError("Max name length is 128")
 
     @property
     def description(self):

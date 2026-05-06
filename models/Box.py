@@ -69,7 +69,7 @@ class Box(DatabaseObject):
 
     category_id = Column(Integer, ForeignKey("category.id"), nullable=True)
 
-    _name = Column(Unicode(32), unique=True, nullable=False)
+    _name = Column(Unicode(128), unique=True, nullable=False)
     _operating_system = Column(Unicode(16))
     _description = Column(Unicode(4096))
     _capture_message = Column(Unicode(4096))
@@ -200,8 +200,8 @@ class Box(DatabaseObject):
 
     @name.setter
     def name(self, value):
-        if not 3 <= len(str(value)) <= 32:
-            raise ValidationError("Name must be 3 - 32 characters")
+        if not 3 <= len(str(value)) <= 128:
+            raise ValidationError("Name must be 3 - 128 characters")
         self._name = str(value)
 
     @property

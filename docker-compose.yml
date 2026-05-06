@@ -1,100 +1,225 @@
 services:
-  # ── Reverse proxy (SSL termination + gzip) ─────────────────────────────────
   nginx:
     image: nginx:1.25-alpine
     ports:
-      - "80:80"
-      - "443:443"
+    - 80:80
+    - 443:443
     volumes:
-      - ./deploy/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./deploy/nginx/certs:/etc/nginx/certs:ro
+    - ./deploy/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    - ./deploy/nginx/certs:/etc/nginx/certs:ro
     depends_on:
-      - webapp
+    - webapp
     restart: unless-stopped
-
-  # ── Digital Day CTF Application ────────────────────────────────────────────
+    networks:
+    - default
+    - ctf_internal
   webapp:
     build:
       context: .
       target: runtime
     ports:
-      - "8888:8888"
+    - 8888:8888
     volumes:
-      - .:/opt/ctf
-      - ctf_data:/opt/ctf/files
-
+    - .:/opt/ctf
+    - ctf_data:/opt/ctf/files
     environment:
-      - SQL_DIALECT=sqlite
-      - PYTHONUNBUFFERED=1
-      - X_HEADERS=True
-      - MEMCACHED=memcached:11211
-      - AUTOSTART_GAME=True
-      - DEMO=1
-      - FORCE_LOCALE=fr
-      - CTF_TAGLINE=Le Jeu des Hackers
-
-
+    - SQL_DIALECT=sqlite
+    - PYTHONUNBUFFERED=1
+    - X_HEADERS=True
+    - MEMCACHED=memcached:11211
+    - AUTOSTART_GAME=True
+    - DEMO=0
+    - FORCE_LOCALE=fr
+    - CTF_TAGLINE=Le Jeu des Hackers
     depends_on:
-      - memcached
+    - memcached
     restart: unless-stopped
-
+    deploy:
+      resources:
+        limits:
+          memory: 8192M
   memcached:
     image: memcached:1.6-alpine
     restart: unless-stopped
-
-  # ── Cloudflare Tunnel (Global Access) ──────────────────────────────────────
   tunnel:
     image: cloudflare/cloudflared:latest
     restart: unless-stopped
-    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TOKEN}
-    environment:
-      - TUNNEL_TOKEN=${CLOUDFLARE_TOKEN}
+    command: tunnel --no-autoupdate --url http://nginx:80
     depends_on:
-      - webapp
-
-  # ── TECHNICAL TARGETS (The Engine) ─────────────────────────────────────────
+    - webapp
   target-segou:
     build:
       context: ./targets/segou
     ports:
-      - "8001:8001"
+    - 8001:8001
     restart: unless-stopped
-
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1024M
+    read_only: false
+    tmpfs:
+    - /tmp
+    pids_limit: 50
+    cap_drop:
+    - ALL
+    security_opt:
+    - no-new-privileges:true
+    networks:
+    - ctf_internal
   target-bougouni:
     build:
       context: ./targets/bougouni
     ports:
-      - "8002:8002"
+    - 8002:8002
     restart: unless-stopped
-
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1024M
+    read_only: false
+    tmpfs:
+    - /tmp
+    pids_limit: 50
+    cap_drop:
+    - ALL
+    security_opt:
+    - no-new-privileges:true
+    networks:
+    - ctf_internal
   target-taoudeni:
     build:
       context: ./targets/taoudeni
     ports:
-      - "8003:8003"
+    - 8003:8003
     restart: unless-stopped
-
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1024M
+    read_only: false
+    tmpfs:
+    - /tmp
+    pids_limit: 50
+    cap_drop:
+    - ALL
+    security_opt:
+    - no-new-privileges:true
+    networks:
+    - ctf_internal
   target-tessalit:
     build:
       context: ./targets/tessalit
     ports:
-      - "8004:8004"
+    - 8004:8004
     restart: unless-stopped
-
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1024M
+    read_only: false
+    tmpfs:
+    - /tmp
+    pids_limit: 50
+    cap_drop:
+    - ALL
+    security_opt:
+    - no-new-privileges:true
+    networks:
+    - ctf_internal
   target-san:
     build:
       context: ./targets/san
     ports:
-      - "8005:8005"
+    - 8005:8005
     restart: unless-stopped
-
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1024M
+    read_only: false
+    tmpfs:
+    - /tmp
+    pids_limit: 50
+    cap_drop:
+    - ALL
+    security_opt:
+    - no-new-privileges:true
+    networks:
+    - ctf_internal
   target-gao:
     build:
       context: ./targets/gao
     ports:
-      - "8006:8006"
+    - 8006:8006
     restart: unless-stopped
-
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1024M
+    read_only: false
+    tmpfs:
+    - /tmp
+    pids_limit: 50
+    cap_drop:
+    - ALL
+    security_opt:
+    - no-new-privileges:true
+    networks:
+    - ctf_internal
+  target-djenne:
+    build:
+      context: ./targets/djenne
+    ports:
+    - 8007:8007
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1024M
+    read_only: false
+    tmpfs:
+    - /tmp
+    pids_limit: 50
+    cap_drop:
+    - ALL
+    security_opt:
+    - no-new-privileges:true
+    networks:
+    - ctf_internal
+  target-kidal:
+    build:
+      context: ./targets/kidal
+    ports:
+    - 8008:8008
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1024M
+    # No read_only for kidal as it needs to compile/run binary? 
+    # Actually, the binary is pre-compiled in Dockerfile.
+    read_only: false
+    tmpfs:
+    - /tmp
+    pids_limit: 50
+    cap_drop:
+    - ALL
+    security_opt:
+    - no-new-privileges:true
+    networks:
+    - ctf_internal
 volumes:
   ctf_data:
     driver: local
+networks:
+  ctf_internal:
+    internal: true

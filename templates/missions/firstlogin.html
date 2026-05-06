@@ -8,6 +8,30 @@
 <script src="/static/js/pages/missions/firstlogin.js" type="text/javascript"></script>
 <link href="/static/css/terminal.css" rel="stylesheet" />
 {% end %}
+{% block modals %}
+    <div id="charte-conducte-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="charteLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-header">
+            <h3 id="charteLabel" class="matrix-text"><i class="fa fa-gavel"></i> Charte de Bonne Conduite</h3>
+        </div>
+        <div class="modal-body" style="max-height: 400px; overflow-y: auto;">
+            <p>En participant au <strong>Digital Day CTF : L’Équation du Mandé</strong>, vous vous engagez à respecter les règles suivantes :</p>
+            <hr>
+            <h4>1. Esprit Sportif</h4>
+            <p>Pas de partage de solutions (flags). L'objectif est l'apprentissage personnel et collectif.</p>
+            <h4>2. Intégrité Technique</h4>
+            <p>N'attaquez que les cibles désignées. Toute attaque contre l'infrastructure de score ou les autres participants entraînera une exclusion immédiate.</p>
+            <h4>3. Éthique</h4>
+            <p>Les techniques apprises ici sont réservées à un usage pédagogique. Toute utilisation malveillante hors du CTF est illégale.</p>
+            <h4>4. Surveillance</h4>
+            <p>Toutes vos actions sont enregistrées (logs) et auditées en temps réel.</p>
+            <hr>
+            <p class="text-center"><strong>En acceptant, vous certifiez avoir pris connaissance des sanctions encourues en cas de non-respect.</strong></p>
+        </div>
+        <div class="modal-footer">
+            <button id="accept-charte" class="btn btn-primary btn-block">J'ACCEPTE ET JE M'ENGAGE</button>
+        </div>
+    </div>
+{% end %}
 
 {% block content %}
 {% from tornado.options import options %}

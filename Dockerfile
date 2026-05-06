@@ -49,7 +49,7 @@ EXPOSE 8888
 ENV SQL_DIALECT=sqlite \
     PYTHONUNBUFFERED=1
 
-HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
-    CMD python3 -c "import urllib.request; urllib.request.urlopen('http://localhost:8888/')" || exit 1
+# HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
+#     CMD python3 -c "import urllib.request; urllib.request.urlopen('http://localhost:8888/')" || exit 1
 
-ENTRYPOINT ["sh", "-c", "python3 /opt/ctf/rootthebox.py --setup=docker && python3 /opt/ctf/rootthebox.py --start"]
+ENTRYPOINT ["python3", "/opt/ctf/rootthebox.py", "--start"]

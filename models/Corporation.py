@@ -38,7 +38,7 @@ class Corporation(DatabaseObject):
 
     uuid = Column(String(36), unique=True, nullable=False, default=lambda: str(uuid4()))
 
-    _name = Column(Unicode(32), unique=True, nullable=False)
+    _name = Column(Unicode(128), unique=True, nullable=False)
     _description = Column(Unicode(512))
     _locked = Column(Boolean, default=False, nullable=False)
 
@@ -78,8 +78,8 @@ class Corporation(DatabaseObject):
 
     @name.setter
     def name(self, value):
-        if not len(value) <= 32:
-            raise ValidationError("Corporation name must be 0 - 32 characters")
+        if not len(value) <= 128:
+            raise ValidationError("Corporation name must be 0 - 128 characters")
         self._name = str(value)
 
     @property

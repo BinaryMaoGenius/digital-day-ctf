@@ -107,6 +107,9 @@
           </description>
           <difficulty>Moyen</difficulty>
           <gamelevel>1</gamelevel>
+          <ipaddresses count="1">
+            <ip><address>192.168.101.30/gate/bougouni/</address></ip>
+          </ipaddresses>
           <flags count="1">
             <flag submission_type="static">
               <token>flag{jwt_identity_theft_market_real}</token>
@@ -123,6 +126,9 @@
           </description>
           <difficulty>Moyen</difficulty>
           <gamelevel>1</gamelevel>
+          <ipaddresses count="1">
+            <ip><address>192.168.101.30/static/targets/koulikoro/archives.zip</address></ip>
+          </ipaddresses>
           <flags count="1">
             <flag submission_type="static">
               <token>flag{stego_bogolan_layer_extracted}</token>
@@ -140,6 +146,9 @@
           </description>
           <difficulty>Difficile</difficulty>
           <gamelevel>2</gamelevel>
+          <ipaddresses count="1">
+            <ip><address>192.168.101.30/gate/segou/</address></ip>
+          </ipaddresses>
           <flags count="1">
             <flag submission_type="static">
               <token>flag{blind_sqli_segou_king_secret}</token>
@@ -156,6 +165,9 @@
           </description>
           <difficulty>Moyen</difficulty>
           <gamelevel>2</gamelevel>
+          <ipaddresses count="1">
+            <ip><address>192.168.101.30/gate/djenne/</address></ip>
+          </ipaddresses>
           <flags count="1">
             <flag submission_type="static">
               <token>flag{xss_djenne_admin_cookie_stolen}</token>
@@ -189,6 +201,9 @@
           </description>
           <difficulty>Difficile</difficulty>
           <gamelevel>2</gamelevel>
+          <ipaddresses count="1">
+            <ip><address>192.168.101.30/static/targets/bandiagara/signal.pcap</address></ip>
+          </ipaddresses>
           <flags count="1">
             <flag submission_type="static">
               <token>flag{icmp_tunneling_dogon_shaman}</token>
@@ -206,6 +221,9 @@
           </description>
           <difficulty>Difficile</difficulty>
           <gamelevel>2</gamelevel>
+          <ipaddresses count="1">
+            <ip><address>192.168.101.30/gate/san/</address></ip>
+          </ipaddresses>
           <flags count="1">
             <flag submission_type="static">
               <token>flag{race_condition_sanke_mon_2024}</token>
@@ -222,6 +240,9 @@
           </description>
           <difficulty>Difficile</difficulty>
           <gamelevel>3</gamelevel>
+          <ipaddresses count="1">
+            <ip><address>192.168.101.30/static/targets/tombouctou/sankore_script.py</address></ip>
+          </ipaddresses>
           <flags count="1">
             <flag submission_type="static">
               <token>flag{SANKORE_REVERSE_MASTER_2024}</token>
@@ -235,13 +256,16 @@
           <category>Privilege Escalation</category>
           <description>
             La hiérarchie est une construction sociale. Brisez-la techniquement pour prendre le contrôle total.
-            Cible : /gate/gao
+            [OBJECTIF_OPÉRATIONNEL] : Obtenir les privilèges root et lire le fichier /root/flag.txt via le binaire tax_collector.
           </description>
           <difficulty>Extrême</difficulty>
           <gamelevel>3</gamelevel>
+          <ipaddresses count="1">
+            <ip><address>192.168.101.30/gate/gao/</address></ip>
+          </ipaddresses>
           <flags count="1">
             <flag submission_type="static">
-              <token>flag{suid_path_hijack_gao_root}</token>
+              <token>flag{suid_path_hijack_gao_root_2024}</token>
               <reward>1000</reward>
             </flag>
           </flags>
@@ -252,12 +276,17 @@
           <category>Binary Exploitation</category>
           <description>
             Le binaire est un labyrinthe. Les pièges anti-débogage ne sont que des distractions pour les faibles.
+            [OBJECTIF_OPÉRATIONNEL] : Analyser le binaire kidal_sentinel et exploiter le dépassement de tampon pour détourner le flux d'exécution.
           </description>
           <difficulty>Difficile</difficulty>
           <gamelevel>3</gamelevel>
+          <ipaddresses count="2">
+            <ip><address>192.168.101.30/gate/kidal/</address></ip>
+            <ip><address>192.168.101.30/static/targets/kidal/kidal_sentinel</address></ip>
+          </ipaddresses>
           <flags count="1">
             <flag submission_type="static">
-              <token>flag{anti_debug_kidal_mountain_bypass}</token>
+              <token>flag{anti_debug_kidal_mountain_bypass_2024}</token>
               <reward>700</reward>
             </flag>
           </flags>
@@ -272,6 +301,9 @@
           </description>
           <difficulty>Difficile</difficulty>
           <gamelevel>3</gamelevel>
+          <ipaddresses count="1">
+            <ip><address>192.168.101.30/gate/tessalit/</address></ip>
+          </ipaddresses>
           <flags count="1">
             <flag submission_type="static">
               <token>flag{nosql_injection_tessalit_sentinel_2024}</token>
@@ -290,6 +322,9 @@
           </description>
           <difficulty>Extrême</difficulty>
           <gamelevel>3</gamelevel>
+          <ipaddresses count="1">
+            <ip><address>192.168.101.30/gate/taoudeni/</address></ip>
+          </ipaddresses>
           <flags count="1">
             <flag submission_type="static">
               <token>flag{ssrf_master_taoudeni_final_access_2024}</token>

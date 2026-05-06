@@ -86,6 +86,11 @@ class IpAddress(DatabaseObject):
 
     @address.setter
     def address(self, value):
+        # Allow paths and URLs for CTF targets even if they aren't strict IPs
+        if value.startswith("/") or "://" in value or "gate" in value:
+            self._address = value
+            return
+            
         try:
             ip = ip_address(self.ipformat(value))
         except:
@@ -99,7 +104,10 @@ class IpAddress(DatabaseObject):
     @property
     def version(self):
         if self._ip_address is None:
-            self._ip_address = ip_address(self.ipformat(self._address))
+            try:
+                self._ip_address = ip_address(self.ipformat(self._address))
+            except:
+                return 0 # Indicate non-IP target
         return self._ip_address.version
 
     @property

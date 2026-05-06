@@ -974,17 +974,24 @@ class MapHandler(BaseHandler):
 class TargetRedirectHandler(BaseHandler):
     def get(self, target):
         ports = {
-            "segou": 8001,
-            "bougouni": 8002,
-            "taoudeni": 8003,
-            "tessalit": 8004,
-            "san": 8005,
-            "gao": 8006
+            "segou":      8001,
+            "bougouni":   8002,
+            "taoudeni":   8003,
+            "tessalit":   8004,
+            "san":        8005,
+            "gao":        8006,
+            "djenne":     8007,
+            "kidal":      8008,
         }
         port = ports.get(target.lower())
         if port:
-            # Redirection vers l'IP de l'hôte mais sur le port cible
-            self.redirect(f"http://{self.request.host.split(':')[0]}:{port}")
+            # Récupère l'IP réelle de l'hôte (compatible reverse-proxy / VMware)
+            host = (
+                self.request.headers.get("X-Forwarded-Host")
+                or self.request.headers.get("X-Real-IP")
+                or self.request.host.split(":")[0]
+            )
+            self.redirect(f"http://{host}:{port}")
         else:
-            self.redirect("/404")
+            self.render("public/404.html")
 

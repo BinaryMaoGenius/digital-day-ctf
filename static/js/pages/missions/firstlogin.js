@@ -59,7 +59,14 @@ $(document).ready(function() {
             greetings: null,
             tabcompletion: true,
             onInit: function(term) {
-                greetings(term);
+                /* Show the Charte de Bonne Conduite Modal */
+                $("#charte-conducte-modal").modal('show');
+                
+                /* Start animation only after acceptance */
+                $("#accept-charte").click(function() {
+                    $("#charte-conducte-modal").modal('hide');
+                    greetings(term);
+                });
             },
         });
     });
