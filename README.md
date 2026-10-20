@@ -1,12 +1,16 @@
 <div align="center">
-  <h1>🚩 Digital Day CTF Platform</h1>
-  <p><strong>Custom Capture The Flag platform built for the biggest IT event in Mali.</strong></p>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/banner-dark.svg">
+    <img src="assets/banner-light.svg" alt="Digital Day CTF" width="100%">
+  </picture>
 </div>
 
+*Custom Capture The Flag platform built for the biggest IT event in Mali.*
+
 <p align="center">
-  <img src="https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue" />
-  <img src="https://img.shields.io/badge/CTFd-000000?style=for-the-badge&logo=flask&logoColor=white" />
-  <img src="https://img.shields.io/badge/Cybersecurity-FF0000?style=for-the-badge&logo=hackthebox&logoColor=white" />
+  <img src="https://img.shields.io/badge/Python-FFD43B?style=flat-square&logo=python&logoColor=blue" />
+  <img src="https://img.shields.io/badge/CTFd-000000?style=flat-square&logo=flask&logoColor=white" />
+  <img src="https://img.shields.io/badge/Cybersecurity-FF0000?style=flat-square&logo=hackthebox&logoColor=white" />
 </p>
 
 ## 🚀 Overview
