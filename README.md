@@ -16,10 +16,10 @@ This repository hosts the custom Capture The Flag (CTF) platform deployed for th
 - 🔒 **Robust Challenge System**: Supports various categories (Web, Crypto, Pwn, Reverse).
 - 📊 **Real-time Leaderboard**: Dynamic scoring and visualization of team rankings.
 - 👥 **Team Management**: Complete flow for registration, team formation, and collaboration.
-- ðŸ›¡ï¸ **Secure Infrastructure**: Built to withstand attacks while participants attempt to hack the challenges.
+- 🛡️ **Secure Infrastructure**: Built to withstand attacks while participants attempt to hack the challenges.
 
 ## 🎯 Purpose
 Created to promote cybersecurity awareness and foster technical talent in Mali through gamified learning.
 
-## ðŸ‘¨â€ðŸ’» Developer
+## 👨‍💻 Developer
 Built by [BinaryMaoGenius](https://github.com/BinaryMaoGenius) — Passionate about Cybersecurity and African Tech Ecosystems.
